@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consulta hombro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F8F9; --panel:#FFFFFF; --band:#EEF3F5; --ink:#16262B; --muted:#4A6572; --line:#C9D1D6;
+  --accent:#1F5F4E; --on-accent:#FFFFFF; --focus:#0B5CAD;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1517; --panel:#162124; --band:#1D2B2F; --ink:#E7EEF0; --muted:#9DB4BD; --line:#2F4147;
+    --accent:#5CC0A3; --on-accent:#06231B; --focus:#7DB8F0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1517; --panel:#162124; --band:#1D2B2F; --ink:#E7EEF0; --muted:#9DB4BD; --line:#2F4147;
+  --accent:#5CC0A3; --on-accent:#06231B; --focus:#7DB8F0;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:17px/1.5 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:4px;min-height:56px;padding:4px 14px 4px 6px}
+#back{appearance:none;flex:none;width:48px;height:48px;border:0;background:none;font-size:30px;line-height:1;cursor:pointer;color:var(--ink)}
+#back[hidden]{display:none}
+#titulo{font-weight:700;font-size:19px;line-height:1.2;min-width:0;overflow-wrap:anywhere}
+header.home{padding-left:14px}
+
+main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
+.sub{color:var(--muted);font-size:15px;margin:0 0 14px}
+.nota{color:var(--muted);font-size:15px;font-style:italic;margin:12px 0}
+.pre{white-space:pre-line}
+.band{background:var(--band);border-radius:6px;padding:10px 12px;margin:0 0 12px;font-size:15px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin:0 0 10px}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin:0 0 4px}
+.card p{margin:0}
+.card p + p{margin-top:8px}
+.card .lab{display:block;font-size:14px;color:var(--muted);margin-bottom:1px}
+.card.key{border:2px solid var(--accent)}
+.card .nombre{font-size:18px;font-weight:700;color:var(--ink);margin:0 0 6px}
+
+.nav,.big{appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:12px 14px;margin:0 0 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;min-height:64px}
+.nav .tx,.big .tx{flex:1;min-width:0}
+.nav b,.big b{display:block;font-size:18px;line-height:1.25}
+.nav span,.big span{display:block;font-size:15px;color:var(--muted);margin-top:2px}
+.nav i,.big i{flex:none;font-style:normal;font-size:24px;color:var(--muted)}
+.nodo{display:flex;gap:10px}
+.nodo .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700;
+  display:grid;place-items:center;font-size:15px}
+.nodo p{flex:1;min-width:0}
+.acciones{margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
+.acciones .big{margin:0;min-height:52px;padding:8px 12px}
+.acciones .big b{font-size:16px}
+
+details{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin:0 0 8px;padding:0 12px}
+summary{min-height:52px;display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:24px;font-weight:400;color:var(--muted)}
+details[open] > summary::after{content:"–"}
+details[open] > summary{border-bottom:1px solid var(--line);margin-bottom:10px}
+details .in{padding-bottom:12px}
+details .in p{margin:0 0 10px}
+details .in p:last-child{margin-bottom:0}
+details .in .lab{display:block;font-size:14px;color:var(--muted)}
+summary .st{flex:1;min-width:0;padding:8px 0}
+summary .st b{display:block;line-height:1.25}
+summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)}
+.grupo{font-size:16px;color:var(--accent);margin:20px 0 8px}
+.grupo-sub{color:var(--muted);font-size:15px;margin:-4px 0 10px}
+.card[id^="nodo-"]{scroll-margin-top:68px}
+.marca{display:flex;gap:6px;margin-top:12px}
+.marca button{appearance:none;flex:1 1 0;min-height:48px;padding:6px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);cursor:pointer;font-size:15px}
+.marca button[aria-pressed="true"][data-v="hecho"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700}
+.marca button[aria-pressed="true"][data-v="dudoso"]{border:3px solid var(--ink);background:var(--band);font-weight:700}
+.marca button[aria-pressed="true"][data-v="na"]{border-style:dashed;background:var(--band);color:var(--muted);font-weight:700}
+.pasos{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.paso{appearance:none;min-width:56px;min-height:44px;padding:4px 10px;border:1px solid var(--line);border-radius:22px;background:var(--panel);cursor:pointer;font-weight:700}
+.paso[data-e="hecho"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.paso[data-e="dudoso"]{border:3px solid var(--ink);background:var(--band)}
+.paso[data-e="na"]{border-style:dashed;background:var(--band);color:var(--muted)}
+.cabrec{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;padding:4px 0}
+.cabrec[hidden]{display:none}
+.cabrec .paso{flex:none;min-width:48px;min-height:40px;padding:2px 10px}
+.rec .lin{font-size:15px;margin:0 0 4px}
+.rec .ghost{appearance:none;margin-top:8px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);cursor:pointer}
+.cond + .cond{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.cond .nombre{font-weight:700;font-size:17px;margin:0 0 2px}
+.cond .dice{color:var(--muted);font-size:15px;margin:0 0 6px}
+
+</style>
+</head>
+<body>
+<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div></header>
+<main id="main"></main>
+
+<script>
+const DATA = __DATA__;
+
+// ════════════════════════════════════════════════════════════════
+//  Correspondencias específicas de hombro (no vienen de la tarjeta)
+// ════════════════════════════════════════════════════════════════
+const REGION = 'Hombro';
+// Etiqueta del árbol (fila 4) -> fila de SINDROMES
+const PATRON_A_SINDROME = {
+  'ACROMIOCLAVICULAR': 'Acromioclavicular',
+  'INESTABILIDAD': 'Inestabilidad GH',
+  'ROTURA DEL MANGUITO': 'Rotura del manguito',
+  'SLAP': 'Lesión SLAP',
+  'SAPS': 'Dolor subacromial (SAPS)'
+};
+// Fila de SINDROMES -> fila de PRONOSTICO
+const SINDROME_A_PRON = {
+  'Dolor subacromial (SAPS)': 'SAPS', 'Inestabilidad GH': 'Inestabilidad', 'Acromioclavicular': 'Acromioclavicular',
+  'Lesión SLAP': 'SLAP', 'Rotura del manguito': 'Rotura del manguito', 'Hombro congelado': 'Hombro congelado'
+};
+const PISTA_CONGELADO = 'Movilidad pasiva limitada igual que la activa (nodo 2b)';
+// Agrupación propia de la tabla «rigidez activa = pasiva» (la tarjeta lista las 7 seguidas)
+const GRUPO_LIMITADA = ['Artrosis GH', 'Neoplasia', 'Luxación bloqueada', 'Fractura'];
+const GRUPO_LIBRE = ['Dolor del manguito', 'Acromioclavicular', 'Cervicogénico'];
+// Lo que la propia fila dice sobre la pasiva (solo se muestra si está en el texto de la tarjeta)
+const DICE_PASIVA = {
+  'Dolor del manguito': 'movilidad pasiva no muy limitada',
+  'Acromioclavicular': 'sin restricción pasiva',
+  'Cervicogénico': 'sin restricción pasiva GH',
+  'Luxación bloqueada': 'rigidez activa y pasiva similar al congelado'
+};
+
+// ════════════════════════════════════════════════════════════════
+//  Utilidades
+// ════════════════════════════════════════════════════════════════
+const sp = t => (t || '').replace(/[ \t]{2,}/g, ' ').trim();
+const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, val] of Object.entries(props || {})) {
+    if (k === 'class') e.className = val;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), val);
+    else if (val === true) e.setAttribute(k, '');
+    else if (val !== false && val != null) e.setAttribute(k, val);
+  }
+  for (const c of kids.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    e.append(c.nodeType ? c : document.createTextNode(c));
+  }
+  return e;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Datos de la tarjeta
+// ════════════════════════════════════════════════════════════════
+const ARBOL = Object.fromEntries(DATA.ARBOL.filas.map(([n, t]) => [n, t]));
+const sind = n => DATA.SINDROMES.filas.find(f => f[0] === n);
+const pron = n => DATA.PRONOSTICO.filas.find(f => f[0] === SINDROME_A_PRON[n]);
+
+function patrones() {
+  const t = ARBOL['4'].split('\n')[0];
+  return t.slice(t.indexOf('? ') + 2).split(' · ').map(s => {
+    const [cond, et] = s.split(' → ');
+    return { cond: sp(cond), et: sp(et).replace(/\.$/, '') };
+  });
+}
+const CIERRE_4 = ARBOL['4'].split('\n')[1];
+const CLAVE_PATRON = Object.fromEntries(patrones().map(p => [PATRON_A_SINDROME[p.et], p.cond]));
+const NOTA_3 = (() => {
+  const t = DATA.PRONOSTICO.nota, i = t.indexOf('Dosis y progresión');
+  return (i < 0 ? t : t.slice(0, i)).trim();
+})();
+const NOTA_DOSIS = (() => {
+  const t = DATA.PRONOSTICO.nota, i = t.indexOf('Dosis y progresión');
+  return i < 0 ? '' : t.slice(i).trim();
+})();
+
+// ════════════════════════════════════════════════════════════════
+//  Navegación (pila propia + botón Atrás de Android)
+// ════════════════════════════════════════════════════════════════
+let pila = [{ p: 'home' }];
+let hist = false;
+// Recorrido del árbol: solo en memoria (se borra al recargar); no se guarda nada en el navegador
+let marcas = {};   // nodo -> 'hecho' | 'dudoso' | 'na'
+let vistas = [];   // fichas de síndrome abiertas desde el árbol, en orden
+const ESTADOS = [['hecho', '✓ Hecho'], ['dudoso', '? Dudoso'], ['na', '– No aplica']];
+const SIMBOLO = { hecho: '✓', dudoso: '?', na: '–' };
+function ir(p, arg) {
+  if (p === 'sindrome' && !vistas.includes(arg)) vistas.push(arg);
+  pila.push({ p, arg });
+  try { history.pushState({ n: pila.length }, ''); hist = true; } catch (e) {}
+  render(true);
+}
+function volver() {
+  if (pila.length <= 1) return;
+  if (hist) { try { history.back(); return; } catch (e) {} }
+  pila.pop(); render(true);
+}
+window.addEventListener('popstate', () => { if (pila.length > 1) { pila.pop(); render(true); } });
+
+// ════════════════════════════════════════════════════════════════
+//  Componentes
+// ════════════════════════════════════════════════════════════════
+const nav = (titulo, sub, fn) => h('button', { type: 'button', class: 'nav', onclick: fn },
+  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
+const big = (titulo, sub, fn) => h('button', { type: 'button', class: 'big', onclick: fn },
+  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
+const nota = t => h('p', { class: 'nota pre' }, sp(t));
+const pie = t => h('p', { class: 'nota' }, sp(t));
+const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, titulo), h('p', { class: 'pre' }, sp(texto)));
+const plegable = (titulo, contenido, abierto) => h('details', { open: !!abierto }, h('summary', {}, titulo), h('div', { class: 'in' }, contenido));
+
+// ════════════════════════════════════════════════════════════════
+//  Pantallas
+// ════════════════════════════════════════════════════════════════
+function pHome() {
+  const n = [
+    h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de hombro'),
+    nav('Banderas rojas', 'Bloque 3 · ' + DATA.BANDERAS.filas.length + ' sospechas', () => ir('banderas')),
+    nav('Bisagra y árbol', 'Bloque 4 · pasivo y ' + DATA.ARBOL.filas.length + ' pasos · fichas de síndrome', () => ir('arbol'))
+  ];
+  return { titulo: REGION, home: true, nodes: n };
+}
+
+function pBanderas() {
+  const B = DATA.BANDERAS;
+  return { titulo: 'Banderas rojas', nodes: [
+    h('p', { class: 'sub' }, 'Bloque 3 · derivación médica inmediata, sobre el cribado general de la Ficha.'),
+    B.filas.map(f => h('section', { class: 'card' },
+      h('p', { class: 'nombre' }, f[0]),
+      h('p', {}, h('span', { class: 'lab' }, B.cabecera[1]), f[1]),
+      h('p', {}, h('span', { class: 'lab' }, B.cabecera[2]), f[2]))),
+    nota(B.nota), pie(DATA.TITULOS.pieA2)
+  ] };
+}
+
+const preguntaNodo = t => { const l = t.split('\n')[0]; const k = l.indexOf('?'); return sp(k < 0 ? l : l.slice(0, k + 1)); };
+function marcar(n, e) { if (marcas[n] === e) delete marcas[n]; else marcas[n] = e; render(); }
+function irANodo(n) { const el = document.getElementById('nodo-' + n); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+const controlMarca = n => h('div', { class: 'marca', role: 'group', 'aria-label': 'Marcar nodo ' + n },
+  ESTADOS.map(([e, t]) => h('button', { type: 'button', 'data-v': e, 'aria-pressed': String(marcas[n] === e), onclick: () => marcar(n, e) }, t)));
+
+function chipsRecorrido() {
+  return DATA.ARBOL.filas.map(f => f[0]).map(n => h('button', { type: 'button', class: 'paso', 'data-e': marcas[n] || '',
+    'aria-label': 'Nodo ' + n + (marcas[n] ? ': ' + marcas[n] : ': sin marcar'), onclick: () => irANodo(n) },
+    n + ' ' + (marcas[n] ? SIMBOLO[marcas[n]] : '·')));
+}
+// Cuando las cápsulas del panel salen de la pantalla por arriba, la cabecera muestra el recorrido en lugar del título
+function actualizarCab() {
+  const cur = pila[pila.length - 1], pasos = document.getElementById('recPasos');
+  let modo = false;
+  if (cur.p === 'arbol' && pasos) modo = pasos.getBoundingClientRect().bottom <= $('#cab').getBoundingClientRect().bottom;
+  $('#titulo').hidden = modo; $('#cabRec').hidden = !modo;
+}
+window.addEventListener('scroll', actualizarCab, { passive: true });
+
+function panelRecorrido() {
+  const filas = DATA.ARBOL.filas, nodos = filas.map(f => f[0]);
+  const cuenta = e => nodos.filter(n => marcas[n] === e).length;
+  const dud = nodos.filter(n => marcas[n] === 'dudoso'), sin = nodos.filter(n => !marcas[n]);
+  const alguna = nodos.some(n => marcas[n]);
+  const texto = n => preguntaNodo(filas.find(f => f[0] === n)[1]);
+  return h('section', { class: 'card rec', id: 'recorrido' },
+    h('h3', {}, 'Recorrido'),
+    h('div', { class: 'pasos', id: 'recPasos' }, chipsRecorrido()),
+    !alguna ? h('p', { class: 'lin' }, 'Marca cada nodo al repasarlo: hecho, dudoso o no aplica.') : [
+      h('p', { class: 'lin' }, 'Hechos ' + cuenta('hecho') + ' · Dudosos ' + dud.length + ' · No aplica ' + cuenta('na') + ' · Sin marcar ' + sin.length),
+      dud.length ? [h('p', { class: 'lin' }, h('b', {}, 'Revisar')), dud.map(n => h('p', { class: 'lin' }, n + ' · ' + texto(n)))] : null,
+      sin.length ? h('p', { class: 'lin' }, h('b', {}, 'Sin marcar: '), sin.join(', ')) : null],
+    vistas.length ? h('p', { class: 'lin', style: 'color:var(--muted)' }, 'Fichas abiertas: ' + vistas.join(', ')) : null,
+    alguna || vistas.length ? h('button', { type: 'button', class: 'ghost', onclick: () => { marcas = {}; vistas = []; render(); } }, 'Limpiar recorrido') : null);
+}
+
+function pArbol() {
+  const B = DATA.BISAGRA;
+  const acciones = {
+    '1': [['Banderas rojas', () => ir('banderas')]],
+    '2b': [['Rigidez activa = pasiva', () => ir('rigidez')], ['Hombro congelado', () => ir('sindrome', 'Hombro congelado')]],
+    '4': patrones().map(p => { const c = PATRON_A_SINDROME[p.et]; return [c, () => ir('sindrome', c), cap1(p.cond)]; })
+  };
+  const nodos = DATA.ARBOL.filas.map(([n, t]) => h('section', { class: 'card', id: 'nodo-' + n },
+    h('div', { class: 'nodo' }, h('span', { class: 'n' }, n), h('p', { class: 'pre' }, n === '4' ? sp(ARBOL['4'].split('\n')[0].split('? ')[0]) + '?' : sp(t))),
+    acciones[n] ? h('div', { class: 'acciones' }, acciones[n].map(([tit, fn, sub]) => big(tit, sub, fn))) : null,
+    controlMarca(n)));
+  return { titulo: 'Bisagra y árbol', nodes: [
+    h('p', { class: 'sub' }, 'Bloque 4 · revisa el recorrido de arriba abajo.'),
+    h('div', { class: 'band pre' }, sp(DATA.SINDROMES.aviso)),
+    panelRecorrido(),
+    h('section', { class: 'card key' },
+      h('p', { class: 'nombre' }, B.pregunta),
+      h('p', { class: 'pre' }, sp(B.ramas).replace(/\s*\|\s*/, '\n')),
+      h('p', { class: 'nota' }, sp(B.apoyo))),
+    nodos, nota(CIERRE_4), pie(DATA.TITULOS.pieA2)
+  ] };
+}
+
+function pSindrome(clave) {
+  const f = sind(clave), pr = pron(clave), P = DATA.PRONOSTICO;
+  const pista = clave === 'Hombro congelado' ? PISTA_CONGELADO : cap1(CLAVE_PATRON[clave] || '');
+  return { titulo: f[0], nodes: [
+    pista ? h('p', { class: 'sub' }, pista) : null,
+    seccion('Explorar · 10′', f[1]),
+    seccion('① Gesto testigo', f[2]),
+    seccion('② Medida objetiva', f[3]),
+    plegable('Bloque 6 · horizonte y criterio', [
+      h('p', {}, h('span', { class: 'lab' }, P.cabecera[1]), sp(pr[1])),
+      h('p', {}, h('span', { class: 'lab' }, P.cabecera[2]), sp(pr[2]))]),
+    plegable('Antes de explorar: severidad e irritabilidad', h('p', { class: 'pre' }, sp(DATA.SINDROMES.aviso))),
+    clave === 'Hombro congelado' ? big('Diferencial: rigidez activa = pasiva', 'Qué lo distingue del hombro congelado', () => ir('rigidez')) : null,
+    clave === 'Hombro congelado' ? nota(DATA.SINDROMES.nota) : null,
+    nota(NOTA_3), nota(NOTA_DOSIS), pie(DATA.PRONOSTICO.pie)
+  ] };
+}
+
+function pRigidez() {
+  const O = DATA.ORIENTATIVA;
+  const dicePasiva = f => DICE_PASIVA[f[0]] && f[1].includes(DICE_PASIVA[f[0]]) ? cap1(DICE_PASIVA[f[0]]) : null;
+  const cuerpo = f => [
+    h('p', {}, h('span', { class: 'lab' }, O.cabecera[1]), sp(f[1])),
+    h('p', {}, h('span', { class: 'lab' }, O.cabecera[2]), sp(f[2]))];
+  const fila = f => h('details', {},
+    h('summary', {}, h('div', { class: 'st' }, h('b', {}, f[0]), dicePasiva(f) ? h('span', {}, dicePasiva(f)) : null)),
+    h('div', { class: 'in' }, cuerpo(f)));
+  const por = nombres => O.filas.filter(f => nombres.includes(f[0]));
+  const otras = O.filas.filter(f => !GRUPO_LIMITADA.includes(f[0]) && !GRUPO_LIBRE.includes(f[0]));
+  const A = [...por(GRUPO_LIMITADA), ...otras].map(fila);
+  const libres = por(GRUPO_LIBRE);
+  const B = h('details', {},
+    h('summary', {}, h('div', { class: 'st' }, h('b', {}, 'Se parecen al congelado, pero con pasiva no limitada'), h('span', {}, libres.map(f => f[0]).join(' · ')))),
+    h('div', { class: 'in' }, libres.map(f => h('div', { class: 'cond' },
+      h('p', { class: 'nombre' }, f[0]),
+      dicePasiva(f) ? h('p', { class: 'dice' }, dicePasiva(f)) : null,
+      cuerpo(f)))));
+  const todas = [...A, B];
+  todas.forEach(d => d.addEventListener('toggle', () => { if (d.open) todas.forEach(o => { if (o !== d) o.open = false; }); }));
+  return { titulo: 'Rigidez activa = pasiva', nodes: [
+    h('p', { class: 'sub' }, 'Bloque 4 · qué lo distingue del hombro congelado.'),
+    h('h3', { class: 'grupo' }, 'Pasiva limitada, como el congelado'),
+    A,
+    big('Hombro congelado', 'Ficha del síndrome', () => {
+      const prev = pila[pila.length - 2];
+      if (prev && prev.p === 'sindrome' && prev.arg === 'Hombro congelado') volver(); else ir('sindrome', 'Hombro congelado');
+    }),
+    B,
+    nota(O.nota),
+    nota('Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.'),
+    pie(DATA.PRONOSTICO.pie)
+  ] };
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Render
+// ════════════════════════════════════════════════════════════════
+const PANTALLAS = { home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, rigidez: pRigidez };
+const $ = s => document.querySelector(s);
+$('#back').addEventListener('click', volver);
+
+function render(arriba) {
+  const y = window.scrollY, cur = pila[pila.length - 1];
+  const s = PANTALLAS[cur.p](cur.arg);
+  document.title = s.home ? 'Consulta hombro' : s.titulo + ' · hombro';
+  $('#titulo').textContent = s.titulo;
+  $('#back').hidden = !!s.home;
+  $('#cab').classList.toggle('home', !!s.home);
+  $('#main').replaceChildren(...[s.nodes].flat(Infinity).filter(Boolean));
+  if (cur.p === 'arbol') $('#cabRec').replaceChildren(...chipsRecorrido());
+  window.scrollTo(0, arriba ? 0 : y);
+  actualizarCab();
+}
+render(true);
+</script>
+</body>
+</html>

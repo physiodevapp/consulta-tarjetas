@@ -1,0 +1,17 @@
+{
+  "name": "consulta-hombro",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SPA móvil de consulta de la tarjeta de hombro (solo lectura)",
+  "scripts": {
+    "extraer": "python3 extraer.py tarjeta_hombro.docx",
+    "build": "python3 build.py",
+    "test": "node test-fuente.js && node test-contenido.js && node test-recorrido.js && node test-cabecera.js",
+    "extraer-js": "node extraer-js.js",
+    "tarjetas": "mkdir -p salida && for r in hombro cadera cervical lumbar rodilla; do OUT_DIR=salida node tarjeta_$r.js || exit 1; done"
+  },
+  "devDependencies": {
+    "docx": "^9.7.1",
+    "jsdom": "^26.0.0"
+  }
+}
