@@ -3,11 +3,12 @@
 SPA móvil de solo lectura con la tarjeta de consulta de hombro (Banderas rojas, Bisagra y árbol, fichas de síndrome y diferencial de rigidez). No guarda datos.
 
 ## Uso
-- `npm install` · `pip install -r requirements.txt`
-- `npm run tarjetas` regenera los docx de las cinco tarjetas en `salida/`
+- `npm install`
+- `npm run extraer` genera `hombro.data.json` a partir de `tarjeta_hombro.js` (la tarjeta) y `spa_hombro.js` (los enlaces y agrupaciones propios de la SPA)
 - `npm run build` genera `index.html` a partir de `plantilla.html` + `hombro.data.json`
-- `npm run extraer-js -- tarjeta_<región>.js` extrae el contenido de una región desde su `.js`
-- `npm test` comprueba que los datos de hombro coinciden con `tarjeta_hombro.js` y que el texto en pantalla coincide con el de la tarjeta
+- `npm run tarjetas` regenera los docx de las cinco tarjetas en `salida/`
+- `npm run extraer-js -- tarjeta_<región>.js` vuelca el contenido de una región tal cual está en su `.js`
+- `npm test` comprueba que los datos de hombro coinciden con `tarjeta_hombro.js`, que los campos de `spa_hombro.js` nombran filas que existen y que el texto en pantalla coincide con el de la tarjeta
 
 ## Publicar
 GitHub Pages: Settings → Pages → *Deploy from a branch* → `main` / `(root)`.
