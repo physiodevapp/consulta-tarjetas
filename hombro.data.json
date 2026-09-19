@@ -3,7 +3,7 @@
  "NOMBRE": "Hombro",
  "ACENTO": {
   "claro": "#1F5F4E",
-  "oscuro": "#1F5F4E"
+  "oscuro": "#5CC0A3"
  },
  "TITULOS": {
   "caraA": "HOMBRO · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
@@ -211,5 +211,87 @@
    ]
   ],
   "nota": "Los estadios del congelado se solapan: en la práctica es más útil clasificar como dolor > rigidez o rigidez > dolor y ajustar el tratamiento a eso."
- }
+ },
+ "ENLACES": {
+  "1": {
+   "botones": [
+    {
+     "pantalla": "banderas"
+    }
+   ]
+  },
+  "4": {
+   "patrones": {
+    "ACROMIOCLAVICULAR": "Acromioclavicular",
+    "INESTABILIDAD": "Inestabilidad GH",
+    "ROTURA DEL MANGUITO": "Rotura del manguito",
+    "SLAP": "Lesión SLAP",
+    "SAPS": "Dolor subacromial (SAPS)"
+   }
+  },
+  "2b": {
+   "botones": [
+    {
+     "pantalla": "orientativa"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Hombro congelado"
+    }
+   ]
+  }
+ },
+ "PRONOSTICO_DE": {
+  "Dolor subacromial (SAPS)": "SAPS",
+  "Inestabilidad GH": "Inestabilidad",
+  "Acromioclavicular": "Acromioclavicular",
+  "Lesión SLAP": "SLAP",
+  "Rotura del manguito": "Rotura del manguito",
+  "Hombro congelado": "Hombro congelado"
+ },
+ "FICHAS": {
+  "Hombro congelado": {
+   "pista": "Movilidad pasiva limitada igual que la activa (nodo 2b)",
+   "orientativa": true,
+   "nota": true
+  }
+ },
+ "ORIENTATIVA_GRUPOS": {
+  "aviso": "Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.",
+  "grupos": [
+   {
+    "titulo": "Pasiva limitada, como el congelado",
+    "resto": true,
+    "filas": [
+     "Artrosis GH",
+     "Neoplasia",
+     "Luxación bloqueada",
+     "Fractura"
+    ]
+   },
+   {
+    "enlace": {
+     "pantalla": "sindrome",
+     "fila": "Hombro congelado",
+     "sub": "Ficha del síndrome"
+    }
+   },
+   {
+    "titulo": "Se parecen al congelado, pero con pasiva no limitada",
+    "plegado": true,
+    "filas": [
+     "Dolor del manguito",
+     "Acromioclavicular",
+     "Cervicogénico"
+    ]
+   }
+  ],
+  "dice": {
+   "Dolor del manguito": "movilidad pasiva no muy limitada",
+   "Acromioclavicular": "sin restricción pasiva",
+   "Cervicogénico": "sin restricción pasiva GH",
+   "Luxación bloqueada": "rigidez activa y pasiva similar al congelado"
+  }
+ },
+ "CORTE_NOTA": "Dosis y progresión"
 }
