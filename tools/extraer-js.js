@@ -1,6 +1,6 @@
 // Extrae { REGION, CONFIG, CONTENIDO } de un tarjeta_<región>.js SIN generar el docx.
-// Uso:  node extraer-js.js tarjeta_lumbar.js [salida.json]     (por defecto: <region>.data.json)
-// Como módulo:  const { leer } = require('./extraer-js');  leer('tarjeta_hombro.js')
+// Uso:  node tools/extraer-js.js data/tarjeta_lumbar.js [salida.json]  (por defecto: junto a la tarjeta)
+// Como módulo:  const { leer } = require('./extraer-js');  leer('data/tarjeta_hombro.js')
 const Module = require('module');
 const path = require('path');
 const fs = require('fs');
@@ -28,10 +28,10 @@ module.exports = { leer };
 
 if (require.main === module) {
   const archivo = process.argv[2];
-  if (!archivo) { console.error('Uso: node extraer-js.js tarjeta_<region>.js [salida.json]'); process.exit(1); }
+  if (!archivo) { console.error('Uso: node tools/extraer-js.js data/tarjeta_<region>.js [salida.json]'); process.exit(1); }
   let captura;
   try { captura = leer(archivo); } catch (e) { console.error(e.message); process.exit(1); }
-  const salida = process.argv[3] || `${captura.REGION}.data.json`;
+  const salida = process.argv[3] || path.join(path.dirname(archivo), `${captura.REGION}.data.json`);
   fs.writeFileSync(salida, JSON.stringify(captura, null, 1));
   console.log('ok', salida);
 }

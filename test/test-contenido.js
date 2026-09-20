@@ -1,9 +1,9 @@
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
-const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'hombro.data.json'), 'utf8'));
-const { nombre: APP } = JSON.parse(fs.readFileSync(path.join(__dirname, 'app.json'), 'utf8'));
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'hombro.data.json'), 'utf8'));
+const { nombre: APP } = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'app.json'), 'utf8'));
 let fails = 0;
 const ok = (c, m) => { if (!c) { fails++; console.log('FALLO:', m); } else console.log('ok:', m); };
 const norm = s => s.replace(/\s+/g, ' ').trim();
