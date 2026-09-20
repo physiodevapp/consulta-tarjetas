@@ -19,9 +19,12 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
 const chips = d => [...d.querySelectorAll('.rec .paso')].map(b => b.textContent);
 const marca = (d, n, e) => click(d.querySelector('#nodo-' + n + ' .marca [data-v="' + e + '"]'));
 const pressed = (d, n) => [...d.querySelectorAll('#nodo-' + n + ' .marca button')].filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.v);
+// El inicio es el selector de región (tarea 3); hombro es la única disponible hoy
+const entrarHombro = d => click(btn(d, 'Hombro'));
 
 (async () => {
   const { w, d, errs, saltos } = nueva();
+  entrarHombro(d);
   click(btn(d, 'Bisagra y árbol'));
   ok(chips(d).join('|') === '1 ·|2 ·|2b ·|3 ·|4 ·', 'panel: 5 nodos sin marcar: ' + chips(d).join('|'));
   ok(txt(d).includes('Marca cada nodo al repasarlo'), 'panel: pista inicial');
@@ -58,7 +61,7 @@ const pressed = (d, n) => [...d.querySelectorAll('#nodo-' + n + ' .marca button'
   ok(chips(d).join('|') === '1 ·|2 ·|2b ·|3 ·|4 ·' && !txt(d).includes('Fichas abiertas') && txt(d).includes('Marca cada nodo'), 'limpiar deja el árbol como nuevo');
 
   // Recarga: memoria solamente
-  const n2 = nueva(); click(btn(n2.d, 'Bisagra y árbol'));
+  const n2 = nueva(); entrarHombro(n2.d); click(btn(n2.d, 'Bisagra y árbol'));
   ok(chips(n2.d).every(c => c.endsWith('·')), 'una página nueva empieza sin marcas');
   ok(w.sessionStorage.length === 0 && w.localStorage.length === 0 && n2.w.sessionStorage.length === 0, 'no guarda nada en el navegador');
   ok(errs.length === 0 && n2.errs.length === 0, 'sin errores de JS: ' + errs.concat(n2.errs).join(' / '));

@@ -6,7 +6,7 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 ## Decisiones tomadas (no cambiar sin preguntar)
 1. **Solo consulta.** No captura datos de pacientes. Prohibido localStorage, sessionStorage, IndexedDB y cookies. El recorrido del árbol (marcas y fichas abiertas) vive en memoria y se pierde al recargar.
 2. **La tarjeta manda.** Todo el texto clínico sale del CONTENIDO (`hombro.data.json`, extraído del docx). No reescribir, resumir ni añadir cifras (S, E, LR, umbrales, puntuaciones). Lo que añade la SPA (agrupación de la tabla de rigidez, pista del congelado, botones del árbol, mapas de nombres) es propio: se marca como tal en pantalla o en el código.
-3. **Se entra siempre por el árbol** (inicio: Banderas rojas y Bisagra y árbol; las fichas de síndrome se alcanzan desde ahí). No hay lista de síndromes en el inicio. Sin popups; plegables con una sola fila abierta.
+3. **El inicio es un selector de región** (una sola URL; tarea 3 hecha). Dentro de cada región **se entra siempre por el árbol** (Banderas rojas y Bisagra y árbol; las fichas de síndrome se alcanzan desde ahí). No hay lista de síndromes en el inicio de la región. Sin popups; plegables con una sola fila abierta.
 4. **Recorrido del árbol:** marcas Hecho / Dudoso / No aplica por nodo, panel «Recorrido» y, al hacer scroll, cápsulas en la cabecera en lugar del título.
 5. **Móvil primero:** objetivos táctiles ≥ 44 px, variables CSS con tema claro y oscuro (dark según el sistema), tipografía Atkinson Hyperlegible con fallback, y que aguante el tamaño de letra del sistema al 130 %.
 6. **Un solo HTML autocontenido.** Sin librerías externas; solo Google Fonts (con fallback).
@@ -14,13 +14,13 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 8. **Una sola paleta para todas las regiones:** la verde de hombro (`#1F5F4E` en claro, `#5CC0A3` en oscuro), fija en el CSS. `CONFIG.DARK` no se usa en pantalla.
 
 ## Archivos (todo en la raíz, formato plano)
-- `plantilla.html` código de la SPA (motor genérico, sin texto de ninguna región); lleva los marcadores `__DATA__` y `__TITULO__`. Los colores de acento son fijos en el CSS (una sola paleta para todas las regiones)
+- `plantilla.html` código de la SPA (motor genérico, sin texto de ninguna región); lleva el marcador `__DATA__` con `{REGIONES, DATOS}` (ver más abajo). El inicio es el selector de región; dentro de una región, `D` son sus datos planos y `R` lo que se deriva de ellos (`cargarRegion()`). Los colores de acento son fijos en el CSS (una sola paleta para todas las regiones)
 - `hombro.data.json` datos de hombro ya montados: CONTENIDO de la tarjeta + campos de `spa_hombro.js`. Se genera, no se edita a mano
 - `spa_<región>.js` **los campos específicos de la SPA viven aquí, no en el CONTENIDO de la tarjeta**: enlaces del árbol a las fichas, correspondencia síndrome↔pronóstico, pistas de las fichas, agrupación de la tabla orientativa y corte de la nota. Hoy solo `spa_hombro.js`. No es texto clínico: solo nombra filas que ya están en la tarjeta
 - `datos.js` funde `tarjeta_<región>.js` + `spa_<región>.js` en la forma que consume la SPA; `extraer.js` es su CLI y escribe `<región>.data.json`
-- `build.py` inyecta el JSON y el título de la región en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
+- `build.py` junta los `<región>.data.json` que existan (define las cinco regiones conocidas; hoy solo `hombro.data.json`) en `{REGIONES: [{region, nombre, disponible}], DATOS: {<región>: ...}}`, lo inyecta en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
 - `test-build.js` `npm test` lo ejecuta primero: regenera `index.html` (`build.py`) y falla si el resultado difiere del que había, para no publicar nunca una versión desactualizada
-- `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js`, `test-urgencia.js` pruebas con jsdom
+- `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js`, `test-urgencia.js`, `test-selector.js` pruebas con jsdom
 - `plantilla_tarjetas.js` generador de los docx de las tarjetas (no tocar salvo en la migración). Depende del paquete npm `docx` (ya declarado en `package.json`). Escribe en la carpeta de la variable `OUT_DIR` (por defecto `/home/claude`).
 - `tarjeta_cadera.js`, `tarjeta_cervical.js`, `tarjeta_lumbar.js`, `tarjeta_rodilla.js`: CONFIG + CONTENIDO de cada región (la fuente de verdad; cada uno llama a `generarTarjeta` al cargarse)
 - `extraer-js.js` extrae `{REGION, CONFIG, CONTENIDO}` de un `tarjeta_<región>.js` sin generar el docx: `npm run extraer-js -- tarjeta_lumbar.js`. Exporta `leer()`, que usan `datos.js` y `test-fuente.js`
@@ -50,7 +50,7 @@ El motor lee un nodo con `patrones` partiendo su primera línea en «condición 
 ## Tareas, por orden
 1. ~~**Motor común + datos por región.**~~ **Hecho con hombro.** La fuente es `tarjeta_hombro.js` (+ `spa_hombro.js`), `extraer.py` retirado y el motor sin literales de la región. Los 5 docx se regeneran idénticos (comprobado comparando `word/document.xml` antes y después). Queda, al añadir cada región: darle su `spa_<región>.js` y meterla en `REGIONES` de `test-fuente.js`.
 2. ~~**URGENCIA.**~~ **Hecho.** Componente genérico en `plantilla.html` (`urgencia()`, clase CSS `.card.urgencia`): lo primero que se ve al entrar en la región cuando `DATA.URGENCIA` existe, con el mismo criterio visual que la tarjeta (borde grueso con `var(--ink)`, sin rojo) y sus líneas literales, sin resumir. Probado con una región sintética en `test-urgencia.js` (ninguna región publicada tiene aún `URGENCIA`; llegará con la tarea 4).
-3. **Selector de región en el inicio** (una sola URL). Con una sola paleta, el nombre de la región debe verse siempre en la cabecera, también cuando aparecen las cápsulas del recorrido.
+3. ~~**Selector de región en el inicio.**~~ **Hecho.** `pSelector()` en `plantilla.html`, con `DATA.REGIONES` (las cinco, generadas por `build.py`): hombro abre, las otras cuatro se ven marcadas «Pendiente» y no son clicables (llegan con la tarea 4). El nombre de la región se ve siempre en la cabecera (`#regionCab`) salvo en el propio selector y en el inicio de la región (ahí ya es el título); también con las cápsulas del recorrido. Probado en `test-selector.js` y en `test-cabecera.js`.
 4. **Añadir regiones una a una** (cadera, cervical, lumbar, rodilla) leyendo su `tarjeta_<región>.js` con `npm run extraer` y dándole su `spa_<región>.js`. Para cada una, prueba como `test-contenido.js`: el texto en pantalla coincide con el de su tarjeta. Tener en cuenta las diferencias de arriba: no asumir los nodos de hombro, tratar `span`, `BANDERAS` de 2 columnas, `ORIENTATIVA` genérica y pronóstico con mapa explícito.
 5. **PWA:** manifest y service worker para uso sin conexión (GitHub Pages sirve por HTTPS).
 6. **Wake Lock** (mantener la pantalla encendida): falló dentro del visor de claude.ai; reintentarlo como página propia.

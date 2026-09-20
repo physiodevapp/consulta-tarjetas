@@ -1,0 +1,57 @@
+// Tarea 3: selector de región en el inicio (una sola URL). Hoy solo hombro tiene datos;
+// las otras cuatro se ven pero no se pueden abrir (llegan con la tarea 4).
+const { JSDOM } = require('jsdom');
+const fs = require('fs');
+const path = require('path');
+const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+let fails = 0;
+const ok = (c, m) => { if (!c) { fails++; console.log('FALLO:', m); } else console.log('ok:', m); };
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+function nueva() {
+  const errs = [];
+  const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'http://localhost/', pretendToBeVisual: true,
+    beforeParse(w) { w.scrollTo = () => {}; w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
+  return { w: dom.window, d: dom.window.document, errs };
+}
+const btn = (d, t) => [...d.querySelectorAll('#main button')].find(b => b.textContent.includes(t));
+const click = b => { if (!b) throw new Error('botón no encontrado'); b.click(); };
+
+(async () => {
+  const { w, d, errs } = nueva();
+
+  ok(d.title === 'Consulta', 'selector: título de la pestaña, sin región');
+  ok(d.querySelector('#titulo').textContent === 'Consulta' && d.querySelector('#back').hidden, 'selector: título en la cabecera y sin botón atrás');
+  ok(d.querySelector('#regionCab').hidden, 'selector: sin nombre de región en la cabecera (todavía no se ha elegido ninguna)');
+
+  const filas = [...d.querySelectorAll('#main .nav, #main .nav.pendiente')];
+  ok(filas.length === 5, 'selector: las cinco regiones de CLAUDE.md: ' + filas.map(f => f.querySelector('b').textContent).join(', '));
+  const nombres = filas.map(f => f.querySelector('b').textContent);
+  ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla', 'selector: orden de las regiones: ' + nombres.join('|'));
+
+  const hombro = filas[0], resto = filas.slice(1);
+  ok(hombro.tagName === 'BUTTON', 'selector: hombro es la única región clicable');
+  ok(resto.every(f => f.tagName === 'DIV' && f.classList.contains('pendiente')), 'selector: las otras cuatro no son botones (no se pueden abrir)');
+  ok(resto.every(f => f.textContent.includes('Pendiente')), 'selector: las cuatro pendientes lo dicen en pantalla');
+
+  click(btn(d, 'Hombro'));
+  ok(d.title === 'Consulta Hombro', 'home: título de la pestaña con la región');
+  ok(d.querySelector('#titulo').textContent === 'Hombro' && !d.querySelector('#back').hidden, 'home: título de la región y botón atrás (vuelve al selector)');
+
+  d.querySelector('#back').click(); await wait(50);
+  ok(d.querySelector('#titulo').textContent === 'Consulta' && d.querySelector('#back').hidden, 'atrás desde home: vuelve al selector, sin botón atrás');
+  ok(d.title === 'Consulta', 'atrás desde home: título de la pestaña, sin región');
+
+  // Volver a entrar conserva el recorrido de esa misma región (no es un cambio de región)
+  click(btn(d, 'Hombro')); click(btn(d, 'Bisagra y árbol'));
+  click(d.querySelector('#nodo-1 .marca [data-v="hecho"]'));
+  d.querySelector('#back').click(); await wait(50);
+  d.querySelector('#back').click(); await wait(50);
+  click(btn(d, 'Hombro')); click(btn(d, 'Bisagra y árbol'));
+  ok(d.querySelector('#nodo-1 .marca [data-v="hecho"]').getAttribute('aria-pressed') === 'true', 'volver a entrar en la misma región conserva las marcas del recorrido');
+
+  ok(w.sessionStorage.length === 0 && w.localStorage.length === 0, 'no guarda nada en el navegador');
+  ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
+  console.log(fails ? '\n' + fails + ' FALLOS' : '\nTODO OK');
+  process.exit(fails ? 1 : 0);
+})();

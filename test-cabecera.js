@@ -16,17 +16,24 @@ function nueva() {
 }
 const btn = (d, t) => [...d.querySelectorAll('#main button')].find(b => b.textContent.includes(t));
 const click = b => { if (!b) throw new Error('botón no encontrado'); b.click(); };
-const cab = d => ({ titulo: !d.querySelector('#titulo').hidden, rec: !d.querySelector('#cabRec').hidden, chips: [...d.querySelectorAll('#cabRec .paso')].map(b => b.textContent) });
+const cab = d => ({ titulo: !d.querySelector('#titulo').hidden, rec: !d.querySelector('#cabRec').hidden, chips: [...d.querySelectorAll('#cabRec .paso')].map(b => b.textContent),
+  region: d.querySelector('#regionCab').hidden ? null : d.querySelector('#regionCab').textContent });
 const scroll = (w, y) => { pasosBottom = y; w.dispatchEvent(new w.Event('scroll')); };
+// El inicio es el selector de región (tarea 3); hombro es la única disponible hoy
+const entrarHombro = d => click(btn(d, 'Hombro'));
 
 (async () => {
   const { w, d, errs } = nueva();
   let c = cab(d);
-  ok(c.titulo && !c.rec, 'home: título visible y sin recorrido en la cabecera');
+  ok(c.titulo && !c.rec && c.region === null, 'selector: título visible, sin recorrido y sin nombre de región (no hay ninguna elegida)');
+  entrarHombro(d);
+  c = cab(d); ok(c.titulo && !c.rec && c.region === null, 'home: título (ya es el nombre de la región) y sin nombre de región repetido');
   click(btn(d, 'Bisagra y árbol'));
-  c = cab(d); ok(c.titulo && !c.rec && d.querySelector('#titulo').textContent === 'Bisagra y árbol', 'árbol arriba: título visible (las cápsulas del panel se ven)');
+  c = cab(d); ok(c.titulo && !c.rec && d.querySelector('#titulo').textContent === 'Bisagra y árbol' && c.region === 'Hombro', 'árbol arriba: título visible (las cápsulas del panel se ven) y nombre de región en la cabecera');
   scroll(w, 10);
   c = cab(d); ok(!c.titulo && c.rec && c.chips.join('|') === '1 ·|2 ·|2b ·|3 ·|4 ·', 'al salir las cápsulas del panel: la cabecera muestra el recorrido: ' + c.chips.join('|'));
+  // tarea 3: con una sola paleta, el nombre de la región se ve siempre, también con las cápsulas
+  ok(c.region === 'Hombro', 'con las cápsulas del recorrido, el nombre de la región sigue en la cabecera');
   ok(!d.querySelector('#back').hidden, 'el botón atrás sigue en la cabecera');
   scroll(w, 200);
   c = cab(d); ok(c.titulo && !c.rec, 'al volver a verse las cápsulas: vuelve el título');
@@ -41,7 +48,7 @@ const scroll = (w, y) => { pasosBottom = y; w.dispatchEvent(new w.Event('scroll'
   click(d.querySelectorAll('#cabRec .paso')[3]); ok(salto === 'nodo-3', 'pulsar una cápsula de la cabecera salta al nodo');
   // en otras pantallas, la cabecera vuelve al título aunque el scroll sea "grande"
   click(btn(d, 'Dolor subacromial (SAPS)'));
-  c = cab(d); ok(c.titulo && !c.rec && d.querySelector('#titulo').textContent === 'Dolor subacromial (SAPS)', 'en la ficha: título del síndrome, sin cápsulas');
+  c = cab(d); ok(c.titulo && !c.rec && d.querySelector('#titulo').textContent === 'Dolor subacromial (SAPS)' && c.region === 'Hombro', 'en la ficha: título del síndrome, sin cápsulas, y nombre de región');
   pasosBottom = 300;   // al volver, la pantalla se coloca arriba y las cápsulas del panel se ven
   d.querySelector('#back').click(); await wait(50);
   c = cab(d); ok(d.querySelector('#titulo').textContent === 'Bisagra y árbol' && c.titulo && !c.rec, 'al volver al árbol arriba: título');
