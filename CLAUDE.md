@@ -19,6 +19,7 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 - `spa_<región>.js` **los campos específicos de la SPA viven aquí, no en el CONTENIDO de la tarjeta**: enlaces del árbol a las fichas, correspondencia síndrome↔pronóstico, pistas de las fichas, agrupación de la tabla orientativa y corte de la nota. Hoy solo `spa_hombro.js`. No es texto clínico: solo nombra filas que ya están en la tarjeta
 - `datos.js` funde `tarjeta_<región>.js` + `spa_<región>.js` en la forma que consume la SPA; `extraer.js` es su CLI y escribe `<región>.data.json`
 - `build.py` inyecta el JSON y el título de la región en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
+- `test-build.js` `npm test` lo ejecuta primero: regenera `index.html` (`build.py`) y falla si el resultado difiere del que había, para no publicar nunca una versión desactualizada
 - `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js` pruebas con jsdom
 - `plantilla_tarjetas.js` generador de los docx de las tarjetas (no tocar salvo en la migración). Depende del paquete npm `docx` (ya declarado en `package.json`). Escribe en la carpeta de la variable `OUT_DIR` (por defecto `/home/claude`).
 - `tarjeta_cadera.js`, `tarjeta_cervical.js`, `tarjeta_lumbar.js`, `tarjeta_rodilla.js`: CONFIG + CONTENIDO de cada región (la fuente de verdad; cada uno llama a `generarTarjeta` al cargarse)
@@ -64,6 +65,6 @@ El motor lee un nodo con `patrones` partiendo su primera línea en «condición 
 ## Reglas de trabajo
 - **`.gitignore` con `node_modules/` y `salida/`** (ya está). El repo se sube a mano (sin carpetas ni archivos ocultos) y una sesión en la nube podría commitear `node_modules`.
 - Cambios de contenido clínico: primero en la tarjeta o la guía, después reflejarlos aquí.
-- Antes de dar algo por hecho: `npm run build && npm test`.
+- Antes de dar algo por hecho: `npm test` (ya regenera `index.html` y falla si no coincidía con el del repo).
 - Publicar en GitHub Pages **desde una rama, sin GitHub Actions** (los tokens de las sesiones en la nube pueden no poder empujar archivos de workflow).
 - Sin datos de pacientes en el repo, en pruebas ni en ejemplos.
