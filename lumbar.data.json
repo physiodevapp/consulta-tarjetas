@@ -1,0 +1,310 @@
+{
+ "REGION": "lumbar",
+ "NOMBRE": "Lumbar",
+ "TITULOS": {
+  "caraA": "LUMBAR · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
+  "caraB": "LUMBAR · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",
+  "pieA2": "Guía clínica lumbar, ap. 1 y 4 · Fondevila Suárez, cap. 5 — Ficha de primera visita, bloques 0, 3 y 4"
+ },
+ "BANDERAS": {
+  "titulo": "Banderas rojas de la región — sobre el cribado general de la ficha",
+  "cabecera": [
+   "Sospecha",
+   "Pistas en entrevista y exploración"
+  ],
+  "filas": [
+   [
+    "Cáncer vertebral",
+    "Antecedente de cáncer (mama, próstata, pulmón) + fuerte sospecha clínica: lo más preciso. <22 o >55 a; primer episodio >50; pérdida de peso inexplicada (pregunta obligada); dolor nocturno; empeora con el tiempo; malestar general; no cambia con tratamientos previos. >50 + antecedente + pérdida de peso + >1 mes → probabilidad alta. Movimiento lumbar indoloro en todas direcciones: LR− 0,0. Signo de la nalga si hay cáncer pélvico."
+   ],
+   [
+    "Infección",
+    "Fiebre, infección bacteriana o cirugía lumbar recientes, inmunodepresión o VIH, dolor nocturno, empeora con el tiempo, sin respuesta al conservador."
+   ],
+   [
+    "Fractura osteoporótica o patológica",
+    "Mayor de 70, corticoides prolongados, traumatismo grave, contusión o abrasión; mujer mayor con osteoporosis; microtraumatismo súbito o dolor sin causa aparente. Edad + corticoides + traumatismo grave + contusión juntos → fractura por compresión probable en el 90,2 %."
+   ],
+   [
+    "Fractura sacra por estrés",
+    "Mujer deportista con actividad vigorosa y repetitiva, dolor en nalga que reproduce la carrera, dieta pobre, alteraciones menstruales, fracturas de estrés previas, sin respuesta a tratamientos. Signo de la nalga. Puede no verse en RM porque no suele formar callo."
+   ],
+   [
+    "Espondilolistesis aguda",
+    "Joven con lesiones repetidas en hiperextensión, ciática bilateral súbita durante el deporte, dolor en extensión (prono con extensión pasiva bilateral de caderas), sin incontinencia. Palpación de apófisis espinosas: E 87–100 %, S 60–88 %. Para espondilólisis ningún test sirve."
+   ],
+   [
+    "Espondiloartropatía",
+    "Menor de 40, rigidez matutina de más de 1 h que cede con el movimiento, dolor que va y viene sin relación con el esfuerzo, no alivia en supino, dolor alterno en SI, pérdida progresiva de movilidad, sin parestesias. Dactilitis, uveítis, entesitis, psoriasis. Tardío: inclinación lateral limitada a ambos lados."
+   ],
+   [
+    "Vascular",
+    "Aneurisma: dolor en reposo o nocturno, masa abdominal pulsátil, antecedentes familiares cardiovasculares. Claudicación vascular: mayor con factores de riesgo (HTA, diabetes, colesterol, tabaco), dolor al caminar que CEDE AL PARARSE, pie más frío, pulsos distales disminuidos, disfunción eréctil. Leriche (aortoilíaca) imita lumbalgia: nalgas, caderas y muslos."
+   ],
+   [
+    "Visceral",
+    "Litiasis renal: dolor agudo intermitente hacia testículos o labios; con fiebre, infección renal. Digestivo: tras comer, en L1–L2. Genital: lumbosacro y nocturno. También úlcera duodenal, pancreatitis, endometriosis, riñón poliquístico. Denominador común: la exploración mecánica no reproduce los síntomas."
+   ]
+  ],
+  "nota": "No se descartan por ausencia: el 64 % de los pacientes con cáncer vertebral no tenía ninguna asociada. Se revisan en todas las visitas, no solo en la primera."
+ },
+ "BISAGRA": {
+  "pregunta": "¿Hay dolor en la pierna con rasgos neuropáticos, claudicación o déficit neurológico?",
+  "ramas": "SÍ → familia radicular · radiculopatía · estenosis      |      NO → inespecífico: disco · faceta · SI · miofascial",
+  "apoyo": "Rasgos neuropáticos: quemazón o descargas, «distinto a todo», por debajo de la rodilla, empeora con tos o Valsalva, no encuentra postura, dolor nocturno.",
+  "nota": "La guía lumbar no nombra una «bisagra» como la RE pasiva del hombro. Ésta es el paso 3 de su árbol, usado como tal."
+ },
+ "ARBOL": {
+  "filas": [
+   [
+    "1",
+    "¿Signos de cauda equina? → URGENCIAS HOY.   ·   No → 2"
+   ],
+   [
+    "2",
+    "¿Otras banderas rojas, o síntomas que la exploración mecánica no reproduce? → derivación médica.   ·   No → 3"
+   ],
+   [
+    "3",
+    "¿Dolor en pierna con rasgos neuropáticos, claudicación o déficit neurológico?   Sí → 3b   ·   No → 4"
+   ],
+   [
+    "3b",
+    "¿Síntomas al caminar o de pie que mejoran al sentarse o con flexión?   Sí → ESTENOSIS DE CANAL (si mejora solo con pararse → vascular → derivar).\nNo: rasgos neuropáticos → DOLOR RADICULAR · déficit de fuerza, sensibilidad o reflejos → RADICULOPATÍA. Pueden coexistir."
+   ],
+   [
+    "4",
+    "Inespecífico, ¿qué patrón encaja mejor? Línea media + preferencia direccional o centralización → DISCOGÉNICO · paramedial unilateral + dolor en extensión sin pasar la rodilla → FACETARIO · Fortin sin Tuber + no centraliza + Laslett positivo → SACROILÍACA · banda tensa + punto hipersensible + dolor reconocido → MIOFASCIAL.\nRevisar siempre cadera y factores contribuyentes."
+   ]
+  ]
+ },
+ "SINDROMES": {
+  "aviso": "Antes de explorar: severidad e irritabilidad. Alta → solo bisagra y 1–2 tests, sin final de rango ni repeticiones provocadoras; el resto, en la próxima visita. Máximo 2 tests; la palpación va la última.",
+  "cabecera": [
+   "Síndrome",
+   "Explorar · 10′",
+   "① Gesto testigo",
+   "② Medida objetiva"
+  ],
+  "filas": [
+   [
+    "Dolor radicular",
+    "SLR supino (más sensible que sentado): un negativo ayuda a descartar afectación radicular; un positivo por dolor no aporta precisión por sí solo. SLR cruzado (LR aceptables en la mayoría de estudios). Slump: más sensible que el SLR si se sospecha hernia discal.",
+    "Dolor de pierna en slump o SLR en una posición fija → EVA",
+    "Ángulo de SLR en supino en que aparece el dolor de pierna (goniómetro o inclinómetro)"
+   ],
+   [
+    "Radiculopatía",
+    "Fuerza por miotomas L1–S2: la debilidad es el signo más importante. Reflejos rotuliano (L3–L4) y aquíleo (L5–S1). Sensibilidad: algodón, diapasón sobre prominencia ósea, pinchazo. Comparar siempre con el lado sano.",
+    "Si hay dolor, el gesto testigo del cuadro que lo acompañe",
+    "Repeticiones hasta el fallo (máx. 10) con tempo fijo del miotoma afectado, frente al lado sano, siempre con la misma prueba (p. ej. elevaciones de talón a una pierna para S1, u otra equivalente)"
+   ],
+   [
+    "Estenosis de canal",
+    "Criterios clínicos: >60 a · test de extensión 30 s positivo · dolor en ambas piernas · alivio al sentarse · alivio al inclinarse o flexionar · SLR negativo. Flexión conservada, extensión limitada. Neurológico habitualmente normal. SLR y slump suelen ser negativos.",
+    "Test de extensión de 30 s → EVA del dolor de piernas",
+    "Tiempo o distancia de marcha hasta los síntomas, con el mismo recorrido y ritmo"
+   ],
+   [
+    "Discogénico",
+    "Preferencia direccional: movimientos repetidos al final del rango o posturas mantenidas que alivian de forma duradera o aumentan la movilidad. Centralización: desaparecen los síntomas distales. Observación: espalda plana, shift lateral.",
+    "Movimiento o postura provocadora → EVA y localización más distal del dolor, antes y después de los repetidos",
+    "Tiempo sentado tolerado hasta la aparición de síntomas, en la misma silla"
+   ],
+   [
+    "Facetario",
+    "Dolor en extensión, inclinación lateral o rotación hacia el lado del dolor. PA sobre la faceta o la transversa; PA unilateral con menos movilidad o más rigidez; espasmo ipsilateral. Ausencia de signos radiculares. Espalda en flexión, sin shift. Los repetidos no suelen aliviar.",
+    "Extensión + rotación hacia el lado del dolor → EVA",
+    "Tiempo de bipedestación o marcha tolerado hasta el dolor, en la misma superficie y al mismo ritmo"
+   ],
+   [
+    "Sacroilíaca",
+    "Descartar antes origen lumbar buscando preferencia direccional. Cluster de Laslett (buena S y E): no centralización + dolor dominante en SI sin dolor en Tuber + 3 de 5 positivos (distracción, compresión, thrust sacro, thrust de muslo, Gaenslen).",
+    "El test del cluster más provocador (p. ej. thrust de muslo) → EVA",
+    "Sit-to-stand 30 s, con silla, brazos y apoyo fijos. En PRPPP: dificultad autoinformada en el ASLR, 0–10 (como la EVA)"
+   ],
+   [
+    "Miofascial",
+    "Criterios mínimos (la guía no tiene fila «Explorar · 10′» para este síndrome): banda tensa palpable + punto hipersensible dentro de la banda + el paciente reconoce el dolor provocado. Con o sin dolor referido.",
+    {
+     "span": "La guía no propone ① ni ②. Hallazgo acompañante hasta descartar lo anterior."
+    }
+   ]
+  ],
+  "nota": "No usar: tests de disfunción de movimiento SI — baja fiabilidad y validez. La SI se mueve ~0,2° en carga."
+ },
+ "PRONOSTICO": {
+  "titulo": "para «a las X sesiones espero Y; si no lo veo → Z»",
+  "cabecera": [
+   "Síndrome",
+   "Horizonte e imagen",
+   "Criterio de derivación"
+  ],
+  "filas": [
+   [
+    "Radicular",
+    "Agudo hasta 3 semanas, subagudo hasta 3 meses. Mejora a los 6 meses en el 88 %, recuperación completa en el 65 %. Hernia reabsorbida en al menos dos tercios. Recurrencia 20 %.",
+    "RM si sospecha de patología grave, dolor radicular persistente, déficit grave o progresivo, o más de 1 mes sin remisión con conservador."
+   ],
+   [
+    "Radiculopatía",
+    "RM de elección. EMG muy específica, poco sensible; útil si clínica e imagen no casan.",
+    "Cirugía: déficit significativo en abductores de cadera, flexores plantares o dorsales del pie, o déficit que progresa pese al conservador."
+   ],
+   [
+    "Estenosis",
+    "Historia natural poco conocida. 15 % mejora solo; hasta 20 % controla los síntomas evitando la extensión. Conservador antes que cirugía.",
+    "Progresión neurológica rápida o deterioro de la calidad de vida. La cirugía no garantiza recuperar los déficits."
+   ],
+   [
+    "Discogénico",
+    "A 4 años: 13 % mejoró, 7,6 % alivio leve, 12,2 % empeoró, 67,2 % sin cambios. La preferencia direccional predice buen pronóstico.",
+    "Componente neuropático o disfuncional → más cronicidad. Con dolor en pierna, diferenciar de dolor radicular."
+   ],
+   [
+    "Facetario",
+    "No se puede establecer pronóstico: la degeneración aumenta con la edad sin relación causal demostrada con el dolor. La radiología no es criterio diagnóstico; un bloqueo simple alivia definitivamente a menos del 10 %.",
+    "—"
+   ],
+   [
+    "Sacroilíaca · PRPPP",
+    "PRPPP: >54 % en el último trimestre, 25 % posparto; la mayoría se recupera, 7–20 % persiste. Recaída del 85 % en el siguiente embarazo.",
+    "Predicen persistencia: edad, carga de trabajo alta, lumbalgia previa, mala función muscular. Cribar depresión posparto (×3)."
+   ],
+   [
+    "Curso general",
+    "Mejora sustancial a las 6 semanas, pero el 65–67 % sigue con dolor a los 3 y 12 meses. Mejor predictor: un episodio previo.",
+    "Sin banderas rojas, no hay imagen."
+   ]
+  ],
+  "nota": "③ lo elige el paciente; si no sabe: sentarse, levantarse, caminar, estar de pie, dormir. Dosis y progresión no están en la guía: son tuyas.",
+  "pie": "Guía clínica lumbar, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo"
+ },
+ "URGENCIA": {
+  "titulo": "URGENCIAS HOY · CAUDA EQUINA",
+  "lineas": [
+   "Urgencia quirúrgica: el tiempo hasta la cirugia pesa mas que la duración de los sintomas.",
+   "Dolor o debilidad bilateral grave en MMII · parestesia en silla de montar · retención o incontinencia urinaria · incontinencia fecal · menor tono anal.",
+   "PREGUNTAR SIEMPRE. Signos más específicos que sensibles; RM de elección. En mayores con estenosis el inicio lento se solapa y pasa desapercibido."
+  ]
+ },
+ "ORIENTATIVA": {
+  "titulo": "Inespecífico · disco / faceta / SI — tabla orientativa",
+  "bloque": "4",
+  "cabecera": [
+   "",
+   "Discogénico 39–43 %",
+   "Facetario 15–30 %",
+   "Sacroilíaco 15 %"
+  ],
+  "filas": [
+   [
+    "Localización",
+    "Medial (origen discal 73 %; sin dolor medial, 96 % de que no lo sea)",
+    "Paramedial, unilateral",
+    "Fortin, uni o bilateral; sin dolor en Tuber"
+   ],
+   [
+    "Dolor distal",
+    "Puede llegar al pie",
+    "Normalmente hasta la rodilla",
+    "Puede llegar al pie"
+   ],
+   [
+    "Cambia de lado",
+    "Sí",
+    "No",
+    "No"
+   ],
+   [
+    "Alivio con repetidos",
+    "Sí (ayuda al diagnóstico)",
+    "Preliminar: no",
+    "No"
+   ],
+   [
+    "Agravantes",
+    "Flexión, levantarse de la silla",
+    "Extensión, extensión + rotación",
+    "Levantarse de la silla, cluster de Laslett"
+   ],
+   [
+    "Observación",
+    "Espalda plana; shift sí",
+    "Espalda en flexión, unilateral; shift no",
+    "Shift no"
+   ],
+   [
+    "Perfil",
+    "Varón, 44 ± 10 a; sin relación con IMC",
+    "Mujer, ~60 a; IMC alto",
+    "Mujer, ~61 a; IMC bajo"
+   ]
+  ],
+  "nota": "El autor insiste en que esta tabla solo tiene valor indicativo. Valsalva es inespecífico en los tres."
+ },
+ "ENLACES": {
+  "2": {
+   "botones": [
+    {
+     "pantalla": "banderas",
+     "sub": "Otras banderas rojas, o síntomas que la exploración mecánica no reproduce"
+    }
+   ]
+  },
+  "4": {
+   "botones": [
+    {
+     "pantalla": "orientativa",
+     "sub": "Comparativa disco / faceta / SI"
+    }
+   ],
+   "patrones": {
+    "DISCOGÉNICO": "Discogénico",
+    "FACETARIO": "Facetario",
+    "SACROILÍACA": "Sacroilíaca",
+    "MIOFASCIAL": "Miofascial"
+   }
+  },
+  "3b": {
+   "botones": [
+    {
+     "pantalla": "sindrome",
+     "fila": "Estenosis de canal",
+     "sub": "Síntomas al caminar o de pie que mejoran al sentarse o con flexión"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Dolor radicular",
+     "sub": "Rasgos neuropáticos"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Radiculopatía",
+     "sub": "Déficit de fuerza, sensibilidad o reflejos"
+    }
+   ]
+  }
+ },
+ "PRONOSTICO_DE": {
+  "Dolor radicular": "Radicular",
+  "Estenosis de canal": "Estenosis",
+  "Sacroilíaca": "Sacroilíaca · PRPPP",
+  "Miofascial": null
+ },
+ "FICHAS": {
+  "Estenosis de canal": {
+   "pista": "Síntomas al caminar o de pie que mejoran al sentarse o con flexión (nodo 3b)"
+  },
+  "Dolor radicular": {
+   "pista": "Rasgos neuropáticos (nodo 3b)"
+  },
+  "Radiculopatía": {
+   "pista": "Déficit de fuerza, sensibilidad o reflejos (nodo 3b)"
+  },
+  "Sacroilíaca": {
+   "nota": true
+  }
+ },
+ "CORTE_NOTA": "Dosis y progresión"
+}
