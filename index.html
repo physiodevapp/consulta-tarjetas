@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Consulta de tarjetas</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- theme-color: mismo acento que --accent en el CSS de abajo (decisión 8); si cambia, cambiar en los dos sitios -->
+<meta name="theme-color" content="#1F5F4E" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#5CC0A3" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -459,6 +466,15 @@ function render(arriba) {
   actualizarCab();
 }
 render(true);
+
+// PWA: uso sin conexión (tarea 5). Ruta relativa: GitHub Pages puede servir el sitio
+// desde una subruta. Si falla (o el navegador no lo soporta), la SPA sigue igual,
+// solo que sin caché para la próxima vez sin conexión.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
