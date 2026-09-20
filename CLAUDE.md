@@ -20,7 +20,7 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 - `datos.js` funde `tarjeta_<región>.js` + `spa_<región>.js` en la forma que consume la SPA; `extraer.js` es su CLI y escribe `<región>.data.json`
 - `build.py` inyecta el JSON y el título de la región en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
 - `test-build.js` `npm test` lo ejecuta primero: regenera `index.html` (`build.py`) y falla si el resultado difiere del que había, para no publicar nunca una versión desactualizada
-- `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js` pruebas con jsdom
+- `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js`, `test-urgencia.js` pruebas con jsdom
 - `plantilla_tarjetas.js` generador de los docx de las tarjetas (no tocar salvo en la migración). Depende del paquete npm `docx` (ya declarado en `package.json`). Escribe en la carpeta de la variable `OUT_DIR` (por defecto `/home/claude`).
 - `tarjeta_cadera.js`, `tarjeta_cervical.js`, `tarjeta_lumbar.js`, `tarjeta_rodilla.js`: CONFIG + CONTENIDO de cada región (la fuente de verdad; cada uno llama a `generarTarjeta` al cargarse)
 - `extraer-js.js` extrae `{REGION, CONFIG, CONTENIDO}` de un `tarjeta_<región>.js` sin generar el docx: `npm run extraer-js -- tarjeta_lumbar.js`. Exporta `leer()`, que usan `datos.js` y `test-fuente.js`
@@ -49,7 +49,7 @@ El motor lee un nodo con `patrones` partiendo su primera línea en «condición 
 
 ## Tareas, por orden
 1. ~~**Motor común + datos por región.**~~ **Hecho con hombro.** La fuente es `tarjeta_hombro.js` (+ `spa_hombro.js`), `extraer.py` retirado y el motor sin literales de la región. Los 5 docx se regeneran idénticos (comprobado comparando `word/document.xml` antes y después). Queda, al añadir cada región: darle su `spa_<región>.js` y meterla en `REGIONES` de `test-fuente.js`.
-2. **URGENCIA.** Las cuatro regiones nuevas la tienen. Debe ser lo primero que se vea al entrar en la región, con el mismo criterio visual que la tarjeta (borde grueso, sin rojo), y sus líneas literales.
+2. ~~**URGENCIA.**~~ **Hecho.** Componente genérico en `plantilla.html` (`urgencia()`, clase CSS `.card.urgencia`): lo primero que se ve al entrar en la región cuando `DATA.URGENCIA` existe, con el mismo criterio visual que la tarjeta (borde grueso con `var(--ink)`, sin rojo) y sus líneas literales, sin resumir. Probado con una región sintética en `test-urgencia.js` (ninguna región publicada tiene aún `URGENCIA`; llegará con la tarea 4).
 3. **Selector de región en el inicio** (una sola URL). Con una sola paleta, el nombre de la región debe verse siempre en la cabecera, también cuando aparecen las cápsulas del recorrido.
 4. **Añadir regiones una a una** (cadera, cervical, lumbar, rodilla) leyendo su `tarjeta_<región>.js` con `npm run extraer` y dándole su `spa_<región>.js`. Para cada una, prueba como `test-contenido.js`: el texto en pantalla coincide con el de su tarjeta. Tener en cuenta las diferencias de arriba: no asumir los nodos de hombro, tratar `span`, `BANDERAS` de 2 columnas, `ORIENTATIVA` genérica y pronóstico con mapa explícito.
 5. **PWA:** manifest y service worker para uso sin conexión (GitHub Pages sirve por HTTPS).
