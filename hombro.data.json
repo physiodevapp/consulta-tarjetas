@@ -1,10 +1,6 @@
 {
  "REGION": "hombro",
  "NOMBRE": "Hombro",
- "ACENTO": {
-  "claro": "#1F5F4E",
-  "oscuro": "#5CC0A3"
- },
  "TITULOS": {
   "caraA": "HOMBRO · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "HOMBRO · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",

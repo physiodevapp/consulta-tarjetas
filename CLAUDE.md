@@ -11,13 +11,14 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 5. **Móvil primero:** objetivos táctiles ≥ 44 px, variables CSS con tema claro y oscuro (dark según el sistema), tipografía Atkinson Hyperlegible con fallback, y que aguante el tamaño de letra del sistema al 130 %.
 6. **Un solo HTML autocontenido.** Sin librerías externas; solo Google Fonts (con fallback).
 7. **Sin colores de alarma:** el borde grueso negro sustituye al rojo (decisión de la tarjeta en papel).
+8. **Una sola paleta para todas las regiones:** la verde de hombro (`#1F5F4E` en claro, `#5CC0A3` en oscuro), fija en el CSS. `CONFIG.DARK` no se usa en pantalla.
 
 ## Archivos (todo en la raíz, formato plano)
-- `plantilla.html` código de la SPA (motor genérico, sin texto de ninguna región); lleva los marcadores `__DATA__`, `__TITULO__`, `__ACENTO_CLARO__` y `__ACENTO_OSCURO__`
+- `plantilla.html` código de la SPA (motor genérico, sin texto de ninguna región); lleva los marcadores `__DATA__` y `__TITULO__`. Los colores de acento son fijos en el CSS (una sola paleta para todas las regiones)
 - `hombro.data.json` datos de hombro ya montados: CONTENIDO de la tarjeta + campos de `spa_hombro.js`. Se genera, no se edita a mano
-- `spa_<región>.js` **los campos específicos de la SPA viven aquí, no en el CONTENIDO de la tarjeta**: enlaces del árbol a las fichas, correspondencia síndrome↔pronóstico, pistas de las fichas, agrupación de la tabla orientativa, corte de la nota y aclarado del acento. Hoy solo `spa_hombro.js`. No es texto clínico: solo nombra filas que ya están en la tarjeta
+- `spa_<región>.js` **los campos específicos de la SPA viven aquí, no en el CONTENIDO de la tarjeta**: enlaces del árbol a las fichas, correspondencia síndrome↔pronóstico, pistas de las fichas, agrupación de la tabla orientativa y corte de la nota. Hoy solo `spa_hombro.js`. No es texto clínico: solo nombra filas que ya están en la tarjeta
 - `datos.js` funde `tarjeta_<región>.js` + `spa_<región>.js` en la forma que consume la SPA; `extraer.js` es su CLI y escribe `<región>.data.json`
-- `build.py` inyecta el JSON y lo de la región (título y color) en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
+- `build.py` inyecta el JSON y el título de la región en la plantilla y genera `index.html` (lo que publica GitHub Pages). Solo biblioteca estándar
 - `test-contenido.js`, `test-recorrido.js`, `test-cabecera.js` pruebas con jsdom
 - `plantilla_tarjetas.js` generador de los docx de las tarjetas (no tocar salvo en la migración). Depende del paquete npm `docx` (ya declarado en `package.json`). Escribe en la carpeta de la variable `OUT_DIR` (por defecto `/home/claude`).
 - `tarjeta_cadera.js`, `tarjeta_cervical.js`, `tarjeta_lumbar.js`, `tarjeta_rodilla.js`: CONFIG + CONTENIDO de cada región (la fuente de verdad; cada uno llama a `generarTarjeta` al cargarse)
@@ -38,17 +39,17 @@ SPA móvil **de solo lectura** que reproduce la tarjeta de consulta de hombro (e
 - **`SINDROMES`:** 6 (cervical), 7 (lumbar), 9 (cadera), 13 (rodilla). Algunas filas tienen 3 celdas con `{ span: "texto" }` en la tercera (síndromes sin ① ni ②, p. ej. miofascial en lumbar, sensibilización central en cadera). La cabecera de esa tabla no está en el CONTENIDO: la fija la plantilla («Síndrome · Explorar · 10′ · ① Gesto testigo · ② Medida objetiva»).
 - **`ORIENTATIVA` es distinta en cada región.** Matriz comparativa en cervical (migraña / tensional / cervicogénica) y lumbar (discogénico / facetario / sacroilíaco); fichas de entidades adicionales en cadera y rodilla (4 columnas, la última con ① y ②). Hay que renderizarla de forma genérica (cada fila con sus columnas etiquetadas por `cabecera`), no con la pantalla de rigidez de hombro.
 - **`PRONOSTICO`:** 6 a 17 filas. En rodilla (13 + 8 entidades frente a 17 filas) la correspondencia síndrome ↔ pronóstico no es 1 a 1: necesita mapa explícito.
-- **`CONFIG.DARK`:** color propio por región (hombro `1F5F4E`, cadera `6A4A6A`, cervical `4A5A7A`, lumbar `1F4E5F`, rodilla `7A5A2E`). En tema oscuro hay que aclararlo para que el contraste sea suficiente. `SPLIT_A` / `SPLIT_B` / `SZ_*` solo afectan al papel.
+- **`CONFIG.DARK`:** color propio por región (hombro `1F5F4E`, cadera `6A4A6A`, cervical `4A5A7A`, lumbar `1F4E5F`, rodilla `7A5A2E`). Solo afecta al papel: la SPA usa una sola paleta para todas las regiones. `SPLIT_A` / `SPLIT_B` / `SZ_*` tampoco afectan a la SPA.
 - **`TITULOS`:** claves distintas según región (`caraA`, `caraA2`, `caraB`, `caraC`, `pieA`, `pieA2`, `pieB`, `pieC`).
 
 ## Lo específico de hombro (ya está en datos, en `spa_hombro.js`)
-`ENLACES` (botones de los nodos 1, 2b y 4, y el mapa etiqueta del árbol → ficha que antes era `PATRON_A_SINDROME`), `PRONOSTICO_DE` (antes `SINDROME_A_PRON`), `FICHAS` (pista del congelado, botón al diferencial y nota de síndromes), `ORIENTATIVA_GRUPOS` (antes `GRUPO_LIMITADA` / `GRUPO_LIBRE` / `DICE_PASIVA`, con su aviso de agrupación propia), `CORTE_NOTA` y `ACENTO_OSCURO`. El nombre de la región y el acento claro salen de la propia tarjeta (`REGION` y `CONFIG.DARK`).
+`ENLACES` (botones de los nodos 1, 2b y 4, y el mapa etiqueta del árbol → ficha que antes era `PATRON_A_SINDROME`), `PRONOSTICO_DE` (antes `SINDROME_A_PRON`), `FICHAS` (pista del congelado, botón al diferencial y nota de síndromes), `ORIENTATIVA_GRUPOS` (antes `GRUPO_LIMITADA` / `GRUPO_LIBRE` / `DICE_PASIVA`, con su aviso de agrupación propia) y `CORTE_NOTA`. El nombre de la región sale de la propia tarjeta (`REGION`); el color es fijo (decisión 8), no viene de `CONFIG.DARK`.
 El motor lee un nodo con `patrones` partiendo su primera línea en «condición → ETIQUETA» (la condición, literal de la tarjeta, es el subtítulo del botón) y usa el resto de líneas como nota de cierre del árbol; la pantalla `orientativa` pinta cada fila con sus columnas etiquetadas por `cabecera` y la agrupación es una capa opcional.
 
 ## Tareas, por orden
 1. ~~**Motor común + datos por región.**~~ **Hecho con hombro.** La fuente es `tarjeta_hombro.js` (+ `spa_hombro.js`), `extraer.py` retirado y el motor sin literales de la región. Los 5 docx se regeneran idénticos (comprobado comparando `word/document.xml` antes y después). Queda, al añadir cada región: darle su `spa_<región>.js` y meterla en `REGIONES` de `test-fuente.js`.
 2. **URGENCIA.** Las cuatro regiones nuevas la tienen. Debe ser lo primero que se vea al entrar en la región, con el mismo criterio visual que la tarjeta (borde grueso, sin rojo), y sus líneas literales.
-3. **Selector de región en el inicio** (una sola URL).
+3. **Selector de región en el inicio** (una sola URL). Con una sola paleta, el nombre de la región debe verse siempre en la cabecera, también cuando aparecen las cápsulas del recorrido.
 4. **Añadir regiones una a una** (cadera, cervical, lumbar, rodilla) leyendo su `tarjeta_<región>.js` con `npm run extraer` y dándole su `spa_<región>.js`. Para cada una, prueba como `test-contenido.js`: el texto en pantalla coincide con el de su tarjeta. Tener en cuenta las diferencias de arriba: no asumir los nodos de hombro, tratar `span`, `BANDERAS` de 2 columnas, `ORIENTATIVA` genérica y pronóstico con mapa explícito.
 5. **PWA:** manifest y service worker para uso sin conexión (GitHub Pages sirve por HTTPS).
 6. **Wake Lock** (mantener la pantalla encendida): falló dentro del visor de claude.ai; reintentarlo como página propia.

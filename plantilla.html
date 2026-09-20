@@ -10,18 +10,18 @@
 <style>
 :root{
   --bg:#F6F8F9; --panel:#FFFFFF; --band:#EEF3F5; --ink:#16262B; --muted:#4A6572; --line:#C9D1D6;
-  /* --accent: color de la región (CONFIG.DARK). --on-accent se revisa al añadir regiones */
-  --accent:__ACENTO_CLARO__; --on-accent:#FFFFFF; --focus:#0B5CAD;
+  /* Una sola paleta para todas las regiones (la verde de hombro): no depende de CONFIG.DARK */
+  --accent:#1F5F4E; --on-accent:#FFFFFF; --focus:#0B5CAD;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#0E1517; --panel:#162124; --band:#1D2B2F; --ink:#E7EEF0; --muted:#9DB4BD; --line:#2F4147;
-    --accent:__ACENTO_OSCURO__; --on-accent:#06231B; --focus:#7DB8F0;
+    --accent:#5CC0A3; --on-accent:#06231B; --focus:#7DB8F0;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E1517; --panel:#162124; --band:#1D2B2F; --ink:#E7EEF0; --muted:#9DB4BD; --line:#2F4147;
-  --accent:__ACENTO_OSCURO__; --on-accent:#06231B; --focus:#7DB8F0;
+  --accent:#5CC0A3; --on-accent:#06231B; --focus:#7DB8F0;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -112,7 +112,7 @@ const DATA = __DATA__;
 // ════════════════════════════════════════════════════════════════
 //  Datos de la región: la tarjeta (tarjeta_<región>.js) más los campos
 //  propios de la SPA (spa_<región>.js), fundidos por datos.js.
-//    REGION NOMBRE ACENTO · TITULOS BANDERAS BISAGRA ARBOL SINDROMES
+//    REGION NOMBRE · TITULOS BANDERAS BISAGRA ARBOL SINDROMES
 //    ORIENTATIVA? PRONOSTICO · ENLACES? PRONOSTICO_DE? FICHAS?
 //    ORIENTATIVA_GRUPOS? CORTE_NOTA?
 //  Aquí no hay texto de ninguna región: los rótulos o salen de la tarjeta

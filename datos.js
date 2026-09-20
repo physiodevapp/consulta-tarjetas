@@ -22,13 +22,10 @@ const filas = f => f.map(fila => fila.map(celda));
 
 function normalizar({ REGION, CONFIG, CONTENIDO }, propio = {}) {
   const { URGENCIA, BANDERAS, BISAGRA, ARBOL, SINDROMES, ORIENTATIVA, PRONOSTICO, TITULOS } = CONTENIDO;
-  const { ACENTO_OSCURO, ...campos } = propio;
+  // Una sola paleta para todas las regiones (fija en el CSS): CONFIG.DARK no se usa en pantalla.
   const datos = {
     REGION,
     NOMBRE: cap1(REGION),
-    // Color de la región (CONFIG.DARK). El de tema oscuro viene aclarado desde
-    // spa_<región>.js: hace falta contraste suficiente sobre fondo oscuro.
-    ACENTO: { claro: '#' + CONFIG.DARK, oscuro: '#' + (ACENTO_OSCURO || CONFIG.DARK) },
     TITULOS: {
       caraA: TITULOS.caraA.join('   '),
       caraB: TITULOS.caraB.join('   '),
@@ -52,7 +49,7 @@ function normalizar({ REGION, CONFIG, CONTENIDO }, propio = {}) {
     cabecera: ORIENTATIVA.cabecera, filas: filas(ORIENTATIVA.filas), nota: ORIENTATIVA.nota
   };
   // Campos propios de la SPA: uno por clave, al mismo nivel que el contenido
-  for (const [k, v] of Object.entries(campos)) datos[k] = v;
+  for (const [k, v] of Object.entries(propio)) datos[k] = v;
   return datos;
 }
 

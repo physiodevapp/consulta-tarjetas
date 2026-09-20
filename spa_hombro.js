@@ -76,7 +76,4 @@ const ORIENTATIVA_GRUPOS = {
 // no se toca: solo se decide dónde respira.
 const CORTE_NOTA = 'Dosis y progresión';
 
-// CONFIG.DARK (1F5F4E) aclarado para que contraste sobre fondo oscuro.
-const ACENTO_OSCURO = '5CC0A3';
-
-module.exports = { ENLACES, PRONOSTICO_DE, FICHAS, ORIENTATIVA_GRUPOS, CORTE_NOTA, ACENTO_OSCURO };
+module.exports = { ENLACES, PRONOSTICO_DE, FICHAS, ORIENTATIVA_GRUPOS, CORTE_NOTA };
