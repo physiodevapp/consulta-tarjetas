@@ -48,6 +48,12 @@ header.home{padding-left:14px}
 #regionCab{flex:none;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
   color:var(--muted);padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
 #regionCab[hidden]{display:none}
+/* Wake Lock (tarea 6): botón oculto por defecto, visible solo si la API existe (ver JS) */
+#pantalla{appearance:none;flex:none;width:44px;height:44px;margin-left:auto;border:1px solid var(--line);
+  border-radius:50%;background:var(--panel);color:var(--muted);font-size:19px;line-height:1;cursor:pointer;
+  display:grid;place-items:center}
+#pantalla[hidden]{display:none}
+#pantalla[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -120,7 +126,7 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 </style>
 </head>
 <body>
-<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div></header>
+<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div><button id="pantalla" type="button" aria-label="Mantener la pantalla encendida" aria-pressed="false" hidden>◯</button></header>
 <main id="main"></main>
 
 <script>
@@ -448,6 +454,50 @@ function pOrientativa() {
 const PANTALLAS = { selector: pSelector, home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
 const $ = s => document.querySelector(s);
 $('#back').addEventListener('click', volver);
+
+// Wake Lock (tarea 6): mantener la pantalla encendida durante la consulta. Es un
+// interruptor manual (no se activa solo al entrar en una región) y, como el
+// recorrido del árbol, vive solo en memoria: se pierde al recargar (decisión 1).
+let wakeLock = null;
+let wakeLockQuerido = false;
+
+function actualizarBotonPantalla() {
+  const boton = $('#pantalla');
+  if (!boton) return;
+  const activo = !!wakeLock;
+  boton.setAttribute('aria-pressed', String(activo));
+  boton.textContent = activo ? '◉' : '◯';
+}
+
+async function pedirWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => { wakeLock = null; actualizarBotonPantalla(); });
+  } catch (e) {
+    wakeLock = null;
+  }
+  actualizarBotonPantalla();
+}
+
+async function soltarWakeLock() {
+  if (wakeLock) await wakeLock.release();
+  wakeLock = null;
+  actualizarBotonPantalla();
+}
+
+if ('wakeLock' in navigator) {
+  const boton = $('#pantalla');
+  boton.hidden = false;
+  boton.addEventListener('click', () => {
+    wakeLockQuerido = !wakeLockQuerido;
+    if (wakeLockQuerido) pedirWakeLock(); else soltarWakeLock();
+  });
+  // El navegador suelta el wake lock solo al ocultar la pestaña; si se sigue queriendo
+  // al volver a verla, hay que pedirlo de nuevo
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && wakeLockQuerido && !wakeLock) pedirWakeLock();
+  });
+}
 
 function render(arriba) {
   const y = window.scrollY, cur = pila[pila.length - 1];
