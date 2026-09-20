@@ -1,7 +1,7 @@
 {
  "id": ".",
- "name": "Consulta de tarjetas",
- "short_name": "Consulta",
+ "name": "Guía de consulta",
+ "short_name": "Guía",
  "description": "Tarjetas de consulta de fisioterapia, de solo lectura.",
  "lang": "es",
  "start_url": ".",
