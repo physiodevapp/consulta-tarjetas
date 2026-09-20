@@ -1,6 +1,6 @@
 // Tarjeta de región · cadera
 // Solo config y contenido. Helpers y montaje: plantilla_tarjetas.js
-const generarTarjeta = require('./plantilla_tarjetas');
+const generarTarjeta = require('../tools/plantilla_tarjetas');
 
 const REGION = 'cadera';
 

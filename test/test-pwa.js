@@ -9,9 +9,10 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
+const RAIZ = path.join(__dirname, '..');
 let fails = 0;
 const ok = (c, m) => { if (!c) { fails++; console.log('FALLO:', m); } else console.log('ok:', m); };
-const leer = f => fs.readFileSync(path.join(__dirname, f), 'utf8');
+const leer = f => fs.readFileSync(path.join(RAIZ, f), 'utf8');
 const relativa = r => typeof r === 'string' && !r.startsWith('/') && !/^[a-z]+:\/\//i.test(r);
 
 const { nombre: APP } = JSON.parse(leer('app.json'));
@@ -24,7 +25,7 @@ ok(relativa(manifest.start_url) && relativa(manifest.scope) && relativa(manifest
 ok(Array.isArray(manifest.icons) && manifest.icons.length >= 2, 'manifest: al menos 2 iconos');
 for (const icono of manifest.icons || []) {
   ok(relativa(icono.src), 'manifest: icono con ruta relativa: ' + icono.src);
-  const archivo = path.join(__dirname, icono.src);
+  const archivo = path.join(RAIZ, icono.src);
   ok(fs.existsSync(archivo), 'manifest: el archivo del icono existe: ' + icono.src);
   if (fs.existsSync(archivo)) {
     const buf = fs.readFileSync(archivo);
@@ -41,7 +42,7 @@ for (const icono of manifest.icons || []) {
 
 // ── service-worker.js ──
 const sw = leer('service-worker.js');
-try { execFileSync('node', ['--check', path.join(__dirname, 'service-worker.js')], { stdio: 'pipe' }); ok(true, 'service-worker.js: sintaxis válida'); }
+try { execFileSync('node', ['--check', path.join(RAIZ, 'service-worker.js')], { stdio: 'pipe' }); ok(true, 'service-worker.js: sintaxis válida'); }
 catch (e) { ok(false, 'service-worker.js: sintaxis inválida: ' + e.stderr.toString()); }
 // Toda ruta entre comillas que empiece por «/» (una sola, no «//» de protocolo) sería absoluta
 ok(!/['"]\/(?!\/)/.test(sw), 'service-worker.js: sin rutas absolutas (todas empiezan por «./»)');

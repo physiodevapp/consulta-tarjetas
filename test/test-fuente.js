@@ -5,9 +5,10 @@
 //   2. el JSON del repo está al día (es lo que da hoy npm run extraer)
 //   3. los campos propios de la SPA apuntan a filas que existen en la tarjeta
 const fs = require('fs'), path = require('path');
-const { leer } = require('./extraer-js');
-const { datosDeRegion, aJSON } = require('./datos');
+const { leer } = require('../tools/extraer-js');
+const { datosDeRegion, aJSON } = require('../tools/datos');
 
+const DATA = path.join(__dirname, '..', 'data');
 const REGIONES = ['hombro', 'cadera', 'lumbar', 'cervical', 'rodilla'];   // al añadir una región, aquí
 
 const cel = v => Array.isArray(v) ? v.join('\n') : (v && typeof v === 'object' && v.span !== undefined ? v.span : String(v == null ? '' : v));
@@ -19,8 +20,8 @@ const filas = (a, b, et) => { comparaciones++; if (a.length !== b.length) mal(`n
 const existe = (v, lista, et) => { comparaciones++; if (!lista.includes(v)) mal(`${et}: «${v}» no está en la tarjeta (hay: ${lista.join(', ')})`); };
 
 for (const region of REGIONES) {
-  const tarjeta = path.join(__dirname, `tarjeta_${region}.js`);
-  const archivo = path.join(__dirname, `${region}.data.json`);
+  const tarjeta = path.join(DATA, `tarjeta_${region}.js`);
+  const archivo = path.join(DATA, `${region}.data.json`);
   const capturado = leer(tarjeta);
   const js = capturado.CONTENIDO, { SPLIT_A, SPLIT_B } = capturado.CONFIG;
   const dx = JSON.parse(fs.readFileSync(archivo, 'utf8'));

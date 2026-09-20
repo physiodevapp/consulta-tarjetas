@@ -6,18 +6,19 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
+const RAIZ = path.join(__dirname, '..');
 const GENERADOS = ['index.html', 'manifest.webmanifest', 'service-worker.js'];
 let fails = 0;
 const ok = (c, m) => { if (!c) { fails++; console.log('FALLO:', m); } else console.log('ok:', m); };
 
 const antes = {};
 for (const nombre of GENERADOS) {
-  const archivo = path.join(__dirname, nombre);
+  const archivo = path.join(RAIZ, nombre);
   antes[nombre] = fs.existsSync(archivo) ? fs.readFileSync(archivo, 'utf8') : null;
 }
 
 try {
-  execFileSync('python3', [path.join(__dirname, 'build.py')], { cwd: __dirname, stdio: 'pipe' });
+  execFileSync('python3', [path.join(RAIZ, 'tools', 'build.py')], { cwd: RAIZ, stdio: 'pipe' });
 } catch (e) {
   ok(false, 'npm run build ha fallado: ' + (e.stderr ? e.stderr.toString() : e.message));
   console.log('\n' + fails + ' FALLOS');
@@ -25,7 +26,7 @@ try {
 }
 
 for (const nombre of GENERADOS) {
-  const despues = fs.readFileSync(path.join(__dirname, nombre), 'utf8');
+  const despues = fs.readFileSync(path.join(RAIZ, nombre), 'utf8');
   if (antes[nombre] === null) {
     ok(true, nombre + ' no existía; generado por build.py');
   } else {
