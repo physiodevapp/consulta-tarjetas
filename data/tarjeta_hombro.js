@@ -68,11 +68,11 @@ const SINDROMES = {
     ['Dolor subacromial (SAPS)',
       'Descartar primero capsulitis (RE pasiva), origen cervical y dolor postraumático. Dolor o debilidad al elevar el brazo; el dolor debe reproducirse de forma consistente con los test resistidos. Regla clínica: SAPS probable si no hay pérdida de RE pasiva y hay dolor anterior, lesión por sobreesfuerzo y ausencia de síntomas en RE final en abducción.',
       'Elevación en el plano de la escápula o RE resistida que reproduce el dolor → EVA',
-      'Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa hasta el dolor'],
+      'Fuerza isométrica en RE con dinamómetro si se dispone (brazo junto al cuerpo, codo a 90°) o grados de elevación activa hasta el dolor'],
     ['Inestabilidad GH',
       'Anterior: aprensión, recolocación y sorpresa (S y E >72 %). Interpretar la aprensión, no el dolor. Posterior: no usar un test aislado; agrupar Jerk, Kim y signo de pinzamiento posterior junto con la historia.',
       'Aprensión de 0 a 10 en abducción + RE; en posterior, la posición provocadora',
-      'Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición'],
+      'Fuerza isométrica de RE y RI con dinamómetro si se dispone, siempre en la misma posición'],
     ['Acromioclavicular',
       'Palpación AC (S 96 %, E 10 %): si no duele, hace poco probable el cuadro; si duele, no lo confirma. Aducción horizontal con el brazo a 90° de flexión (S >67 %, E 79 %). Movilidad pasiva sin restricción; posible escalón.',
       'Aducción horizontal → EVA',
@@ -80,11 +80,11 @@ const SINDROMES = {
     ['Lesión SLAP',
       'Ningún hallazgo físico es específico. Compresión-rotación activa (S 72 %, E 52 %): sirve para sostener la hipótesis, no para confirmarla.',
       'Gesto por encima de la cabeza que reproduce el síntoma mecánico → EVA',
-      'Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición'],
+      'Fuerza isométrica de RE y RI con dinamómetro si se dispone, siempre en la misma posición'],
     ['Rotura del manguito',
       'Inspección: brazo en cabestrillo, escápula en rotación inferior o inclinación anterior, cabeza humeral anteriorizada. Cluster A: arco doloroso + drop arm + debilidad en RE → LR+ 15,6 con los tres positivos. Cluster B: edad >65 + debilidad en RE + dolor nocturno → LR+ 9,8 con los tres positivos.',
       'Elevación activa o arco doloroso → EVA',
-      'Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa'],
+      'Fuerza isométrica en RE con dinamómetro si se dispone (brazo junto al cuerpo, codo a 90°) o grados de elevación activa'],
     ['Hombro congelado',
       'Restricción equivalente de movilidad activa y pasiva: es el dato que más discrimina. La RE se considera la más afectada, pero la RI suele estar muy limitada con el brazo cerca de 90° de abducción. Criterio de Bunker: restricción igual de RE activa y pasiva + Rx esencialmente normal.',
       'Final del rango de RE pasiva → EVA (más útil cuando dolor > rigidez)',
@@ -131,7 +131,7 @@ const TITULOS = {
   caraA: ['HOMBRO · cara A', 'bloque 0 (con el paciente fuera) y bloques 3–4'],
   caraB: ['HOMBRO · cara B', 'bloques 4, 5 y 6, ya dentro de una rama del árbol'],
   pieA: 'Guía clínica de hombro, ap. 1 y 4 · Struyf · Powell y Lewis, cap. 3 — Ficha de primera visita, bloques 0, 3 y 4',
-  pieB: 'Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo'
+  pieB: 'Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo · cuestionarios validados citados en el ap. 6: SPADI, DASH, ASES, SST, Constant'
 };
 
 generarTarjeta(REGION, CONFIG, {
