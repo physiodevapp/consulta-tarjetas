@@ -12,7 +12,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 function nueva() {
   const errs = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'http://localhost/', pretendToBeVisual: true,
-    beforeParse(w) { w.scrollTo = () => {}; w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
+    beforeParse(w) { w.scrollTo = () => {}; w.scrollBy = () => {}; w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
   return { w: dom.window, d: dom.window.document, errs };
 }
 const btn = (d, t) => [...d.querySelectorAll('#main button')].find(b => b.textContent.includes(t));

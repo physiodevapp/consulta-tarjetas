@@ -9,7 +9,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 function nueva() {
   const errs = [], saltos = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'http://localhost/', pretendToBeVisual: true,
-    beforeParse(w) { w.scrollTo = () => {}; w.Element.prototype.scrollIntoView = function () { saltos.push(this.id); };
+    beforeParse(w) { w.scrollTo = () => {}; w.scrollBy = () => {}; w.Element.prototype.scrollIntoView = function () { saltos.push(this.id); };
       w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
   return { w: dom.window, d: dom.window.document, errs, saltos };
 }

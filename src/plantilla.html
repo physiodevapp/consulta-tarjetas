@@ -313,7 +313,16 @@ function pBanderas() {
 }
 
 const preguntaNodo = t => { const l = t.split('\n')[0]; const k = l.indexOf('?'); return sp(k < 0 ? l : l.slice(0, k + 1)); };
-function marcar(n, e) { if (marcas[n] === e) delete marcas[n]; else marcas[n] = e; render(); }
+function marcar(n, e) {
+  if (marcas[n] === e) delete marcas[n]; else marcas[n] = e;
+  // El panel «Recorrido» cambia de alto según las marcas (aparece «Sin marcar», el
+  // botón «Limpiar»…); sin esto, el nodo recién marcado saltaría en pantalla al redibujar.
+  const antes = document.getElementById('nodo-' + n);
+  const y0 = antes ? antes.getBoundingClientRect().top : null;
+  render();
+  const despues = document.getElementById('nodo-' + n);
+  if (y0 !== null && despues) window.scrollBy(0, despues.getBoundingClientRect().top - y0);
+}
 function irANodo(n) { const el = document.getElementById('nodo-' + n); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 const controlMarca = n => h('div', { class: 'marca', role: 'group', 'aria-label': 'Marcar nodo ' + n },
   ESTADOS.map(([e, t]) => h('button', { type: 'button', 'data-v': e, 'aria-pressed': String(marcas[n] === e), onclick: () => marcar(n, e) }, t)));
