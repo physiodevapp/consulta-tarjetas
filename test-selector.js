@@ -1,5 +1,6 @@
-// Tarea 3: selector de región en el inicio (una sola URL). Hoy solo hombro tiene datos;
-// las otras cuatro se ven pero no se pueden abrir (llegan con la tarea 4).
+// Tarea 3: selector de región en el inicio (una sola URL). Tarea 4: añadir regiones
+// una a una; hombro y cadera ya tienen datos, las otras tres se ven pero no se pueden
+// abrir todavía.
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
@@ -30,10 +31,10 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   const nombres = filas.map(f => f.querySelector('b').textContent);
   ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla', 'selector: orden de las regiones: ' + nombres.join('|'));
 
-  const hombro = filas[0], resto = filas.slice(1);
-  ok(hombro.tagName === 'BUTTON', 'selector: hombro es la única región clicable');
-  ok(resto.every(f => f.tagName === 'DIV' && f.classList.contains('pendiente')), 'selector: las otras cuatro no son botones (no se pueden abrir)');
-  ok(resto.every(f => f.textContent.includes('Pendiente')), 'selector: las cuatro pendientes lo dicen en pantalla');
+  const disponibles = [filas[0], filas[3]], resto = [filas[1], filas[2], filas[4]];
+  ok(disponibles.every(f => f.tagName === 'BUTTON'), 'selector: hombro y cadera son clicables');
+  ok(resto.every(f => f.tagName === 'DIV' && f.classList.contains('pendiente')), 'selector: lumbar, cervical y rodilla no son botones (no se pueden abrir)');
+  ok(resto.every(f => f.textContent.includes('Pendiente')), 'selector: las tres pendientes lo dicen en pantalla');
 
   click(btn(d, 'Hombro'));
   ok(d.title === APP + ' Hombro', 'home: título de la pestaña con la región');
@@ -50,6 +51,13 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   d.querySelector('#back').click(); await wait(50);
   click(btn(d, 'Hombro')); click(btn(d, 'Bisagra y árbol'));
   ok(d.querySelector('#nodo-1 .marca [data-v="hecho"]').getAttribute('aria-pressed') === 'true', 'volver a entrar en la misma región conserva las marcas del recorrido');
+
+  // Cambiar de región: cadera abre con sus propios datos, no los de hombro
+  d.querySelector('#back').click(); await wait(50); d.querySelector('#back').click(); await wait(50);
+  click(btn(d, 'Cadera'));
+  ok(d.querySelector('#titulo').textContent === 'Cadera' && d.title === APP + ' Cadera', 'selector → cadera: título de la región correcto');
+  click(btn(d, 'Bisagra y árbol'));
+  ok([...d.querySelectorAll('.nodo .n')].map(e => e.textContent).join('|') === '1|2|3|4|5|5b|6', 'cadera: nodos propios (no los de hombro)');
 
   ok(w.sessionStorage.length === 0 && w.localStorage.length === 0, 'no guarda nada en el navegador');
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
