@@ -50,6 +50,9 @@ main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .card .lab{display:block;font-size:14px;color:var(--muted);margin-bottom:1px}
 .card.key{border:2px solid var(--accent)}
 .card .nombre{font-size:18px;font-weight:700;color:var(--ink);margin:0 0 6px}
+/* URGENCIA: borde grueso negro, no rojo (decisión de la tarjeta en papel; ver CLAUDE.md) */
+.card.urgencia{border:3px solid var(--ink)}
+.card.urgencia .nombre{font-size:17px}
 
 .nav,.big{appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;
   padding:12px 14px;margin:0 0 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;min-height:64px}
@@ -222,6 +225,8 @@ const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, t
 const plegable = (titulo, contenido, abierto) => h('details', { open: !!abierto }, h('summary', {}, titulo), h('div', { class: 'in' }, contenido));
 // Celdas de una fila con la etiqueta de su columna
 const columnas = (fila, cabecera) => fila.slice(1).map((c, i) => h('p', {}, h('span', { class: 'lab' }, cabecera[i + 1]), sp(c)));
+// URGENCIA (opcional): mismo criterio visual que en el papel (borde grueso, sin rojo), líneas literales
+const urgencia = U => U && h('section', { class: 'card urgencia' }, h('p', { class: 'nombre' }, U.titulo), U.lineas.map(l => h('p', { class: 'pre' }, sp(l))));
 // Botón a un destino fijo de ENLACES: { pantalla, fila?, sub? }
 function botonDestino(d) {
   if (d.pantalla === 'banderas') return big(TIT_BANDERAS, d.sub, () => ir('banderas'));
@@ -235,6 +240,7 @@ function botonDestino(d) {
 // ════════════════════════════════════════════════════════════════
 function pHome() {
   const n = [
+    urgencia(DATA.URGENCIA),
     h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de ' + DATA.REGION),
     nav(TIT_BANDERAS, bloque(3, DATA.BANDERAS.filas.length + ' sospechas'), () => ir('banderas')),
     nav('Bisagra y árbol', bloque(4, 'pasivo y ' + DATA.ARBOL.filas.length + ' pasos · fichas de síndrome'), () => ir('arbol'))
