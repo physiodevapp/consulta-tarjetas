@@ -9,7 +9,7 @@ let pasosBottom = 300;   // posición simulada de las cápsulas del panel respec
 function nueva() {
   const errs = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'http://localhost/', pretendToBeVisual: true,
-    beforeParse(w) { w.scrollTo = () => {}; w.Element.prototype.scrollIntoView = function () {};
+    beforeParse(w) { w.scrollTo = () => {}; w.scrollBy = () => {}; w.Element.prototype.scrollIntoView = function () {};
       w.Element.prototype.getBoundingClientRect = function () { return { top: 0, left: 0, right: 0, width: 0, height: 0, bottom: this.id === 'recPasos' ? pasosBottom : this.id === 'cab' ? 56 : 0 }; };
       w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
   return { w: dom.window, d: dom.window.document, errs };
