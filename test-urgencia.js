@@ -11,13 +11,21 @@ const norm = s => s.replace(/\s+/g, ' ').trim();
 
 const plantilla = fs.readFileSync(path.join(__dirname, 'plantilla.html'), 'utf8');
 
-function nueva(datos) {
-  const data = JSON.stringify(datos).replace(/</g, '<\\/');
-  const html = plantilla.replace('__TITULO__', 'Consulta ' + datos.REGION).replace('__DATA__', data);
+// Monta la SPA con una única región disponible (los datos que se le pasen) y entra en
+// ella desde el selector del inicio (tarea 3), para acabar en la misma pantalla de
+// home que veían las pruebas antes de que existiera el selector.
+function nueva(datosRegion) {
+  const bundle = { REGIONES: [{ region: datosRegion.REGION, nombre: datosRegion.NOMBRE, disponible: true }], DATOS: { [datosRegion.REGION]: datosRegion } };
+  const data = JSON.stringify(bundle).replace(/</g, '<\\/');
+  const html = plantilla.replace('__DATA__', data);
   const errs = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'http://localhost/', pretendToBeVisual: true,
     beforeParse(w) { w.scrollTo = () => {}; w.addEventListener('error', e => errs.push(e.message)); w.console.error = (...a) => errs.push(a.join(' ')); } });
-  return { d: dom.window.document, errs };
+  const d = dom.window.document;
+  const entrar = [...d.querySelectorAll('#main button')].find(b => b.textContent.includes(datosRegion.NOMBRE));
+  if (!entrar) throw new Error('botón del selector no encontrado: ' + datosRegion.NOMBRE);
+  entrar.click();
+  return { d, errs };
 }
 
 // ── Con URGENCIA (región sintética) ──

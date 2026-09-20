@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Consulta hombro</title>
+<title>Consulta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -36,6 +36,11 @@ header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px
 #back[hidden]{display:none}
 #titulo{font-weight:700;font-size:19px;line-height:1.2;min-width:0;overflow-wrap:anywhere}
 header.home{padding-left:14px}
+/* Con una sola paleta ya no hay color por región: el nombre se ve siempre en la cabecera
+   (menos en el propio selector y en el inicio de la región, donde ya es el título) */
+#regionCab{flex:none;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
+  color:var(--muted);padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
+#regionCab[hidden]{display:none}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -60,6 +65,8 @@ main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .nav b,.big b{display:block;font-size:18px;line-height:1.25}
 .nav span,.big span{display:block;font-size:15px;color:var(--muted);margin-top:2px}
 .nav i,.big i{flex:none;font-style:normal;font-size:24px;color:var(--muted)}
+.nav.pendiente{cursor:default;opacity:.55;border-style:dashed}
+.nav.pendiente span{font-style:italic}
 .nodo{display:flex;gap:10px}
 .nodo .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700;
   display:grid;place-items:center;font-size:15px}
@@ -106,22 +113,27 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 </style>
 </head>
 <body>
-<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div></header>
+<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div></header>
 <main id="main"></main>
 
 <script>
-const DATA = {"REGION": "hombro", "NOMBRE": "Hombro", "TITULOS": {"caraA": "HOMBRO · cara A   bloque 0 (con el paciente fuera) y bloques 3–4", "caraB": "HOMBRO · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol", "pieA2": "Guía clínica de hombro, ap. 1 y 4 · Struyf · Powell y Lewis, cap. 3 — Ficha de primera visita, bloques 0, 3 y 4"}, "BANDERAS": {"titulo": "Banderas rojas — derivación médica inmediata, sobre el cribado general de la ficha", "cabecera": ["Sospecha", "Pistas en entrevista y exploración", "Ayuda en consulta"], "filas": [["Tumor", "Antecedente de cáncer, pérdida de peso inexplicada, dolor sin relación con el movimiento o implacable, dolor nocturno o en reposo con síntomas sistémicos, masa o deformidad inexplicada.", "Raros en clavícula distal y acromion; pensar en ellos si hay dolor nocturno + síntomas sistémicos."], ["Infección o sistémico", "Fiebre, sensación de estar enfermo, cambios en la piel (aspecto, erupciones, sudoración), hematomas inexplicados, dolor en otras partes del cuerpo.", "Preguntar siempre por el estado general reciente."], ["Fractura o luxación no reducida", "Traumatismo previo (caída sobre el hombro o el codo), pérdida aguda de movilidad, deformidad, osteoporosis.", "Test de aprensión ósea; signo de percusión olécranon-manubrio (buen valor para luxación anterior y fracturas de clavícula y húmero)."], ["Lesión neurológica", "Déficit motor o sensitivo significativo, atrofia.", "Exploración neurológica breve: sensibilidad, fuerza y reflejos."], ["Origen visceral", "Dolor con esfuerzo cardiorrespiratorio o con síntomas digestivos; referido cardiaco, pulmonar o gastrointestinal a la zona AC.", "Preguntar si el dolor aparece al caminar rápido, al subir escaleras o tras comer."]], "nota": "Descartar antes de clasificar (no son banderas rojas, pero cambian la hipótesis): capsulitis, dolor de origen cervical y dolor secundario a traumatismo. Las banderas rojas se revisan en todas las visitas, no solo en la primera."}, "BISAGRA": {"pregunta": "¿La movilidad pasiva GH, sobre todo la RE, está limitada igual que la activa?", "ramas": "SÍ → capsulitis · artrosis GH · luxación bloqueada      |      NO → el resto de síndromes", "apoyo": "Clasifica síndromes, no estructuras: los test de hombro tienen poca precisión, combinarlos apenas la mejora y un hombro irritable da test positivos por casi cualquier causa."}, "ARBOL": {"filas": [["1", "¿Hay banderas rojas? → derivación médica.   ·   No → 2"], ["2", "¿La movilidad pasiva GH (sobre todo la RE) está limitada igual que la activa?   Sí → 2b   ·   No → 3"], ["2b", "¿Traumatismo previo?   Sí → LUXACIÓN BLOQUEADA o FRACTURA → Rx.\nNo: mayor edad + crepitación → ARTROSIS GH (Rx) · resto → HOMBRO CONGELADO."], ["3", "¿Los test cervicales reproducen el dolor de hombro?   Sí → CERVICOGÉNICO → explorar columna (pueden coexistir)   ·   No → 4"], ["4", "Movilidad pasiva conservada, ¿qué patrón encaja mejor? Dolor focal AC + palpación + aducción horizontal → ACROMIOCLAVICULAR · episodio concreto o aprensión → INESTABILIDAD · debilidad en RE + cluster positivo → ROTURA DEL MANGUITO · síntomas mecánicos (enganche, bloqueo, chasquido) → SLAP · dolor o debilidad al elevar, reproducido de forma consistente con resistidos → SAPS.\nLos cuadros se solapan: busca la hipótesis que explica los síntomas, no un hallazgo."]]}, "SINDROMES": {"aviso": "Antes de explorar: severidad e irritabilidad. Alta → solo bisagra y 1–2 tests, sin final de rango ni repeticiones provocadoras; el resto, en la próxima visita. Máximo 2–3 tests; la palpación va la última.", "cabecera": ["Síndrome", "Explorar · 10′", "① Gesto testigo", "② Medida objetiva"], "filas": [["Dolor subacromial (SAPS)", "Descartar primero capsulitis (RE pasiva), origen cervical y dolor postraumático. Dolor o debilidad al elevar el brazo; el dolor debe reproducirse de forma consistente con los test resistidos. Regla clínica: SAPS probable si no hay pérdida de RE pasiva y hay dolor anterior, lesión por sobreesfuerzo y ausencia de síntomas en RE final en abducción.", "Elevación en el plano de la escápula o RE resistida que reproduce el dolor → EVA", "Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa hasta el dolor"], ["Inestabilidad GH", "Anterior: aprensión, recolocación y sorpresa (S y E >72 %). Interpretar la aprensión, no el dolor. Posterior: no usar un test aislado; agrupar Jerk, Kim y signo de pinzamiento posterior junto con la historia.", "Aprensión de 0 a 10 en abducción + RE; en posterior, la posición provocadora", "Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición"], ["Acromioclavicular", "Palpación AC (S 96 %, E 10 %): si no duele, hace poco probable el cuadro; si duele, no lo confirma. Aducción horizontal con el brazo a 90° de flexión (S >67 %, E 79 %). Movilidad pasiva sin restricción; posible escalón.", "Aducción horizontal → EVA", "Grados de aducción horizontal hasta la aparición del dolor, en la misma posición"], ["Lesión SLAP", "Ningún hallazgo físico es específico. Compresión-rotación activa (S 72 %, E 52 %): sirve para sostener la hipótesis, no para confirmarla.", "Gesto por encima de la cabeza que reproduce el síntoma mecánico → EVA", "Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición"], ["Rotura del manguito", "Inspección: brazo en cabestrillo, escápula en rotación inferior o inclinación anterior, cabeza humeral anteriorizada. Cluster A: arco doloroso + drop arm + debilidad en RE → LR+ 15,6 con los tres positivos. Cluster B: edad >65 + debilidad en RE + dolor nocturno → LR+ 9,8 con los tres positivos.", "Elevación activa o arco doloroso → EVA", "Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa"], ["Hombro congelado", "Restricción equivalente de movilidad activa y pasiva: es el dato que más discrimina. La RE se considera la más afectada, pero la RI suele estar muy limitada con el brazo cerca de 90° de abducción. Criterio de Bunker: restricción igual de RE activa y pasiva + Rx esencialmente normal.", "Final del rango de RE pasiva → EVA (más útil cuando dolor > rigidez)", "RE pasiva en grados a 0° de abducción y RI a 90° de abducción (más útil cuando rigidez > dolor)"]], "nota": "No usar en hombro congelado: test específicos de MR, labrum o AC — casi siempre salen positivos al tensar una cápsula sensibilizada. Los test AC por separado son débiles: Paxinos + O’Brien combinados dan S y E >90 % (Ampliar)."}, "PRONOSTICO": {"titulo": "para «a las X sesiones espero Y; si no lo veo → Z»", "cabecera": ["Síndrome", "Horizonte e imagen", "Criterio de derivación o cuidado"], "filas": [["SAPS", "Una rotura completa del supraespinoso en ecografía aumenta la probabilidad, pero la imagen no mejora la capacidad de descartarlo.", "Dolor en reposo: puede indicar bursitis o proceso inflamatorio que tolere mal el movimiento vigoroso → dosificar. La idea de «espacio subacromial estrecho» es controvertida."], ["Inestabilidad", "Diagnóstico sobre todo clínico; la Rx simple puede identificar Bankart y Hill-Sachs. A las 3–4 semanas del episodio agudo hay poco dolor y recuperan movilidad y fuerza.", "La MDI se confunde con inestabilidad unidireccional, SAPS, patología discal cervical, plexitis braquial y desfiladero torácico. Tener presente Ehlers-Danlos o Marfan."], ["Acromioclavicular", "Rx y RM muestran patología AC, pero muchos cambios aparecen en personas sin síntomas.", "La infiltración ecoguiada tiene efecto diagnóstico y terapéutico: decisión médica."], ["SLAP", "La artro-RM es más precisa que la RM sin contraste.", "El SLAP aislado es raro y es frecuente en asintomáticos: tratarlo solo tiene sentido si explica los síntomas. Suele acompañar a rotura del MR, inestabilidad, rotura del bíceps o bursitis."], ["Rotura del manguito", "RM como referencia: rotura completa S 90 %, E 100 %; parcial S 100 %, E 87 %. No se observa curación espontánea y el tamaño puede aumentar en unos 2 años, también en asintomáticas.", "Alrededor del 40 % de la población tiene roturas asintomáticas: la rotura no explica por sí sola el dolor. La degeneración crece desde los 50–55 años mientras el dolor no traumático baja a partir de los 60–65."], ["Hombro congelado", "Se suele decir que se resuelve en 2–3 años, pero un 41 % sigue con síntomas a los 4 años y la mitad a los 7. No hay evidencia de que avance por estadios hasta curarse sin tratamiento. Rx normal salvo osteopenia o calcificación; RM no necesaria.", "Ejercicio en grupo supervisado: mejores resultados que el individual y que el ejercicio en casa. Derivar a psicología si los factores psicosociales superan tu competencia. Baja autoeficacia predice peor evolución. Contralateral en el 6–34 %."]], "nota": "③ lo elige el paciente; si no sabe: cartera del bolsillo trasero, sujetador o axila contraria (AC); peinarse, vestirse, alcanzar detrás de la espalda (congelado); lanzar (SLAP). Dosis y progresión no están en la guía: son tuyas.", "pie": "Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo"}, "ORIENTATIVA": {"titulo": "Rigidez activa = pasiva · qué lo distingue del hombro congelado", "bloque": "4", "cabecera": ["Condición", "Qué la distingue del hombro congelado", "Imagen"], "filas": [["Dolor del manguito", "Dolor mecánico provocado por los test de carga del MR; RE y abducción más afectadas; movilidad pasiva no muy limitada.", "Eco y RM (cambios también en asintomáticos)"], ["Acromioclavicular", "Dolor localizado y a la palpación sobre la AC, posible escalón, provocación con O’Brien o aducción horizontal; sin restricción pasiva.", "Rx y RM (cambios también en asintomáticos)"], ["Artrosis GH", "Mayor edad, dolor progresivo más largo y a menudo menos intenso, crepitación, posible atrofia.", "Rx simple la muestra"], ["Cervicogénico", "Dolor reproducible con los test cervicales; sin restricción pasiva GH.", "Rx y RM cervical (cambios también en asintomáticos)"], ["Neoplasia", "Se presenta parecido; antecedente de cáncer, pérdida de peso, fiebre, dolor implacable.", "Rx, gammagrafía, RM"], ["Luxación bloqueada", "Traumatismo previo, cualquier edad, rigidez activa y pasiva similar al congelado.", "Rx simple"], ["Fractura", "Traumatismo previo, osteoporosis.", "Rx; RM si fractura no desplazada del troquíter"]], "nota": "Los estadios del congelado se solapan: en la práctica es más útil clasificar como dolor > rigidez o rigidez > dolor y ajustar el tratamiento a eso."}, "ENLACES": {"1": {"botones": [{"pantalla": "banderas"}]}, "4": {"patrones": {"ACROMIOCLAVICULAR": "Acromioclavicular", "INESTABILIDAD": "Inestabilidad GH", "ROTURA DEL MANGUITO": "Rotura del manguito", "SLAP": "Lesión SLAP", "SAPS": "Dolor subacromial (SAPS)"}}, "2b": {"botones": [{"pantalla": "orientativa"}, {"pantalla": "sindrome", "fila": "Hombro congelado"}]}}, "PRONOSTICO_DE": {"Dolor subacromial (SAPS)": "SAPS", "Inestabilidad GH": "Inestabilidad", "Acromioclavicular": "Acromioclavicular", "Lesión SLAP": "SLAP", "Rotura del manguito": "Rotura del manguito", "Hombro congelado": "Hombro congelado"}, "FICHAS": {"Hombro congelado": {"pista": "Movilidad pasiva limitada igual que la activa (nodo 2b)", "orientativa": true, "nota": true}}, "ORIENTATIVA_GRUPOS": {"aviso": "Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.", "grupos": [{"titulo": "Pasiva limitada, como el congelado", "resto": true, "filas": ["Artrosis GH", "Neoplasia", "Luxación bloqueada", "Fractura"]}, {"enlace": {"pantalla": "sindrome", "fila": "Hombro congelado", "sub": "Ficha del síndrome"}}, {"titulo": "Se parecen al congelado, pero con pasiva no limitada", "plegado": true, "filas": ["Dolor del manguito", "Acromioclavicular", "Cervicogénico"]}], "dice": {"Dolor del manguito": "movilidad pasiva no muy limitada", "Acromioclavicular": "sin restricción pasiva", "Cervicogénico": "sin restricción pasiva GH", "Luxación bloqueada": "rigidez activa y pasiva similar al congelado"}}, "CORTE_NOTA": "Dosis y progresión"};
+const DATA = {"REGIONES": [{"region": "hombro", "nombre": "Hombro", "disponible": true}, {"region": "lumbar", "nombre": "Lumbar", "disponible": false}, {"region": "cervical", "nombre": "Cervical", "disponible": false}, {"region": "cadera", "nombre": "Cadera", "disponible": false}, {"region": "rodilla", "nombre": "Rodilla", "disponible": false}], "DATOS": {"hombro": {"REGION": "hombro", "NOMBRE": "Hombro", "TITULOS": {"caraA": "HOMBRO · cara A   bloque 0 (con el paciente fuera) y bloques 3–4", "caraB": "HOMBRO · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol", "pieA2": "Guía clínica de hombro, ap. 1 y 4 · Struyf · Powell y Lewis, cap. 3 — Ficha de primera visita, bloques 0, 3 y 4"}, "BANDERAS": {"titulo": "Banderas rojas — derivación médica inmediata, sobre el cribado general de la ficha", "cabecera": ["Sospecha", "Pistas en entrevista y exploración", "Ayuda en consulta"], "filas": [["Tumor", "Antecedente de cáncer, pérdida de peso inexplicada, dolor sin relación con el movimiento o implacable, dolor nocturno o en reposo con síntomas sistémicos, masa o deformidad inexplicada.", "Raros en clavícula distal y acromion; pensar en ellos si hay dolor nocturno + síntomas sistémicos."], ["Infección o sistémico", "Fiebre, sensación de estar enfermo, cambios en la piel (aspecto, erupciones, sudoración), hematomas inexplicados, dolor en otras partes del cuerpo.", "Preguntar siempre por el estado general reciente."], ["Fractura o luxación no reducida", "Traumatismo previo (caída sobre el hombro o el codo), pérdida aguda de movilidad, deformidad, osteoporosis.", "Test de aprensión ósea; signo de percusión olécranon-manubrio (buen valor para luxación anterior y fracturas de clavícula y húmero)."], ["Lesión neurológica", "Déficit motor o sensitivo significativo, atrofia.", "Exploración neurológica breve: sensibilidad, fuerza y reflejos."], ["Origen visceral", "Dolor con esfuerzo cardiorrespiratorio o con síntomas digestivos; referido cardiaco, pulmonar o gastrointestinal a la zona AC.", "Preguntar si el dolor aparece al caminar rápido, al subir escaleras o tras comer."]], "nota": "Descartar antes de clasificar (no son banderas rojas, pero cambian la hipótesis): capsulitis, dolor de origen cervical y dolor secundario a traumatismo. Las banderas rojas se revisan en todas las visitas, no solo en la primera."}, "BISAGRA": {"pregunta": "¿La movilidad pasiva GH, sobre todo la RE, está limitada igual que la activa?", "ramas": "SÍ → capsulitis · artrosis GH · luxación bloqueada      |      NO → el resto de síndromes", "apoyo": "Clasifica síndromes, no estructuras: los test de hombro tienen poca precisión, combinarlos apenas la mejora y un hombro irritable da test positivos por casi cualquier causa."}, "ARBOL": {"filas": [["1", "¿Hay banderas rojas? → derivación médica.   ·   No → 2"], ["2", "¿La movilidad pasiva GH (sobre todo la RE) está limitada igual que la activa?   Sí → 2b   ·   No → 3"], ["2b", "¿Traumatismo previo?   Sí → LUXACIÓN BLOQUEADA o FRACTURA → Rx.\nNo: mayor edad + crepitación → ARTROSIS GH (Rx) · resto → HOMBRO CONGELADO."], ["3", "¿Los test cervicales reproducen el dolor de hombro?   Sí → CERVICOGÉNICO → explorar columna (pueden coexistir)   ·   No → 4"], ["4", "Movilidad pasiva conservada, ¿qué patrón encaja mejor? Dolor focal AC + palpación + aducción horizontal → ACROMIOCLAVICULAR · episodio concreto o aprensión → INESTABILIDAD · debilidad en RE + cluster positivo → ROTURA DEL MANGUITO · síntomas mecánicos (enganche, bloqueo, chasquido) → SLAP · dolor o debilidad al elevar, reproducido de forma consistente con resistidos → SAPS.\nLos cuadros se solapan: busca la hipótesis que explica los síntomas, no un hallazgo."]]}, "SINDROMES": {"aviso": "Antes de explorar: severidad e irritabilidad. Alta → solo bisagra y 1–2 tests, sin final de rango ni repeticiones provocadoras; el resto, en la próxima visita. Máximo 2–3 tests; la palpación va la última.", "cabecera": ["Síndrome", "Explorar · 10′", "① Gesto testigo", "② Medida objetiva"], "filas": [["Dolor subacromial (SAPS)", "Descartar primero capsulitis (RE pasiva), origen cervical y dolor postraumático. Dolor o debilidad al elevar el brazo; el dolor debe reproducirse de forma consistente con los test resistidos. Regla clínica: SAPS probable si no hay pérdida de RE pasiva y hay dolor anterior, lesión por sobreesfuerzo y ausencia de síntomas en RE final en abducción.", "Elevación en el plano de la escápula o RE resistida que reproduce el dolor → EVA", "Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa hasta el dolor"], ["Inestabilidad GH", "Anterior: aprensión, recolocación y sorpresa (S y E >72 %). Interpretar la aprensión, no el dolor. Posterior: no usar un test aislado; agrupar Jerk, Kim y signo de pinzamiento posterior junto con la historia.", "Aprensión de 0 a 10 en abducción + RE; en posterior, la posición provocadora", "Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición"], ["Acromioclavicular", "Palpación AC (S 96 %, E 10 %): si no duele, hace poco probable el cuadro; si duele, no lo confirma. Aducción horizontal con el brazo a 90° de flexión (S >67 %, E 79 %). Movilidad pasiva sin restricción; posible escalón.", "Aducción horizontal → EVA", "Grados de aducción horizontal hasta la aparición del dolor, en la misma posición"], ["Lesión SLAP", "Ningún hallazgo físico es específico. Compresión-rotación activa (S 72 %, E 52 %): sirve para sostener la hipótesis, no para confirmarla.", "Gesto por encima de la cabeza que reproduce el síntoma mecánico → EVA", "Fuerza isométrica de RE y RI con dinamómetro, siempre en la misma posición"], ["Rotura del manguito", "Inspección: brazo en cabestrillo, escápula en rotación inferior o inclinación anterior, cabeza humeral anteriorizada. Cluster A: arco doloroso + drop arm + debilidad en RE → LR+ 15,6 con los tres positivos. Cluster B: edad >65 + debilidad en RE + dolor nocturno → LR+ 9,8 con los tres positivos.", "Elevación activa o arco doloroso → EVA", "Fuerza isométrica en RE con dinamómetro (brazo junto al cuerpo, codo a 90°) o grados de elevación activa"], ["Hombro congelado", "Restricción equivalente de movilidad activa y pasiva: es el dato que más discrimina. La RE se considera la más afectada, pero la RI suele estar muy limitada con el brazo cerca de 90° de abducción. Criterio de Bunker: restricción igual de RE activa y pasiva + Rx esencialmente normal.", "Final del rango de RE pasiva → EVA (más útil cuando dolor > rigidez)", "RE pasiva en grados a 0° de abducción y RI a 90° de abducción (más útil cuando rigidez > dolor)"]], "nota": "No usar en hombro congelado: test específicos de MR, labrum o AC — casi siempre salen positivos al tensar una cápsula sensibilizada. Los test AC por separado son débiles: Paxinos + O’Brien combinados dan S y E >90 % (Ampliar)."}, "PRONOSTICO": {"titulo": "para «a las X sesiones espero Y; si no lo veo → Z»", "cabecera": ["Síndrome", "Horizonte e imagen", "Criterio de derivación o cuidado"], "filas": [["SAPS", "Una rotura completa del supraespinoso en ecografía aumenta la probabilidad, pero la imagen no mejora la capacidad de descartarlo.", "Dolor en reposo: puede indicar bursitis o proceso inflamatorio que tolere mal el movimiento vigoroso → dosificar. La idea de «espacio subacromial estrecho» es controvertida."], ["Inestabilidad", "Diagnóstico sobre todo clínico; la Rx simple puede identificar Bankart y Hill-Sachs. A las 3–4 semanas del episodio agudo hay poco dolor y recuperan movilidad y fuerza.", "La MDI se confunde con inestabilidad unidireccional, SAPS, patología discal cervical, plexitis braquial y desfiladero torácico. Tener presente Ehlers-Danlos o Marfan."], ["Acromioclavicular", "Rx y RM muestran patología AC, pero muchos cambios aparecen en personas sin síntomas.", "La infiltración ecoguiada tiene efecto diagnóstico y terapéutico: decisión médica."], ["SLAP", "La artro-RM es más precisa que la RM sin contraste.", "El SLAP aislado es raro y es frecuente en asintomáticos: tratarlo solo tiene sentido si explica los síntomas. Suele acompañar a rotura del MR, inestabilidad, rotura del bíceps o bursitis."], ["Rotura del manguito", "RM como referencia: rotura completa S 90 %, E 100 %; parcial S 100 %, E 87 %. No se observa curación espontánea y el tamaño puede aumentar en unos 2 años, también en asintomáticas.", "Alrededor del 40 % de la población tiene roturas asintomáticas: la rotura no explica por sí sola el dolor. La degeneración crece desde los 50–55 años mientras el dolor no traumático baja a partir de los 60–65."], ["Hombro congelado", "Se suele decir que se resuelve en 2–3 años, pero un 41 % sigue con síntomas a los 4 años y la mitad a los 7. No hay evidencia de que avance por estadios hasta curarse sin tratamiento. Rx normal salvo osteopenia o calcificación; RM no necesaria.", "Ejercicio en grupo supervisado: mejores resultados que el individual y que el ejercicio en casa. Derivar a psicología si los factores psicosociales superan tu competencia. Baja autoeficacia predice peor evolución. Contralateral en el 6–34 %."]], "nota": "③ lo elige el paciente; si no sabe: cartera del bolsillo trasero, sujetador o axila contraria (AC); peinarse, vestirse, alcanzar detrás de la espalda (congelado); lanzar (SLAP). Dosis y progresión no están en la guía: son tuyas.", "pie": "Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo"}, "ORIENTATIVA": {"titulo": "Rigidez activa = pasiva · qué lo distingue del hombro congelado", "bloque": "4", "cabecera": ["Condición", "Qué la distingue del hombro congelado", "Imagen"], "filas": [["Dolor del manguito", "Dolor mecánico provocado por los test de carga del MR; RE y abducción más afectadas; movilidad pasiva no muy limitada.", "Eco y RM (cambios también en asintomáticos)"], ["Acromioclavicular", "Dolor localizado y a la palpación sobre la AC, posible escalón, provocación con O’Brien o aducción horizontal; sin restricción pasiva.", "Rx y RM (cambios también en asintomáticos)"], ["Artrosis GH", "Mayor edad, dolor progresivo más largo y a menudo menos intenso, crepitación, posible atrofia.", "Rx simple la muestra"], ["Cervicogénico", "Dolor reproducible con los test cervicales; sin restricción pasiva GH.", "Rx y RM cervical (cambios también en asintomáticos)"], ["Neoplasia", "Se presenta parecido; antecedente de cáncer, pérdida de peso, fiebre, dolor implacable.", "Rx, gammagrafía, RM"], ["Luxación bloqueada", "Traumatismo previo, cualquier edad, rigidez activa y pasiva similar al congelado.", "Rx simple"], ["Fractura", "Traumatismo previo, osteoporosis.", "Rx; RM si fractura no desplazada del troquíter"]], "nota": "Los estadios del congelado se solapan: en la práctica es más útil clasificar como dolor > rigidez o rigidez > dolor y ajustar el tratamiento a eso."}, "ENLACES": {"1": {"botones": [{"pantalla": "banderas"}]}, "4": {"patrones": {"ACROMIOCLAVICULAR": "Acromioclavicular", "INESTABILIDAD": "Inestabilidad GH", "ROTURA DEL MANGUITO": "Rotura del manguito", "SLAP": "Lesión SLAP", "SAPS": "Dolor subacromial (SAPS)"}}, "2b": {"botones": [{"pantalla": "orientativa"}, {"pantalla": "sindrome", "fila": "Hombro congelado"}]}}, "PRONOSTICO_DE": {"Dolor subacromial (SAPS)": "SAPS", "Inestabilidad GH": "Inestabilidad", "Acromioclavicular": "Acromioclavicular", "Lesión SLAP": "SLAP", "Rotura del manguito": "Rotura del manguito", "Hombro congelado": "Hombro congelado"}, "FICHAS": {"Hombro congelado": {"pista": "Movilidad pasiva limitada igual que la activa (nodo 2b)", "orientativa": true, "nota": true}}, "ORIENTATIVA_GRUPOS": {"aviso": "Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.", "grupos": [{"titulo": "Pasiva limitada, como el congelado", "resto": true, "filas": ["Artrosis GH", "Neoplasia", "Luxación bloqueada", "Fractura"]}, {"enlace": {"pantalla": "sindrome", "fila": "Hombro congelado", "sub": "Ficha del síndrome"}}, {"titulo": "Se parecen al congelado, pero con pasiva no limitada", "plegado": true, "filas": ["Dolor del manguito", "Acromioclavicular", "Cervicogénico"]}], "dice": {"Dolor del manguito": "movilidad pasiva no muy limitada", "Acromioclavicular": "sin restricción pasiva", "Cervicogénico": "sin restricción pasiva GH", "Luxación bloqueada": "rigidez activa y pasiva similar al congelado"}}, "CORTE_NOTA": "Dosis y progresión"}}};
 
 // ════════════════════════════════════════════════════════════════
-//  Datos de la región: la tarjeta (tarjeta_<región>.js) más los campos
-//  propios de la SPA (spa_<región>.js), fundidos por datos.js.
+//  Datos: una sola URL para todas las regiones (tarea 3).
+//    DATA.REGIONES  [{region, nombre, disponible}]  para el selector del inicio
+//    DATA.DATOS     {<región>: datos de esa región}  solo las que ya están migradas
+//  Los datos de cada región son la tarjeta (tarjeta_<región>.js) más los campos
+//  propios de la SPA (spa_<región>.js), fundidos por datos.js:
 //    REGION NOMBRE · TITULOS BANDERAS BISAGRA ARBOL SINDROMES
-//    ORIENTATIVA? PRONOSTICO · ENLACES? PRONOSTICO_DE? FICHAS?
-//    ORIENTATIVA_GRUPOS? CORTE_NOTA?
+//    ORIENTATIVA? PRONOSTICO · ENLACES? PRONOSTICO_DE? FICHAS? ORIENTATIVA_GRUPOS? CORTE_NOTA?
 //  Aquí no hay texto de ninguna región: los rótulos o salen de la tarjeta
 //  o son de la SPA y valen igual para todas.
 // ════════════════════════════════════════════════════════════════
-const REGION = DATA.NOMBRE;
+// D: datos planos de la región que se está viendo; R: lo que se deriva de D.
+// Se recalculan al entrar en una región (irARegion); el selector del inicio no los usa.
+let D = null;
+let R = null;
 
 // ════════════════════════════════════════════════════════════════
 //  Utilidades
@@ -151,44 +163,49 @@ function h(tag, props, ...kids) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  Lectura de los datos
+//  Lectura de los datos: todo lo que se deriva de una región, una vez
 // ════════════════════════════════════════════════════════════════
-const ARBOL = Object.fromEntries(DATA.ARBOL.filas.map(([n, t]) => [n, t]));
-const ENLACES = DATA.ENLACES || {};
-const FICHAS = DATA.FICHAS || {};
-const GRUPOS = DATA.ORIENTATIVA_GRUPOS || null;
-const sind = n => DATA.SINDROMES.filas.find(f => f[0] === n);
-const pron = n => DATA.PRONOSTICO.filas.find(f => f[0] === ((DATA.PRONOSTICO_DE || {})[n] || n));
+function cargarRegion(d) {
+  const ARBOL = Object.fromEntries(d.ARBOL.filas.map(([n, t]) => [n, t]));
+  const ENLACES = d.ENLACES || {};
+  const FICHAS = d.FICHAS || {};
+  const GRUPOS = d.ORIENTATIVA_GRUPOS || null;
+  const sind = n => d.SINDROMES.filas.find(f => f[0] === n);
+  const pron = n => d.PRONOSTICO.filas.find(f => f[0] === ((d.PRONOSTICO_DE || {})[n] || n));
 
-// Rótulos que salen de la propia tarjeta
-const [TIT_BANDERAS, SUB_BANDERAS] = partir(DATA.BANDERAS.titulo, ' — ');
-const [TIT_ORIENT, SUB_ORIENT] = partir(DATA.ORIENTATIVA ? DATA.ORIENTATIVA.titulo : '', ' · ');
-const TIT_AVISO = frase1(DATA.SINDROMES.aviso);
+  // Rótulos que salen de la propia tarjeta
+  const [TIT_BANDERAS, SUB_BANDERAS] = partir(d.BANDERAS.titulo, ' — ');
+  const [TIT_ORIENT, SUB_ORIENT] = partir(d.ORIENTATIVA ? d.ORIENTATIVA.titulo : '', ' · ');
+  const TIT_AVISO = frase1(d.SINDROMES.aviso);
 
-// Nodo que reparte la pregunta en botones (ENLACES[n].patrones): su primera línea
-// son pares «condición → ETIQUETA» y el resto de líneas cierra el árbol como nota.
-const NODO_PATRONES = Object.keys(ENLACES).find(n => ENLACES[n].patrones) || null;
-function patrones(n) {
-  const mapa = ENLACES[n].patrones, l = ARBOL[n].split('\n')[0], i = l.indexOf('? ');
-  return (i < 0 ? l : l.slice(i + 2)).split(' · ').map(s => {
-    const [cond, et] = s.split(' → ');
-    return { cond: sp(cond), clave: mapa[sp(et).replace(/\.$/, '')] };
-  }).filter(p => p.clave);
+  // Nodo que reparte la pregunta en botones (ENLACES[n].patrones): su primera línea
+  // son pares «condición → ETIQUETA» y el resto de líneas cierra el árbol como nota.
+  const NODO_PATRONES = Object.keys(ENLACES).find(n => ENLACES[n].patrones) || null;
+  function patrones(n) {
+    const mapa = ENLACES[n].patrones, l = ARBOL[n].split('\n')[0], i = l.indexOf('? ');
+    return (i < 0 ? l : l.slice(i + 2)).split(' · ').map(s => {
+      const [cond, et] = s.split(' → ');
+      return { cond: sp(cond), clave: mapa[sp(et).replace(/\.$/, '')] };
+    }).filter(p => p.clave);
+  }
+  const PATRONES = NODO_PATRONES ? patrones(NODO_PATRONES) : [];
+  const CLAVE_PATRON = Object.fromEntries(PATRONES.map(p => [p.clave, p.cond]));
+  const CIERRE = NODO_PATRONES ? ARBOL[NODO_PATRONES].split('\n').slice(1).join('\n') : '';
+  // La nota del pronóstico se parte en dos párrafos por CORTE_NOTA; el texto no se toca
+  const NOTAS_PRON = (() => {
+    const t = d.PRONOSTICO.nota, i = d.CORTE_NOTA ? t.indexOf(d.CORTE_NOTA) : -1;
+    return i < 0 ? [t] : [t.slice(0, i).trim(), t.slice(i).trim()];
+  })();
+
+  return { ARBOL, ENLACES, FICHAS, GRUPOS, sind, pron, TIT_BANDERAS, SUB_BANDERAS, TIT_ORIENT, SUB_ORIENT, TIT_AVISO, NODO_PATRONES, PATRONES, CLAVE_PATRON, CIERRE, NOTAS_PRON };
 }
-const PATRONES = NODO_PATRONES ? patrones(NODO_PATRONES) : [];
-const CLAVE_PATRON = Object.fromEntries(PATRONES.map(p => [p.clave, p.cond]));
-const CIERRE = NODO_PATRONES ? ARBOL[NODO_PATRONES].split('\n').slice(1).join('\n') : '';
-// La nota del pronóstico se parte en dos párrafos por CORTE_NOTA; el texto no se toca
-const NOTAS_PRON = (() => {
-  const t = DATA.PRONOSTICO.nota, i = DATA.CORTE_NOTA ? t.indexOf(DATA.CORTE_NOTA) : -1;
-  return i < 0 ? [t] : [t.slice(0, i).trim(), t.slice(i).trim()];
-})();
 
 // ════════════════════════════════════════════════════════════════
 //  Navegación (pila propia + botón Atrás de Android)
 // ════════════════════════════════════════════════════════════════
-let pila = [{ p: 'home' }];
+let pila = [{ p: 'selector' }];
 let hist = false;
+let regionActual = null;
 // Recorrido del árbol: solo en memoria (se borra al recargar); no se guarda nada en el navegador
 let marcas = {};   // nodo -> 'hecho' | 'dudoso' | 'na'
 let vistas = [];   // fichas de síndrome abiertas desde el árbol, en orden
@@ -199,6 +216,15 @@ function ir(p, arg) {
   pila.push({ p, arg });
   try { history.pushState({ n: pila.length }, ''); hist = true; } catch (e) {}
   render(true);
+}
+// Entrar en una región desde el selector del inicio. El recorrido solo se reinicia si
+// se cambia de región (para otra región, las marcas de esta no significarían nada).
+function irARegion(clave) {
+  if (clave !== regionActual) { marcas = {}; vistas = []; }
+  regionActual = clave;
+  D = DATA.DATOS[clave];
+  R = cargarRegion(D);
+  ir('home');
 }
 function volver() {
   if (pila.length <= 1) return;
@@ -228,34 +254,47 @@ const columnas = (fila, cabecera) => fila.slice(1).map((c, i) => h('p', {}, h('s
 // URGENCIA (opcional): mismo criterio visual que en el papel (borde grueso, sin rojo), líneas literales
 const urgencia = U => U && h('section', { class: 'card urgencia' }, h('p', { class: 'nombre' }, U.titulo), U.lineas.map(l => h('p', { class: 'pre' }, sp(l))));
 // Botón a un destino fijo de ENLACES: { pantalla, fila?, sub? }
-function botonDestino(d) {
-  if (d.pantalla === 'banderas') return big(TIT_BANDERAS, d.sub, () => ir('banderas'));
-  if (d.pantalla === 'orientativa') return DATA.ORIENTATIVA ? big(TIT_ORIENT, d.sub, () => ir('orientativa')) : null;
-  if (d.pantalla === 'sindrome') return sind(d.fila) ? big(d.fila, d.sub, () => irAFicha(d.fila)) : null;
+function botonDestino(dest) {
+  if (dest.pantalla === 'banderas') return big(R.TIT_BANDERAS, dest.sub, () => ir('banderas'));
+  if (dest.pantalla === 'orientativa') return D.ORIENTATIVA ? big(R.TIT_ORIENT, dest.sub, () => ir('orientativa')) : null;
+  if (dest.pantalla === 'sindrome') return R.sind(dest.fila) ? big(dest.fila, dest.sub, () => irAFicha(dest.fila)) : null;
   return null;
 }
 
 // ════════════════════════════════════════════════════════════════
 //  Pantallas
 // ════════════════════════════════════════════════════════════════
+// Selector de región (el inicio; una sola URL para las cinco). Las regiones sin datos
+// todavía (tarea 4) se ven pero no se pueden abrir.
+function pSelector() {
+  const filas = DATA.REGIONES.map(r => r.disponible
+    ? nav(r.nombre, 'Tarjeta de consulta', () => irARegion(r.region))
+    : h('div', { class: 'nav pendiente', 'aria-disabled': 'true' },
+        h('div', { class: 'tx' }, h('b', {}, r.nombre), h('span', {}, 'Pendiente'))));
+  return { titulo: 'Consulta', home: true, nodes: [
+    h('p', { class: 'sub' }, 'Elige una región.'),
+    filas
+  ] };
+}
+
 function pHome() {
   const n = [
-    urgencia(DATA.URGENCIA),
-    h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de ' + DATA.REGION),
-    nav(TIT_BANDERAS, bloque(3, DATA.BANDERAS.filas.length + ' sospechas'), () => ir('banderas')),
-    nav('Bisagra y árbol', bloque(4, 'pasivo y ' + DATA.ARBOL.filas.length + ' pasos · fichas de síndrome'), () => ir('arbol'))
+    urgencia(D.URGENCIA),
+    h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de ' + D.REGION),
+    nav(R.TIT_BANDERAS, bloque(3, D.BANDERAS.filas.length + ' sospechas'), () => ir('banderas')),
+    nav('Bisagra y árbol', bloque(4, 'pasivo y ' + D.ARBOL.filas.length + ' pasos · fichas de síndrome'), () => ir('arbol'))
   ];
-  return { titulo: REGION, home: true, nodes: n };
+  return { titulo: D.NOMBRE, nodes: n };
 }
 
 function pBanderas() {
-  const B = DATA.BANDERAS;
-  return { titulo: TIT_BANDERAS, nodes: [
-    h('p', { class: 'sub' }, bloque(3, SUB_BANDERAS ? SUB_BANDERAS + '.' : '')),
+  const B = D.BANDERAS;
+  return { titulo: R.TIT_BANDERAS, nodes: [
+    h('p', { class: 'sub' }, bloque(3, R.SUB_BANDERAS ? R.SUB_BANDERAS + '.' : '')),
     B.filas.map(f => h('section', { class: 'card' },
       h('p', { class: 'nombre' }, f[0]),
       f.slice(1).map((c, i) => h('p', {}, h('span', { class: 'lab' }, B.cabecera[i + 1]), c)))),
-    nota(B.nota), pie(DATA.TITULOS.pieA2)
+    nota(B.nota), pie(D.TITULOS.pieA2)
   ] };
 }
 
@@ -266,7 +305,7 @@ const controlMarca = n => h('div', { class: 'marca', role: 'group', 'aria-label'
   ESTADOS.map(([e, t]) => h('button', { type: 'button', 'data-v': e, 'aria-pressed': String(marcas[n] === e), onclick: () => marcar(n, e) }, t)));
 
 function chipsRecorrido() {
-  return DATA.ARBOL.filas.map(f => f[0]).map(n => h('button', { type: 'button', class: 'paso', 'data-e': marcas[n] || '',
+  return D.ARBOL.filas.map(f => f[0]).map(n => h('button', { type: 'button', class: 'paso', 'data-e': marcas[n] || '',
     'aria-label': 'Nodo ' + n + (marcas[n] ? ': ' + marcas[n] : ': sin marcar'), onclick: () => irANodo(n) },
     n + ' ' + (marcas[n] ? SIMBOLO[marcas[n]] : '·')));
 }
@@ -280,7 +319,7 @@ function actualizarCab() {
 window.addEventListener('scroll', actualizarCab, { passive: true });
 
 function panelRecorrido() {
-  const filas = DATA.ARBOL.filas, nodos = filas.map(f => f[0]);
+  const filas = D.ARBOL.filas, nodos = filas.map(f => f[0]);
   const cuenta = e => nodos.filter(n => marcas[n] === e).length;
   const dud = nodos.filter(n => marcas[n] === 'dudoso'), sin = nodos.filter(n => !marcas[n]);
   const alguna = nodos.some(n => marcas[n]);
@@ -298,19 +337,19 @@ function panelRecorrido() {
 
 // Botones de un nodo: los destinos fijos y, si reparte patrones, uno por patrón
 function botonesNodo(n) {
-  const e = ENLACES[n];
+  const e = R.ENLACES[n];
   if (!e) return null;
   const bs = (e.botones || []).map(botonDestino).filter(Boolean);
-  if (n === NODO_PATRONES) for (const p of PATRONES) bs.push(big(p.clave, cap1(p.cond), () => irAFicha(p.clave)));
+  if (n === R.NODO_PATRONES) for (const p of R.PATRONES) bs.push(big(p.clave, cap1(p.cond), () => irAFicha(p.clave)));
   return bs.length ? bs : null;
 }
 
 function pArbol() {
-  const B = DATA.BISAGRA;
-  const nodos = DATA.ARBOL.filas.map(([n, t]) => {
+  const B = D.BISAGRA;
+  const nodos = D.ARBOL.filas.map(([n, t]) => {
     const bs = botonesNodo(n);
     // el nodo que reparte patrones enseña solo la pregunta: los patrones son los botones
-    const texto = n === NODO_PATRONES ? sp(t.split('\n')[0].split('? ')[0]) + '?' : sp(t);
+    const texto = n === R.NODO_PATRONES ? sp(t.split('\n')[0].split('? ')[0]) + '?' : sp(t);
     return h('section', { class: 'card', id: 'nodo-' + n },
       h('div', { class: 'nodo' }, h('span', { class: 'n' }, n), h('p', { class: 'pre' }, texto)),
       bs ? h('div', { class: 'acciones' }, bs) : null,
@@ -318,37 +357,37 @@ function pArbol() {
   });
   return { titulo: 'Bisagra y árbol', nodes: [
     h('p', { class: 'sub' }, bloque(4, 'revisa el recorrido de arriba abajo.')),
-    h('div', { class: 'band pre' }, sp(DATA.SINDROMES.aviso)),
+    h('div', { class: 'band pre' }, sp(D.SINDROMES.aviso)),
     panelRecorrido(),
     h('section', { class: 'card key' },
       h('p', { class: 'nombre' }, B.pregunta),
       h('p', { class: 'pre' }, sp(B.ramas).replace(/\s*\|\s*/, '\n')),
       h('p', { class: 'nota' }, sp(B.apoyo))),
-    nodos, CIERRE ? nota(CIERRE) : null, pie(DATA.TITULOS.pieA2)
+    nodos, R.CIERRE ? nota(R.CIERRE) : null, pie(D.TITULOS.pieA2)
   ] };
 }
 
 function pSindrome(clave) {
-  const S = DATA.SINDROMES, P = DATA.PRONOSTICO;
-  const f = sind(clave), pr = pron(clave), cfg = FICHAS[clave] || {};
+  const S = D.SINDROMES, P = D.PRONOSTICO;
+  const f = R.sind(clave), pr = R.pron(clave), cfg = R.FICHAS[clave] || {};
   // la pista dice por qué se ha llegado aquí: la del propio síndrome o su condición del árbol
-  const pista = cfg.pista || cap1(CLAVE_PATRON[clave] || '');
+  const pista = cfg.pista || cap1(R.CLAVE_PATRON[clave] || '');
   return { titulo: f[0], nodes: [
     pista ? h('p', { class: 'sub' }, pista) : null,
     f.slice(1).map((c, i) => seccion(S.cabecera[i + 1], c)),
     pr ? plegable(bloque(6, 'horizonte y criterio'), columnas(pr, P.cabecera)) : null,
-    plegable(TIT_AVISO, h('p', { class: 'pre' }, sp(S.aviso))),
-    cfg.orientativa && DATA.ORIENTATIVA ? big('Diferencial: ' + min1(TIT_ORIENT), cap1(SUB_ORIENT), () => ir('orientativa')) : null,
+    plegable(R.TIT_AVISO, h('p', { class: 'pre' }, sp(S.aviso))),
+    cfg.orientativa && D.ORIENTATIVA ? big('Diferencial: ' + min1(R.TIT_ORIENT), cap1(R.SUB_ORIENT), () => ir('orientativa')) : null,
     cfg.nota && S.nota ? nota(S.nota) : null,
-    NOTAS_PRON.map(nota), pie(P.pie)
+    R.NOTAS_PRON.map(nota), pie(P.pie)
   ] };
 }
 
 // Tabla orientativa: cada fila con sus columnas etiquetadas. La agrupación,
 // si la hay, es propia de la SPA y viene de ORIENTATIVA_GRUPOS.
 function pOrientativa() {
-  const O = DATA.ORIENTATIVA, P = DATA.PRONOSTICO;
-  const dice = f => { const d = GRUPOS && GRUPOS.dice && GRUPOS.dice[f[0]]; return d && String(f[1]).includes(d) ? cap1(d) : null; };
+  const O = D.ORIENTATIVA, P = D.PRONOSTICO, GRUPOS = R.GRUPOS;
+  const dice = f => { const dc = GRUPOS && GRUPOS.dice && GRUPOS.dice[f[0]]; return dc && String(f[1]).includes(dc) ? cap1(dc) : null; };
   const plegables = [];   // solo uno abierto a la vez
   const fila = f => {
     const d = h('details', {},
@@ -380,8 +419,8 @@ function pOrientativa() {
     }
   }
   plegables.forEach(d => d.addEventListener('toggle', () => { if (d.open) plegables.forEach(o => { if (o !== d) o.open = false; }); }));
-  const sub = SUB_ORIENT ? SUB_ORIENT + '.' : '';
-  return { titulo: TIT_ORIENT, nodes: [
+  const sub = R.SUB_ORIENT ? R.SUB_ORIENT + '.' : '';
+  return { titulo: R.TIT_ORIENT, nodes: [
     sub ? h('p', { class: 'sub' }, O.bloque ? bloque(O.bloque, sub) : sub) : null,
     cuerpo,
     nota(O.nota),
@@ -393,17 +432,21 @@ function pOrientativa() {
 // ════════════════════════════════════════════════════════════════
 //  Render
 // ════════════════════════════════════════════════════════════════
-const PANTALLAS = { home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
+const PANTALLAS = { selector: pSelector, home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
 const $ = s => document.querySelector(s);
 $('#back').addEventListener('click', volver);
 
 function render(arriba) {
   const y = window.scrollY, cur = pila[pila.length - 1];
   const s = PANTALLAS[cur.p](cur.arg);
-  document.title = s.home ? 'Consulta ' + DATA.REGION : s.titulo + ' · ' + DATA.REGION;
+  document.title = cur.p === 'selector' ? 'Consulta' : cur.p === 'home' ? 'Consulta ' + D.NOMBRE : s.titulo + ' · ' + D.NOMBRE;
   $('#titulo').textContent = s.titulo;
   $('#back').hidden = !!s.home;
   $('#cab').classList.toggle('home', !!s.home);
+  // El nombre de la región se ve siempre en la cabecera (una sola paleta: ya no lo dice el color),
+  // menos en el selector y en el inicio de la región, donde ya es el título de la pantalla
+  $('#regionCab').hidden = cur.p === 'selector' || cur.p === 'home';
+  $('#regionCab').textContent = D ? D.NOMBRE : '';
   $('#main').replaceChildren(...[s.nodes].flat(Infinity).filter(Boolean));
   if (cur.p === 'arbol') $('#cabRec').replaceChildren(...chipsRecorrido());
   window.scrollTo(0, arriba ? 0 : y);

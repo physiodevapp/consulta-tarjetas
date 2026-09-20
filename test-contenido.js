@@ -19,11 +19,16 @@ const titulo = d => d.querySelector('#titulo').textContent;
 const btns = d => [...d.querySelectorAll('#main button')];
 const btn = (d, t) => btns(d).find(b => b.textContent.includes(t));
 const click = b => { if (!b) throw new Error('botón no encontrado'); b.click(); };
+// El inicio es el selector de región (tarea 3); hombro es la única disponible hoy
+const entrarHombro = d => click(btn(d, 'Hombro'));
 
 (async () => {
-  // ── Home ──
+  // ── Selector + Home ──
   let { w, d, errs } = nueva();
-  ok(titulo(d) === 'Hombro' && d.querySelector('#back').hidden, 'home: título y sin botón atrás');
+  ok(titulo(d) === 'Consulta' && d.querySelector('#back').hidden, 'selector: título y sin botón atrás');
+  ok(!!btn(d, 'Hombro') && d.querySelectorAll('#main .nav.pendiente').length === 4, 'selector: hombro disponible, 4 regiones pendientes');
+  entrarHombro(d);
+  ok(titulo(d) === 'Hombro' && !d.querySelector('#back').hidden, 'home: título y con botón atrás (vuelve al selector)');
   ok(d.querySelectorAll('.nav').length === 2 && !txt(d).includes('Rigidez') && !txt(d).includes('Síndromes'), 'home: 2 accesos (banderas y árbol)');
 
   // ── Banderas + atrás ──
@@ -51,6 +56,7 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
 
   // ── Las 6 fichas: todo el texto de la tarjeta (síndromes + pronóstico) ──
   ({ w, d, errs } = nueva());
+  entrarHombro(d);
   click(btn(d, 'Bisagra y árbol'));
   ok(txt(d).includes(norm(data.SINDROMES.aviso)), 'árbol: abre con el aviso de severidad e irritabilidad');
   ok(!btn(d, 'Síndromes') && !txt(d).includes('Bloques 4, 5 y 6'), 'sin lista de síndromes');
@@ -59,6 +65,7 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   const mapa = { 'Dolor subacromial (SAPS)': 'SAPS', 'Inestabilidad GH': 'Inestabilidad', 'Acromioclavicular': 'Acromioclavicular', 'Lesión SLAP': 'SLAP', 'Rotura del manguito': 'Rotura del manguito', 'Hombro congelado': 'Hombro congelado' };
   for (const f of data.SINDROMES.filas) {
     const inst = nueva();
+    entrarHombro(inst.d);
     click(btn(inst.d, 'Bisagra y árbol')); click(btn(inst.d, f[0]));
     const tt = txt(inst.d);
     const p = data.PRONOSTICO.filas.find(x => x[0] === mapa[f[0]]);
@@ -69,11 +76,12 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
     ok(inst.errs.length === 0, 'ficha ' + f[0] + ': sin errores');
     if (f[0] === 'Hombro congelado') ok(tt.includes(norm(data.SINDROMES.nota)), 'congelado: nota de tests');
   }
-  const det = [...(() => { const i = nueva(); click(btn(i.d, 'Bisagra y árbol')); click(btn(i.d, 'Lesión SLAP')); return i.d.querySelectorAll('details'); })()];
+  const det = [...(() => { const i = nueva(); entrarHombro(i.d); click(btn(i.d, 'Bisagra y árbol')); click(btn(i.d, 'Lesión SLAP')); return i.d.querySelectorAll('details'); })()];
   ok(det.length === 2 && det.every(x => !x.open), 'ficha: los dos plegables empiezan cerrados');
 
   // ── Rigidez: grupo limitado + plegable con los 3 que no restringen la pasiva ──
   ({ w, d, errs } = nueva());
+  entrarHombro(d);
   click(btn(d, 'Bisagra y árbol')); click(btn(d, 'Rigidez activa'));
   ok(titulo(d) === 'Rigidez activa = pasiva', 'rigidez: se llega desde el nodo 2b del árbol');
   const rows = [...d.querySelectorAll('#main > details')];
@@ -101,7 +109,7 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   click(btn(d, 'Diferencial: rigidez activa = pasiva')); ok(titulo(d) === 'Rigidez activa = pasiva', 'congelado → diferencial');
   click(btn(d, 'Hombro congelado')); await wait(50);
   ok(titulo(d) === 'Hombro congelado' && w.eval('pila.length') === antes, 'diferencial → congelado vuelve sin apilar pantallas');
-  { const i = nueva(); click(btn(i.d, 'Bisagra y árbol')); click(btn(i.d, 'Lesión SLAP')); ok(!btn(i.d, 'Diferencial: rigidez'), 'otras fichas no llevan el botón del diferencial'); }
+  { const i = nueva(); entrarHombro(i.d); click(btn(i.d, 'Bisagra y árbol')); click(btn(i.d, 'Lesión SLAP')); ok(!btn(i.d, 'Diferencial: rigidez'), 'otras fichas no llevan el botón del diferencial'); }
 
   // ── Sin almacenamiento ni errores ──
   ok(w.sessionStorage.length === 0 && w.localStorage.length === 0, 'no guarda nada en el navegador');
