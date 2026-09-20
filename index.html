@@ -287,7 +287,9 @@ function pSelector() {
         h('div', { class: 'tx' }, h('b', {}, r.nombre), h('span', {}, 'Pendiente'))));
   return { titulo: DATA.APP, home: true, nodes: [
     h('p', { class: 'sub' }, 'Elige una región.'),
-    filas
+    filas,
+    h('p', { class: 'sub', style: 'margin-top:18px' },
+      'Proyecto personal para practicar y entrenar el razonamiento clínico en fisioterapia. No sustituye el juicio profesional.')
   ] };
 }
 
