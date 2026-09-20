@@ -1,6 +1,5 @@
 // Tarea 3: selector de región en el inicio (una sola URL). Tarea 4: añadir regiones
-// una a una; hombro, cadera, lumbar y cervical ya tienen datos, rodilla se ve pero no
-// se puede abrir todavía.
+// una a una; las cinco ya tienen datos.
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
@@ -31,10 +30,8 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   const nombres = filas.map(f => f.querySelector('b').textContent);
   ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla', 'selector: orden de las regiones: ' + nombres.join('|'));
 
-  const disponibles = [filas[0], filas[1], filas[2], filas[3]], resto = [filas[4]];
-  ok(disponibles.every(f => f.tagName === 'BUTTON'), 'selector: hombro, lumbar, cervical y cadera son clicables');
-  ok(resto.every(f => f.tagName === 'DIV' && f.classList.contains('pendiente')), 'selector: rodilla no es botón (no se puede abrir)');
-  ok(resto.every(f => f.textContent.includes('Pendiente')), 'selector: la pendiente lo dice en pantalla');
+  ok(filas.every(f => f.tagName === 'BUTTON'), 'selector: las cinco regiones son clicables');
+  ok(!d.querySelector('#main .nav.pendiente'), 'selector: ninguna región pendiente');
 
   click(btn(d, 'Hombro'));
   ok(d.title === APP + ' Hombro', 'home: título de la pestaña con la región');
@@ -68,6 +65,11 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   click(btn(d, 'Cervical'));
   click(btn(d, 'Bisagra y árbol'));
   ok([...d.querySelectorAll('.nodo .n')].map(e => e.textContent).join('|') === '1|2|3|3b|4|5|5b|6', 'cervical: nodos propios');
+
+  d.querySelector('#back').click(); await wait(50); d.querySelector('#back').click(); await wait(50);
+  click(btn(d, 'Rodilla'));
+  click(btn(d, 'Bisagra y árbol'));
+  ok([...d.querySelectorAll('.nodo .n')].map(e => e.textContent).join('|') === '1|2|3|4|5|6|7', 'rodilla: nodos propios');
 
   ok(w.sessionStorage.length === 0 && w.localStorage.length === 0, 'no guarda nada en el navegador');
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
