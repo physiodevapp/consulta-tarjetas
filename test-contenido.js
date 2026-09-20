@@ -27,7 +27,7 @@ const entrarHombro = d => click(btn(d, 'Hombro'));
   // ── Selector + Home ──
   let { w, d, errs } = nueva();
   ok(titulo(d) === APP && d.querySelector('#back').hidden, 'selector: título y sin botón atrás');
-  ok(!!btn(d, 'Hombro') && d.querySelectorAll('#main .nav.pendiente').length === 4, 'selector: hombro disponible, 4 regiones pendientes');
+  ok(!!btn(d, 'Hombro') && d.querySelectorAll('#main .nav.pendiente').length === 3, 'selector: hombro disponible, 3 regiones pendientes (cadera ya tiene datos)');
   entrarHombro(d);
   ok(titulo(d) === 'Hombro' && !d.querySelector('#back').hidden, 'home: título y con botón atrás (vuelve al selector)');
   ok(d.querySelectorAll('.nav').length === 2 && !txt(d).includes('Rigidez') && !txt(d).includes('Síndromes'), 'home: 2 accesos (banderas y árbol)');

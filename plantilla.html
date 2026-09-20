@@ -373,9 +373,14 @@ function pSindrome(clave) {
   const f = R.sind(clave), pr = R.pron(clave), cfg = R.FICHAS[clave] || {};
   // la pista dice por qué se ha llegado aquí: la del propio síndrome o su condición del árbol
   const pista = cfg.pista || cap1(R.CLAVE_PATRON[clave] || '');
+  // síndromes sin ① ni ②: la última celda es { span: "texto" }, una sola nota combinada
+  const ultima = f[f.length - 1];
+  const span = ultima && typeof ultima === 'object' ? ultima.span : null;
+  const celdas = span ? f.slice(1, -1) : f.slice(1);
   return { titulo: f[0], nodes: [
     pista ? h('p', { class: 'sub' }, pista) : null,
-    f.slice(1).map((c, i) => seccion(S.cabecera[i + 1], c)),
+    celdas.map((c, i) => seccion(S.cabecera[i + 1], c)),
+    span ? seccion(S.cabecera.slice(2).join(' · '), span) : null,
     pr ? plegable(bloque(6, 'horizonte y criterio'), columnas(pr, P.cabecera)) : null,
     plegable(R.TIT_AVISO, h('p', { class: 'pre' }, sp(S.aviso))),
     cfg.orientativa && D.ORIENTATIVA ? big('Diferencial: ' + min1(R.TIT_ORIENT), cap1(R.SUB_ORIENT), () => ir('orientativa')) : null,

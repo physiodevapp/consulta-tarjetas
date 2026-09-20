@@ -1,0 +1,391 @@
+{
+ "REGION": "cadera",
+ "NOMBRE": "Cadera",
+ "TITULOS": {
+  "caraA": "CADERA E INGLE · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
+  "caraB": "CADERA E INGLE · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",
+  "pieA2": "Guía clínica de cadera e ingle, ap. 1 y 4 — Ficha de primera visita, bloques 0, 3 y 4"
+ },
+ "BANDERAS": {
+  "titulo": "Banderas rojas de la región — sobre el cribado general de la ficha",
+  "cabecera": [
+   "Sospecha → derivación médica",
+   "Pistas en entrevista y exploración",
+   "Ayuda en consulta"
+  ],
+  "filas": [
+   [
+    "Cáncer (óseo, partes blandas o metástasis)",
+    "Antecedente de cáncer: próstata en el varón; aparato reproductor o mama en la mujer. ≥50 años, sin mejoría en 1 mes, pérdida de peso inexplicada. Masas o ganglios que crecen o fluctúan. Avulsión ósea en un adulto mayor.",
+    "≥50 años + sin mejoría en 1 mes + pérdida de peso + cáncer previo: S 100 % para malignidad. Lo que más informa: cáncer previo, sospecha clínica, VSG elevada y hematocrito bajo. Radiografía primero; RM para caracterizar masas."
+   ],
+   [
+    "Fractura de estrés de rama púbica, diáfisis femoral o pelvis",
+    "Mismo perfil que la de cuello femoral. Rama púbica: corredores y deportes con mucho trabajo de aductores; dolor localizado referido a ingle y nalga. Diáfisis: dolor vago en muslo anterior que empeora en carga.",
+    "Rama púbica: el dolor NO aumenta con abducción pasiva ni con aducción resistida (a diferencia del aductor). Diáfisis: fulcro (S 88–93 %, E 13–75 %). Radiografía negativa no descarta; RM o gammagrafía si persiste la sospecha."
+   ],
+   [
+    "Osteonecrosis de la cabeza femoral",
+    "Corticoides o alcohol prolongados, traumatismo o fractura previos, lupus y otras conectivopatías, hiperlipidemia; puede ser idiopática. Dolor inguinal profundo que empeora con la carga, varios test articulares positivos.",
+    "Un rango de movimiento normal ayuda a descartarla. Radiografía y RM. Si no es traumática, la cadera no dolorosa está alterada en el 60 %: RM también de la otra cadera."
+   ],
+   [
+    "Lesiones del desarrollo",
+    "EFCF: 9–16 años, durante el estirón. Perthes: 4–8 años, más en varones (4–5:1). Displasia: debilidad y marcha alterada; puede no detectarse al nacer y acelera la degeneración de articulaciones vecinas. Apofisitis púbica: deportistas hasta los primeros veinte años.",
+    "Radiografía simple en edad de desarrollo (EFCF, Perthes, displasia, avulsiones). Apofisitis: mejor RM que TC por la radiación. Un antecedente de EFCF, Perthes o displasia hace más probable el dolor de cadera en el joven."
+   ],
+   [
+    "Fractura por avulsión",
+    "Adolescente con tracción brusca: EIAI (recto femoral), EIAS (sartorio), pubis (aductores), tuberosidad isquiática (isquiotibiales), trocánter menor (psoas ilíaco), trocánter mayor (rotadores).",
+    "Radiografía simple. En un adulto mayor, descartar metástasis."
+   ],
+   [
+    "Inflamatoria o infecciosa",
+    "AR y otras artropatías multiarticulares, espondilitis anquilosante, artritis séptica, osteomielitis, absceso del psoas. Fiebre, malestar general, tumefacción dolorosa.",
+    "VSG como prueba de bajo coste antes que la RM."
+   ],
+   [
+    "Hernia inguinal o femoral",
+    "Inguinal: 80 % varones; dolor, tumefacción y bulto con sensación de peso o arrastre. Femoral: 85 % mujeres; nódulo lateral e inferior al tubérculo púbico.",
+    "Palpar DE PIE el canal inguinal, por encima del ligamento y lateral al escroto; si no se nota, pedir que tosa. Una hernia palpable excluye el dolor «relacionado con la región inguinal»."
+   ],
+   [
+    "Visceral, urogenital o ginecológico",
+    "Apendicitis, enfermedad de Crohn, diverticulitis; litiasis renal, uretritis; prostatitis, epididimitis, torsión testicular; endometriosis, quiste ovárico, enfermedad inflamatoria pélvica. Cáncer ginecológico, de próstata, testículo, vía urinaria o digestivo; linfoma.",
+    "Denominador común: dolor atípico, sin relación clara con la carga, nocturno o con síntomas no musculoesqueléticos (escozor al orinar). Pensar en amplio."
+   ],
+   [
+    "Vascular",
+    "Aneurisma de aorta abdominal, enfermedad vascular periférica, oclusión aortoilíaca (Leriche), variz de la safena, adenopatía inguinal: inflamatoria si hay foco séptico en el miembro inferior, sospechosa si no lo hay.",
+    "El capítulo las enumera sin pistas propias: aplicar la regla del dolor atípico."
+   ]
+  ],
+  "nota": "Si no se puede descartar: vigilancia activa, derivando si no mejora como se espera. Primero pruebas de bajo coste (VSG, radiografía) y RM solo si son positivas. Se revisan en todas las visitas."
+ },
+ "BISAGRA": {
+  "pregunta": "¿Flexión-RI o FADDIR reproducen su dolor, chasquido o enganche?",
+  "ramas": "NO → INTRAARTICULAR IMPROBABLE: extraarticular, neuropático o referido      |      SÍ → seguir, pero no confirma: falta Thomas y la historia",
+  "apoyo": "Embudo: primero descartar, después confirmar. Casi todos los test de cadera son muy sensibles y poco específicos (FADDIR: S 99 %, E 5 %). Sin dolor inguinal, FAIS y labrum son improbables (S 96–100 %).",
+  "nota": "La guía no nombra «bisagra»: es el paso 5 de su árbol, usado como tal. Aquí la bisagra descarta, no clasifica — lo contrario que la RE pasiva del hombro."
+ },
+ "ARBOL": {
+  "filas": [
+   [
+    "1",
+    "¿Sospecha de fractura de estrés del cuello femoral (perfil, dolor en carga o al final de la RI, percusión positiva)? → DERIVACIÓN URGENTE.   ·   No → 2"
+   ],
+   [
+    "2",
+    "¿Otras banderas rojas o dolor atípico (sin relación con la carga, nocturno, no musculoesquelético, masa)? → derivación médica o vigilancia activa.   ·   No → 3"
+   ],
+   [
+    "3",
+    "¿Dolor lumbar, en nalga o por debajo de la rodilla, o poco que encontrar en la exploración local? → cribado lumbar y SI; si es negativo → 4.   ·   No → 4"
+   ],
+   [
+    "4",
+    "¿Evento desencadenante concreto y reciente (chut, sprint, cambio de dirección, estiramiento)? → LESIÓN AGUDA: palpar primero; luego resistencia y estiramiento.   ·   No → 5"
+   ],
+   [
+    "5",
+    "¿Flexión-RI o FADDIR reproducen su dolor, chasquido o enganche?   Sí → 5b   ·   No → INTRAARTICULAR IMPROBABLE → 6"
+   ],
+   [
+    "5b",
+    "¿Thomas positivo con historia compatible (signo de la «C», síntomas mecánicos)?   Sí → INTRAARTICULAR PROBABLE: identificar entidad; ≥50 años, artrosis. Imagen o derivación si cambia el manejo.\nNo concluyente: pueden coexistir → 6."
+   ],
+   [
+    "6",
+    "¿Qué reproduce su dolor conocido? INGLE, palpación: aductor + squeeze → ADUCTOR · psoas supra o infrainguinal → PSOAS ILÍACO · canal sin hernia → INGUINAL · sínfisis → PÚBICO. LATERAL: trocánter + derotación externa resistida → SDTM.\nNEUROPÁTICO: Tinel bajo la EIAS → MERALGIA · ingle y muslo medial con ejercicio → OBTURADOR · arch and twist → ILIOINGUINAL, ILIOHIPOGÁSTRICO o GENITOFEMORAL. Nada encaja o dolor extenso → SENSIBILIZACIÓN CENTRAL y revisar banderas rojas."
+   ]
+  ]
+ },
+ "SINDROMES": {
+  "aviso": "Antes de explorar: severidad e irritabilidad. Alta → solo bisagra y 1–2 tests, sin final de rango ni repeticiones provocadoras; el resto, en la próxima visita. Lo habitual es que varias entidades coexistan.",
+  "cabecera": [
+   "Síndrome",
+   "Explorar · 10′",
+   "① Gesto testigo",
+   "② Medida objetiva"
+  ],
+  "filas": [
+   [
+    "FAIS",
+    "Sin dolor inguinal, improbable (S 96–100 %). Flexión-RI (S 96 %, E 25 %) y FADDIR (S 99 %, E 5 %): solo descartan. Thomas (S 89 %, E 92 %, LR+ 11,1, LR− 0,12): descarta y confirma. Positivo: dolor conocido, bloqueo, chasquido o enganche.",
+    "FADDIR con sobrepresión suave → EVA",
+    "RI pasiva a 90° de flexión en supino frente al otro lado, o profundidad de sentadilla con los pies marcados"
+   ],
+   [
+    "Labrum",
+    "Dolor inguinal (S 96–100 %); lateral en el 59 %. Chasquido doloroso (S 100 %, E 85 %): sin él la rotura es improbable. Flexión-RI y FADDIR para descartar; que reproduzcan el chasquido o el enganche cuenta como positivo. Thomas si la sospecha persiste. Observar longitud de paso.",
+    "FADDIR hasta el dolor o el chasquido conocido → EVA (anotar si aparece el chasquido)",
+    "Longitud de paso: número de pasos en un recorrido marcado de 10 m a velocidad cómoda"
+   ],
+   [
+    "Ligamento redondo e inestabilidad",
+    "Sin síntoma específico: descartar lo intraarticular con flexión-RI y FADDIR. Movilidad AUMENTADA en inestabilidad. Log roll: más RE en el lado afectado, o el borde lateral del pie toca la camilla → laxitud capsular anterior o retroversión. Al menos un episodio de fallo.",
+    "Abducción de cadera en supino hasta el síntoma conocido (dolor, fallo o «clunk») → EVA",
+    "Alcance en SEBT en apoyo sobre la pierna afectada, mismas direcciones, frente al lado sano"
+   ],
+   [
+    "Condropatía",
+    "Cribado intraarticular (flexión-RI, FADDIR) y Thomas. Dolor en reposo y nocturno con síntomas mecánicos; rigidez; IMC >25.",
+    "Bajada de escalón con la pierna afectada, altura fija → EVA",
+    "Profundidad de sentadilla bipodal sin dolor (distancia glúteo–suelo), con los pies en posición marcada"
+   ],
+   [
+    "Artrosis",
+    "Criterios clínicos del Colegio Americano de Reumatología en mayores de 50: dolor de cadera + dolor en RI + rigidez matutina de menos de una hora → S 86 %, E 75 %, LR+ 3,4, LR− 0,19. Apoyan: RI de 15–25° con flexión ≤115°; RI dolorosa.",
+    "RI pasiva a 90° de flexión en supino hasta el final del rango → EVA",
+    "Grados de RI a 90° de flexión y de flexión pasiva en supino, frente al otro lado"
+   ],
+   [
+    "Lesión aguda de ingle",
+    "Palpar PRIMERO: si no duele, se descarta (exactitud >90 % en aductores y flexores). Después, resistencia y estiramiento del grupo sospechoso. Aductores (el largo en unos 2/3), recto femoral, ilíaco y psoas.",
+    "El test de resistencia más provocador de la batería (squeeze a 0° o flexión resistida a 90°) → EVA",
+    "Fuerza isométrica con HHD del grupo lesionado, misma posición, frente al lado sano (vuelta al deporte: déficit <10–20 %)"
+   ],
+   [
+    "SDTM",
+    "Palpación del trocánter mayor primero (S 80 %), rápida y útil para descartar. Derotación externa resistida (S 88 %, E 97,3 %, LR+ 32,6, LR− 0,12): supino, cadera a 90° en RE; vuelve a neutro contra resistencia. Si es negativo, repetir en prono con rodilla a 90°.",
+    "Derotación externa resistida en supino → EVA",
+    "Segundos en apoyo monopodal sobre la pierna afectada hasta el dolor (máximo 30), sin apoyo de manos"
+   ],
+   [
+    "Neuropatías",
+    "Meralgia (la más frecuente): Tinel 1 cm medial e inferior a la EIAS, neurodinámico del femorocutáneo, parestesias anterolaterales. Obturador: neurodinámico, sensibilidad del muslo medial y fuerza de aductores, a ser posible tras el deporte. Ilioinguinal, iliohipogástrico y genitofemoral: arch and twist de pie.",
+    "La maniobra que reproduce el síntoma (neurodinámico, Tinel o arch and twist) → EVA",
+    "Obturador: fuerza de aducción con HHD tras la actividad. Resto: tiempo de actividad desencadenante (sentado, bici, carrera) hasta los síntomas"
+   ],
+   [
+    "Sensibilización central",
+    "Dolor multifocal, referido y extenso; dolor en las AVD; fatiga y mal sueño; dificultades de memoria; más comorbilidad; intolerancia al estrés, ansiedad o depresión. Sin criterios clínicos validados.",
+    {
+     "span": "Coexiste con la patología intraarticular y hace los síntomas vagos y cambiantes: NO excluye patología estructural. Usa el ① y el ② de la entidad que mejor encaje."
+    }
+   ]
+  ],
+  "nota": "Palpa primero y con precisión: las estructuras se solapan. Resistencia y estiramiento cuentan si reproducen su dolor en el mismo sitio. El dolor SI rara vez coexiste con otra fuente: si hay otro diagnóstico válido o hay centralización, un test SI positivo probablemente es un falso positivo."
+ },
+ "PRONOSTICO": {
+  "titulo": "para «a las X sesiones espero Y; si no lo veo → Z»",
+  "cabecera": [
+   "Entidad",
+   "Horizonte e imagen",
+   "Criterio de derivación o cuidado"
+  ],
+  "filas": [
+   [
+    "FAIS",
+    "Radiografía AP de pelvis + axial. CAM: ángulo alfa >55°. PINCER: sobrecobertura, signo del cruce. Artro-RM para labrum y cartílago.",
+    "CAM en asintomáticos: 54,8 % de deportistas y 23,1 % de población general. Sin dolor relacionado con el movimiento NO hay FAIS. CAM tiende a lesionar el cartílago; PINCER, el labrum."
+   ],
+   [
+    "Labrum",
+    "Artro-RM (contraste necesario). Mayoría anterosuperiores. Diferenciar del surco sublabral, variante normal.",
+    "Más de dos tercios de los asintomáticos tienen hallazgos sugestivos, más aún los deportistas. La sinovitis mantenida puede favorecer la condropatía."
+   ],
+   [
+    "Ligamento redondo e inestabilidad",
+    "Artro-RM. Los test de confirmación se basan en estudios únicos.",
+    "La inestabilidad puede conducir a degeneración condral."
+   ],
+   [
+    "Condropatía",
+    "Difícil de ver: cartílago fino y profundo. La artro-TC lo muestra mejor. Delaminación asociada a FAIS.",
+    "Posible estadio inicial de la artrosis precoz."
+   ],
+   [
+    "Artrosis",
+    "Radiografía: pinzamiento del espacio articular u osteofitos.",
+    "Considerarla siempre en mayores de 50, también en deportistas. La sensibilización central se ha estudiado sobre todo aquí y hace los síntomas vagos."
+   ],
+   [
+    "Aductor y resto de Doha",
+    "Ecografía o RM (planos axiales oblicuos para la inserción): edema óseo en la sínfisis, signo de la hendidura secundaria.",
+    "AINE y reposo reducen el dolor, pero suele volver al retomar el deporte. La debilidad de cadera aumenta el riesgo: vuelta al deporte con déficit de fuerza <10–20 %."
+   ],
+   [
+    "SDTM",
+    "RM: tendinopatía y roturas del glúteo menor al medio, líquido en las bolsas. Atrofia grasa (grados I–III): factor pronóstico importante.",
+    "Diferencial: cadera en resorte externa, labrum (dolor lateral en el 59 %), meralgia y neuropatía iliohipogástrica."
+   ],
+   [
+    "Neuropatías",
+    "EMG y conducción nerviosa: baja S y E en esta región. Alivio con bloqueo diagnóstico.",
+    "Sospecha por patrón clínico, exploración neurológica y neurodinámicos. Considerar siempre atrapamientos lumbares."
+   ]
+  ],
+  "nota": "③ lo elige el paciente. Cuestionario aparte: HAGOS (o HOS, iHOT). Dosis y progresión no están en la guía: son tuyas.",
+  "pie": "Guía clínica de cadera e ingle, ap. 5 y 6 · entidades de Doha y filas Imagen, Cuidado y Pronóstico"
+ },
+ "URGENCIA": {
+  "titulo": "DERIVACIÓN URGENTE · FRACTURA DE ESTRÉS DEL CUELLO FEMORAL",
+  "lineas": [
+   "Puede completarse y comprometer la vascularización de la cabeza femoral. Dolor inguinal vago e insidioso que empeora con la actividad; a menudo el único hallazgo es dolor al final del rango, sobre todo en RI. Dolor profundo nocturno o en carga.",
+   "Perfil: corredor de fondo, militar o deportista de alta intensidad; poca forma al empezar, cambio de superficie o calzado; mujer con tríada de la deportista; corticoides prolongados.",
+   "Percusión rotuliano-púbica (S 95 %, E 86 %, LR+ 6,11, LR− 0,07): supino, fonendoscopio sobre el tubérculo púbico homolateral y percusión de la rótula; positivo si el sonido llega disminuido en el lado doloroso. Talón: golpe con el borde cubital del puño; positivo si reproduce el dolor con la carga axial.",
+   "Una radiografía negativa NO descarta, sobre todo en las primeras semanas. · Adenopatía inguinal sin foco séptico: considerar malignidad. · Sospecha de torsión testicular o de artritis séptica: urgencias hoy."
+  ]
+ },
+ "ORIENTATIVA": {
+  "titulo": "Ingle de larga evolución · entidades de Doha",
+  "bloque": "4 y 5",
+  "cabecera": [
+   "Entidad",
+   "Necesario para el diagnóstico",
+   "Más probable si reproduce el dolor",
+   "① Gesto testigo  ·  ② Medida objetiva"
+  ],
+  "filas": [
+   [
+    "Aductor",
+    "Palpación dolorosa de aductores Y squeeze doloroso",
+    "Estiramiento pasivo de aductores",
+    "① Squeeze de 5 s, misma posición → EVA. ② Fuerza isométrica de aducción con HHD en supino, frente al otro lado y en ratio con la abducción"
+   ],
+   [
+    "Psoas ilíaco",
+    "Palpación dolorosa supra O infrainguinal",
+    "Flexión resistida con cadera y rodilla a 90°; flexión resistida o extensión pasiva en Thomas modificado",
+    "① Flexión resistida en Thomas modificado → EVA. ② Fuerza isométrica de flexión con HHD en esa misma posición"
+   ],
+   [
+    "Inguinal",
+    "Dolor en la región del canal + palpación dolorosa del canal + SIN hernia palpable (explorar de pie y con tos)",
+    "Sit-up recto u oblicuo resistido; Valsalva, tos o estornudo; flexión resistida en Thomas modificado",
+    "① Sit-up oblicuo resistido → EVA. ② Plancha lateral: segundos a cada lado, siempre con el mismo apoyo"
+   ],
+   [
+    "Púbico",
+    "Palpación dolorosa de la sínfisis y el hueso adyacente",
+    "Resistencia abdominal y squeeze. No hay test de resistencia específico",
+    "① Squeeze de 5 s, misma posición → EVA. ② Fuerza isométrica de squeeze con HHD a una flexión de cadera fija"
+   ],
+   [
+    "Cadera",
+    "Ver las fichas intraarticulares de arriba",
+    "Flexión-RI, FADDIR, Thomas",
+    "Los de la entidad intraarticular que encaje"
+   ]
+  ],
+  "nota": "La extensión pasiva en Thomas modificado es a la vez el test de Thomas para patología intraarticular: interpretarlo junto con la palpación del psoas y la historia."
+ },
+ "ENLACES": {
+  "1": {
+   "botones": [
+    {
+     "pantalla": "banderas",
+     "sub": "Sospecha de fractura de estrés del cuello femoral"
+    }
+   ]
+  },
+  "2": {
+   "botones": [
+    {
+     "pantalla": "banderas",
+     "sub": "Otras banderas rojas o dolor atípico"
+    }
+   ]
+  },
+  "4": {
+   "botones": [
+    {
+     "pantalla": "sindrome",
+     "fila": "Lesión aguda de ingle",
+     "sub": "Evento desencadenante concreto y reciente"
+    }
+   ]
+  },
+  "6": {
+   "botones": [
+    {
+     "pantalla": "orientativa",
+     "sub": "Aductor · psoas ilíaco · inguinal · púbico (entidades de Doha)"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "SDTM",
+     "sub": "Trocánter + derotación externa resistida"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Neuropatías",
+     "sub": "Tinel, arch and twist u otro patrón neuropático"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Sensibilización central",
+     "sub": "Nada encaja o dolor extenso"
+    }
+   ]
+  },
+  "5b": {
+   "botones": [
+    {
+     "pantalla": "sindrome",
+     "fila": "FAIS"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Labrum"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Ligamento redondo e inestabilidad"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Condropatía"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Artrosis"
+    }
+   ]
+  }
+ },
+ "PRONOSTICO_DE": {
+  "Lesión aguda de ingle": "Aductor y resto de Doha",
+  "Sensibilización central": null
+ },
+ "FICHAS": {
+  "FAIS": {
+   "pista": "Intraarticular probable (nodo 5b): identificar la entidad",
+   "nota": true
+  },
+  "Labrum": {
+   "pista": "Intraarticular probable (nodo 5b): identificar la entidad",
+   "nota": true
+  },
+  "Ligamento redondo e inestabilidad": {
+   "pista": "Intraarticular probable (nodo 5b): identificar la entidad",
+   "nota": true
+  },
+  "Condropatía": {
+   "pista": "Intraarticular probable (nodo 5b): identificar la entidad",
+   "nota": true
+  },
+  "Artrosis": {
+   "pista": "Intraarticular probable (nodo 5b): identificar la entidad",
+   "nota": true
+  },
+  "Lesión aguda de ingle": {
+   "pista": "Evento desencadenante concreto y reciente (nodo 4)",
+   "orientativa": true,
+   "nota": true
+  },
+  "SDTM": {
+   "pista": "Trocánter + derotación externa resistida (nodo 6)",
+   "nota": true
+  },
+  "Neuropatías": {
+   "pista": "Patrón neuropático: Tinel, arch and twist u otro (nodo 6)",
+   "nota": true
+  },
+  "Sensibilización central": {
+   "pista": "Nada encaja o dolor extenso (nodo 6)",
+   "nota": true
+  }
+ }
+}

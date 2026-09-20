@@ -8,7 +8,7 @@ const fs = require('fs'), path = require('path');
 const { leer } = require('./extraer-js');
 const { datosDeRegion, aJSON } = require('./datos');
 
-const REGIONES = ['hombro'];   // al añadir una región, aquí
+const REGIONES = ['hombro', 'cadera'];   // al añadir una región, aquí
 
 const cel = v => Array.isArray(v) ? v.join('\n') : (v && typeof v === 'object' && v.span !== undefined ? v.span : String(v == null ? '' : v));
 const n = s => cel(s).replace(/\s+/g, ' ').trim();
@@ -21,7 +21,8 @@ const existe = (v, lista, et) => { comparaciones++; if (!lista.includes(v)) mal(
 for (const region of REGIONES) {
   const tarjeta = path.join(__dirname, `tarjeta_${region}.js`);
   const archivo = path.join(__dirname, `${region}.data.json`);
-  const js = leer(tarjeta).CONTENIDO;
+  const capturado = leer(tarjeta);
+  const js = capturado.CONTENIDO, { SPLIT_A, SPLIT_B } = capturado.CONFIG;
   const dx = JSON.parse(fs.readFileSync(archivo, 'utf8'));
 
   // ── 1. celda a celda contra la tarjeta ──
@@ -46,8 +47,10 @@ for (const region of REGIONES) {
     eq(js.ORIENTATIVA.titulo, dx.ORIENTATIVA.titulo, 'ORIENTATIVA.titulo'); eq(js.ORIENTATIVA.nota, dx.ORIENTATIVA.nota, 'ORIENTATIVA.nota');
     eq(js.ORIENTATIVA.cabecera.join('|'), dx.ORIENTATIVA.cabecera.join('|'), 'ORIENTATIVA.cabecera');
   }
-  // la SPA llama TITULOS.pieA2 al pie de la cara A y PRONOSTICO.pie al de la cara B
-  eq(js.TITULOS.pieA, dx.TITULOS.pieA2, 'pie de la cara A'); eq(js.TITULOS.pieB, dx.PRONOSTICO.pie, 'pie de la cara B');
+  // la SPA llama TITULOS.pieA2 al pie de la cara A y PRONOSTICO.pie al de la cara B;
+  // si la cara va partida (SPLIT_A/SPLIT_B), el pie de la tarjeta es pieA2/pieC, no pieA/pieB
+  eq(SPLIT_A ? js.TITULOS.pieA2 : js.TITULOS.pieA, dx.TITULOS.pieA2, 'pie de la cara A');
+  eq(SPLIT_B ? js.TITULOS.pieC : js.TITULOS.pieB, dx.PRONOSTICO.pie, 'pie de la cara B');
 
   // ── 2. el JSON del repo está al día ──
   comparaciones++;
@@ -71,8 +74,10 @@ for (const region of REGIONES) {
       comparaciones++; if (!texto[nodo].includes(etiqueta)) mal(`ENLACES[${nodo}]: la etiqueta «${etiqueta}» no está en el texto del nodo`);
     });
   });
-  Object.entries(dx.PRONOSTICO_DE || {}).forEach(([s, p]) => { existe(s, sindromes, 'PRONOSTICO_DE: síndrome'); existe(p, pronosticos, 'PRONOSTICO_DE: pronóstico'); });
-  sindromes.forEach(s => existe((dx.PRONOSTICO_DE || {})[s] || s, pronosticos, `pronóstico de «${s}»`));
+  // PRONOSTICO_DE puede mapear una síndrome a null: la tarjeta no le da pronóstico
+  // (no todas las síndromes lo tienen; no es un despiste, no hay que exigirle fila)
+  Object.entries(dx.PRONOSTICO_DE || {}).forEach(([s, p]) => { existe(s, sindromes, 'PRONOSTICO_DE: síndrome'); if (p !== null) existe(p, pronosticos, 'PRONOSTICO_DE: pronóstico'); });
+  sindromes.forEach(s => { const p = (dx.PRONOSTICO_DE || {})[s]; if (p !== null) existe(p || s, pronosticos, `pronóstico de «${s}»`); });
   Object.keys(dx.FICHAS || {}).forEach(s => existe(s, sindromes, 'FICHAS'));
   const G = dx.ORIENTATIVA_GRUPOS;
   if (G) {
