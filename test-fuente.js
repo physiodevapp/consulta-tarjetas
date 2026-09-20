@@ -8,7 +8,7 @@ const fs = require('fs'), path = require('path');
 const { leer } = require('./extraer-js');
 const { datosDeRegion, aJSON } = require('./datos');
 
-const REGIONES = ['hombro', 'cadera', 'lumbar', 'cervical'];   // al añadir una región, aquí
+const REGIONES = ['hombro', 'cadera', 'lumbar', 'cervical', 'rodilla'];   // al añadir una región, aquí
 
 const cel = v => Array.isArray(v) ? v.join('\n') : (v && typeof v === 'object' && v.span !== undefined ? v.span : String(v == null ? '' : v));
 const n = s => cel(s).replace(/\s+/g, ' ').trim();
