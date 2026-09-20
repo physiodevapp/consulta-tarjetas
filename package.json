@@ -4,7 +4,7 @@
   "private": true,
   "description": "SPA móvil de consulta de la tarjeta de hombro (solo lectura)",
   "scripts": {
-    "extraer": "python3 extraer.py tarjeta_hombro.docx",
+    "extraer": "node extraer.js tarjeta_hombro.js",
     "build": "python3 build.py",
     "test": "node test-fuente.js && node test-contenido.js && node test-recorrido.js && node test-cabecera.js",
     "extraer-js": "node extraer-js.js",

@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Consulta hombro</title>
+<title>__TITULO__</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#F6F8F9; --panel:#FFFFFF; --band:#EEF3F5; --ink:#16262B; --muted:#4A6572; --line:#C9D1D6;
+  /* Una sola paleta para todas las regiones (la verde de hombro): no depende de CONFIG.DARK */
   --accent:#1F5F4E; --on-accent:#FFFFFF; --focus:#0B5CAD;
 }
 @media (prefers-color-scheme: dark){
@@ -109,39 +110,27 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 const DATA = __DATA__;
 
 // ════════════════════════════════════════════════════════════════
-//  Correspondencias específicas de hombro (no vienen de la tarjeta)
+//  Datos de la región: la tarjeta (tarjeta_<región>.js) más los campos
+//  propios de la SPA (spa_<región>.js), fundidos por datos.js.
+//    REGION NOMBRE · TITULOS BANDERAS BISAGRA ARBOL SINDROMES
+//    ORIENTATIVA? PRONOSTICO · ENLACES? PRONOSTICO_DE? FICHAS?
+//    ORIENTATIVA_GRUPOS? CORTE_NOTA?
+//  Aquí no hay texto de ninguna región: los rótulos o salen de la tarjeta
+//  o son de la SPA y valen igual para todas.
 // ════════════════════════════════════════════════════════════════
-const REGION = 'Hombro';
-// Etiqueta del árbol (fila 4) -> fila de SINDROMES
-const PATRON_A_SINDROME = {
-  'ACROMIOCLAVICULAR': 'Acromioclavicular',
-  'INESTABILIDAD': 'Inestabilidad GH',
-  'ROTURA DEL MANGUITO': 'Rotura del manguito',
-  'SLAP': 'Lesión SLAP',
-  'SAPS': 'Dolor subacromial (SAPS)'
-};
-// Fila de SINDROMES -> fila de PRONOSTICO
-const SINDROME_A_PRON = {
-  'Dolor subacromial (SAPS)': 'SAPS', 'Inestabilidad GH': 'Inestabilidad', 'Acromioclavicular': 'Acromioclavicular',
-  'Lesión SLAP': 'SLAP', 'Rotura del manguito': 'Rotura del manguito', 'Hombro congelado': 'Hombro congelado'
-};
-const PISTA_CONGELADO = 'Movilidad pasiva limitada igual que la activa (nodo 2b)';
-// Agrupación propia de la tabla «rigidez activa = pasiva» (la tarjeta lista las 7 seguidas)
-const GRUPO_LIMITADA = ['Artrosis GH', 'Neoplasia', 'Luxación bloqueada', 'Fractura'];
-const GRUPO_LIBRE = ['Dolor del manguito', 'Acromioclavicular', 'Cervicogénico'];
-// Lo que la propia fila dice sobre la pasiva (solo se muestra si está en el texto de la tarjeta)
-const DICE_PASIVA = {
-  'Dolor del manguito': 'movilidad pasiva no muy limitada',
-  'Acromioclavicular': 'sin restricción pasiva',
-  'Cervicogénico': 'sin restricción pasiva GH',
-  'Luxación bloqueada': 'rigidez activa y pasiva similar al congelado'
-};
+const REGION = DATA.NOMBRE;
 
 // ════════════════════════════════════════════════════════════════
 //  Utilidades
 // ════════════════════════════════════════════════════════════════
 const sp = t => (t || '').replace(/[ \t]{2,}/g, ' ').trim();
 const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+const min1 = s => s.charAt(0).toLowerCase() + s.slice(1);
+const bloque = (n, txt) => 'Bloque ' + n + (txt ? ' · ' + txt : '');
+// Los títulos de la tarjeta vienen como «Título — qué es» o «Título · qué es»:
+// la primera parte titula la pantalla y la segunda la describe.
+const partir = (t, sep) => { const i = (t || '').indexOf(sep); return i < 0 ? [sp(t), ''] : [sp(t.slice(0, i)), sp(t.slice(i + sep.length))]; };
+const frase1 = t => partir(t, '. ')[0];
 
 function h(tag, props, ...kids) {
   const e = document.createElement(tag);
@@ -159,28 +148,37 @@ function h(tag, props, ...kids) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  Datos de la tarjeta
+//  Lectura de los datos
 // ════════════════════════════════════════════════════════════════
 const ARBOL = Object.fromEntries(DATA.ARBOL.filas.map(([n, t]) => [n, t]));
+const ENLACES = DATA.ENLACES || {};
+const FICHAS = DATA.FICHAS || {};
+const GRUPOS = DATA.ORIENTATIVA_GRUPOS || null;
 const sind = n => DATA.SINDROMES.filas.find(f => f[0] === n);
-const pron = n => DATA.PRONOSTICO.filas.find(f => f[0] === SINDROME_A_PRON[n]);
+const pron = n => DATA.PRONOSTICO.filas.find(f => f[0] === ((DATA.PRONOSTICO_DE || {})[n] || n));
 
-function patrones() {
-  const t = ARBOL['4'].split('\n')[0];
-  return t.slice(t.indexOf('? ') + 2).split(' · ').map(s => {
+// Rótulos que salen de la propia tarjeta
+const [TIT_BANDERAS, SUB_BANDERAS] = partir(DATA.BANDERAS.titulo, ' — ');
+const [TIT_ORIENT, SUB_ORIENT] = partir(DATA.ORIENTATIVA ? DATA.ORIENTATIVA.titulo : '', ' · ');
+const TIT_AVISO = frase1(DATA.SINDROMES.aviso);
+
+// Nodo que reparte la pregunta en botones (ENLACES[n].patrones): su primera línea
+// son pares «condición → ETIQUETA» y el resto de líneas cierra el árbol como nota.
+const NODO_PATRONES = Object.keys(ENLACES).find(n => ENLACES[n].patrones) || null;
+function patrones(n) {
+  const mapa = ENLACES[n].patrones, l = ARBOL[n].split('\n')[0], i = l.indexOf('? ');
+  return (i < 0 ? l : l.slice(i + 2)).split(' · ').map(s => {
     const [cond, et] = s.split(' → ');
-    return { cond: sp(cond), et: sp(et).replace(/\.$/, '') };
-  });
+    return { cond: sp(cond), clave: mapa[sp(et).replace(/\.$/, '')] };
+  }).filter(p => p.clave);
 }
-const CIERRE_4 = ARBOL['4'].split('\n')[1];
-const CLAVE_PATRON = Object.fromEntries(patrones().map(p => [PATRON_A_SINDROME[p.et], p.cond]));
-const NOTA_3 = (() => {
-  const t = DATA.PRONOSTICO.nota, i = t.indexOf('Dosis y progresión');
-  return (i < 0 ? t : t.slice(0, i)).trim();
-})();
-const NOTA_DOSIS = (() => {
-  const t = DATA.PRONOSTICO.nota, i = t.indexOf('Dosis y progresión');
-  return i < 0 ? '' : t.slice(i).trim();
+const PATRONES = NODO_PATRONES ? patrones(NODO_PATRONES) : [];
+const CLAVE_PATRON = Object.fromEntries(PATRONES.map(p => [p.clave, p.cond]));
+const CIERRE = NODO_PATRONES ? ARBOL[NODO_PATRONES].split('\n').slice(1).join('\n') : '';
+// La nota del pronóstico se parte en dos párrafos por CORTE_NOTA; el texto no se toca
+const NOTAS_PRON = (() => {
+  const t = DATA.PRONOSTICO.nota, i = DATA.CORTE_NOTA ? t.indexOf(DATA.CORTE_NOTA) : -1;
+  return i < 0 ? [t] : [t.slice(0, i).trim(), t.slice(i).trim()];
 })();
 
 // ════════════════════════════════════════════════════════════════
@@ -204,6 +202,11 @@ function volver() {
   if (hist) { try { history.back(); return; } catch (e) {} }
   pila.pop(); render(true);
 }
+// Si la ficha ya es la pantalla anterior, vuelve en vez de apilar otra igual
+function irAFicha(clave) {
+  const prev = pila[pila.length - 2];
+  if (prev && prev.p === 'sindrome' && prev.arg === clave) volver(); else ir('sindrome', clave);
+}
 window.addEventListener('popstate', () => { if (pila.length > 1) { pila.pop(); render(true); } });
 
 // ════════════════════════════════════════════════════════════════
@@ -217,27 +220,35 @@ const nota = t => h('p', { class: 'nota pre' }, sp(t));
 const pie = t => h('p', { class: 'nota' }, sp(t));
 const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, titulo), h('p', { class: 'pre' }, sp(texto)));
 const plegable = (titulo, contenido, abierto) => h('details', { open: !!abierto }, h('summary', {}, titulo), h('div', { class: 'in' }, contenido));
+// Celdas de una fila con la etiqueta de su columna
+const columnas = (fila, cabecera) => fila.slice(1).map((c, i) => h('p', {}, h('span', { class: 'lab' }, cabecera[i + 1]), sp(c)));
+// Botón a un destino fijo de ENLACES: { pantalla, fila?, sub? }
+function botonDestino(d) {
+  if (d.pantalla === 'banderas') return big(TIT_BANDERAS, d.sub, () => ir('banderas'));
+  if (d.pantalla === 'orientativa') return DATA.ORIENTATIVA ? big(TIT_ORIENT, d.sub, () => ir('orientativa')) : null;
+  if (d.pantalla === 'sindrome') return sind(d.fila) ? big(d.fila, d.sub, () => irAFicha(d.fila)) : null;
+  return null;
+}
 
 // ════════════════════════════════════════════════════════════════
 //  Pantallas
 // ════════════════════════════════════════════════════════════════
 function pHome() {
   const n = [
-    h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de hombro'),
-    nav('Banderas rojas', 'Bloque 3 · ' + DATA.BANDERAS.filas.length + ' sospechas', () => ir('banderas')),
-    nav('Bisagra y árbol', 'Bloque 4 · pasivo y ' + DATA.ARBOL.filas.length + ' pasos · fichas de síndrome', () => ir('arbol'))
+    h('p', { class: 'sub' }, 'Tarjeta de consulta · guía clínica de ' + DATA.REGION),
+    nav(TIT_BANDERAS, bloque(3, DATA.BANDERAS.filas.length + ' sospechas'), () => ir('banderas')),
+    nav('Bisagra y árbol', bloque(4, 'pasivo y ' + DATA.ARBOL.filas.length + ' pasos · fichas de síndrome'), () => ir('arbol'))
   ];
   return { titulo: REGION, home: true, nodes: n };
 }
 
 function pBanderas() {
   const B = DATA.BANDERAS;
-  return { titulo: 'Banderas rojas', nodes: [
-    h('p', { class: 'sub' }, 'Bloque 3 · derivación médica inmediata, sobre el cribado general de la Ficha.'),
+  return { titulo: TIT_BANDERAS, nodes: [
+    h('p', { class: 'sub' }, bloque(3, SUB_BANDERAS ? SUB_BANDERAS + '.' : '')),
     B.filas.map(f => h('section', { class: 'card' },
       h('p', { class: 'nombre' }, f[0]),
-      h('p', {}, h('span', { class: 'lab' }, B.cabecera[1]), f[1]),
-      h('p', {}, h('span', { class: 'lab' }, B.cabecera[2]), f[2]))),
+      f.slice(1).map((c, i) => h('p', {}, h('span', { class: 'lab' }, B.cabecera[i + 1]), c)))),
     nota(B.nota), pie(DATA.TITULOS.pieA2)
   ] };
 }
@@ -279,94 +290,111 @@ function panelRecorrido() {
     alguna || vistas.length ? h('button', { type: 'button', class: 'ghost', onclick: () => { marcas = {}; vistas = []; render(); } }, 'Limpiar recorrido') : null);
 }
 
+// Botones de un nodo: los destinos fijos y, si reparte patrones, uno por patrón
+function botonesNodo(n) {
+  const e = ENLACES[n];
+  if (!e) return null;
+  const bs = (e.botones || []).map(botonDestino).filter(Boolean);
+  if (n === NODO_PATRONES) for (const p of PATRONES) bs.push(big(p.clave, cap1(p.cond), () => irAFicha(p.clave)));
+  return bs.length ? bs : null;
+}
+
 function pArbol() {
   const B = DATA.BISAGRA;
-  const acciones = {
-    '1': [['Banderas rojas', () => ir('banderas')]],
-    '2b': [['Rigidez activa = pasiva', () => ir('rigidez')], ['Hombro congelado', () => ir('sindrome', 'Hombro congelado')]],
-    '4': patrones().map(p => { const c = PATRON_A_SINDROME[p.et]; return [c, () => ir('sindrome', c), cap1(p.cond)]; })
-  };
-  const nodos = DATA.ARBOL.filas.map(([n, t]) => h('section', { class: 'card', id: 'nodo-' + n },
-    h('div', { class: 'nodo' }, h('span', { class: 'n' }, n), h('p', { class: 'pre' }, n === '4' ? sp(ARBOL['4'].split('\n')[0].split('? ')[0]) + '?' : sp(t))),
-    acciones[n] ? h('div', { class: 'acciones' }, acciones[n].map(([tit, fn, sub]) => big(tit, sub, fn))) : null,
-    controlMarca(n)));
+  const nodos = DATA.ARBOL.filas.map(([n, t]) => {
+    const bs = botonesNodo(n);
+    // el nodo que reparte patrones enseña solo la pregunta: los patrones son los botones
+    const texto = n === NODO_PATRONES ? sp(t.split('\n')[0].split('? ')[0]) + '?' : sp(t);
+    return h('section', { class: 'card', id: 'nodo-' + n },
+      h('div', { class: 'nodo' }, h('span', { class: 'n' }, n), h('p', { class: 'pre' }, texto)),
+      bs ? h('div', { class: 'acciones' }, bs) : null,
+      controlMarca(n));
+  });
   return { titulo: 'Bisagra y árbol', nodes: [
-    h('p', { class: 'sub' }, 'Bloque 4 · revisa el recorrido de arriba abajo.'),
+    h('p', { class: 'sub' }, bloque(4, 'revisa el recorrido de arriba abajo.')),
     h('div', { class: 'band pre' }, sp(DATA.SINDROMES.aviso)),
     panelRecorrido(),
     h('section', { class: 'card key' },
       h('p', { class: 'nombre' }, B.pregunta),
       h('p', { class: 'pre' }, sp(B.ramas).replace(/\s*\|\s*/, '\n')),
       h('p', { class: 'nota' }, sp(B.apoyo))),
-    nodos, nota(CIERRE_4), pie(DATA.TITULOS.pieA2)
+    nodos, CIERRE ? nota(CIERRE) : null, pie(DATA.TITULOS.pieA2)
   ] };
 }
 
 function pSindrome(clave) {
-  const f = sind(clave), pr = pron(clave), P = DATA.PRONOSTICO;
-  const pista = clave === 'Hombro congelado' ? PISTA_CONGELADO : cap1(CLAVE_PATRON[clave] || '');
+  const S = DATA.SINDROMES, P = DATA.PRONOSTICO;
+  const f = sind(clave), pr = pron(clave), cfg = FICHAS[clave] || {};
+  // la pista dice por qué se ha llegado aquí: la del propio síndrome o su condición del árbol
+  const pista = cfg.pista || cap1(CLAVE_PATRON[clave] || '');
   return { titulo: f[0], nodes: [
     pista ? h('p', { class: 'sub' }, pista) : null,
-    seccion('Explorar · 10′', f[1]),
-    seccion('① Gesto testigo', f[2]),
-    seccion('② Medida objetiva', f[3]),
-    plegable('Bloque 6 · horizonte y criterio', [
-      h('p', {}, h('span', { class: 'lab' }, P.cabecera[1]), sp(pr[1])),
-      h('p', {}, h('span', { class: 'lab' }, P.cabecera[2]), sp(pr[2]))]),
-    plegable('Antes de explorar: severidad e irritabilidad', h('p', { class: 'pre' }, sp(DATA.SINDROMES.aviso))),
-    clave === 'Hombro congelado' ? big('Diferencial: rigidez activa = pasiva', 'Qué lo distingue del hombro congelado', () => ir('rigidez')) : null,
-    clave === 'Hombro congelado' ? nota(DATA.SINDROMES.nota) : null,
-    nota(NOTA_3), nota(NOTA_DOSIS), pie(DATA.PRONOSTICO.pie)
+    f.slice(1).map((c, i) => seccion(S.cabecera[i + 1], c)),
+    pr ? plegable(bloque(6, 'horizonte y criterio'), columnas(pr, P.cabecera)) : null,
+    plegable(TIT_AVISO, h('p', { class: 'pre' }, sp(S.aviso))),
+    cfg.orientativa && DATA.ORIENTATIVA ? big('Diferencial: ' + min1(TIT_ORIENT), cap1(SUB_ORIENT), () => ir('orientativa')) : null,
+    cfg.nota && S.nota ? nota(S.nota) : null,
+    NOTAS_PRON.map(nota), pie(P.pie)
   ] };
 }
 
-function pRigidez() {
-  const O = DATA.ORIENTATIVA;
-  const dicePasiva = f => DICE_PASIVA[f[0]] && f[1].includes(DICE_PASIVA[f[0]]) ? cap1(DICE_PASIVA[f[0]]) : null;
-  const cuerpo = f => [
-    h('p', {}, h('span', { class: 'lab' }, O.cabecera[1]), sp(f[1])),
-    h('p', {}, h('span', { class: 'lab' }, O.cabecera[2]), sp(f[2]))];
-  const fila = f => h('details', {},
-    h('summary', {}, h('div', { class: 'st' }, h('b', {}, f[0]), dicePasiva(f) ? h('span', {}, dicePasiva(f)) : null)),
-    h('div', { class: 'in' }, cuerpo(f)));
-  const por = nombres => O.filas.filter(f => nombres.includes(f[0]));
-  const otras = O.filas.filter(f => !GRUPO_LIMITADA.includes(f[0]) && !GRUPO_LIBRE.includes(f[0]));
-  const A = [...por(GRUPO_LIMITADA), ...otras].map(fila);
-  const libres = por(GRUPO_LIBRE);
-  const B = h('details', {},
-    h('summary', {}, h('div', { class: 'st' }, h('b', {}, 'Se parecen al congelado, pero con pasiva no limitada'), h('span', {}, libres.map(f => f[0]).join(' · ')))),
-    h('div', { class: 'in' }, libres.map(f => h('div', { class: 'cond' },
-      h('p', { class: 'nombre' }, f[0]),
-      dicePasiva(f) ? h('p', { class: 'dice' }, dicePasiva(f)) : null,
-      cuerpo(f)))));
-  const todas = [...A, B];
-  todas.forEach(d => d.addEventListener('toggle', () => { if (d.open) todas.forEach(o => { if (o !== d) o.open = false; }); }));
-  return { titulo: 'Rigidez activa = pasiva', nodes: [
-    h('p', { class: 'sub' }, 'Bloque 4 · qué lo distingue del hombro congelado.'),
-    h('h3', { class: 'grupo' }, 'Pasiva limitada, como el congelado'),
-    A,
-    big('Hombro congelado', 'Ficha del síndrome', () => {
-      const prev = pila[pila.length - 2];
-      if (prev && prev.p === 'sindrome' && prev.arg === 'Hombro congelado') volver(); else ir('sindrome', 'Hombro congelado');
-    }),
-    B,
+// Tabla orientativa: cada fila con sus columnas etiquetadas. La agrupación,
+// si la hay, es propia de la SPA y viene de ORIENTATIVA_GRUPOS.
+function pOrientativa() {
+  const O = DATA.ORIENTATIVA, P = DATA.PRONOSTICO;
+  const dice = f => { const d = GRUPOS && GRUPOS.dice && GRUPOS.dice[f[0]]; return d && String(f[1]).includes(d) ? cap1(d) : null; };
+  const plegables = [];   // solo uno abierto a la vez
+  const fila = f => {
+    const d = h('details', {},
+      h('summary', {}, h('div', { class: 'st' }, h('b', {}, f[0]), dice(f) ? h('span', {}, dice(f)) : null)),
+      h('div', { class: 'in' }, columnas(f, O.cabecera)));
+    plegables.push(d);
+    return d;
+  };
+  const grupos = GRUPOS ? GRUPOS.grupos : [{ resto: true }];
+  const nombradas = grupos.reduce((a, g) => a.concat(g.filas || []), []);
+  const filasDe = g => O.filas.filter(f => (g.filas || []).includes(f[0]) || (g.resto && !nombradas.includes(f[0])));
+  const cuerpo = [];
+  for (const g of grupos) {
+    if (g.enlace) { const b = botonDestino(g.enlace); if (b) cuerpo.push(b); continue; }
+    const fs = filasDe(g);
+    if (!fs.length) continue;
+    if (g.plegado) {
+      const d = h('details', {},
+        h('summary', {}, h('div', { class: 'st' }, h('b', {}, g.titulo), h('span', {}, fs.map(f => f[0]).join(' · ')))),
+        h('div', { class: 'in' }, fs.map(f => h('div', { class: 'cond' },
+          h('p', { class: 'nombre' }, f[0]),
+          dice(f) ? h('p', { class: 'dice' }, dice(f)) : null,
+          columnas(f, O.cabecera)))));
+      plegables.push(d);
+      cuerpo.push(d);
+    } else {
+      if (g.titulo) cuerpo.push(h('h3', { class: 'grupo' }, g.titulo));
+      fs.forEach(f => cuerpo.push(fila(f)));
+    }
+  }
+  plegables.forEach(d => d.addEventListener('toggle', () => { if (d.open) plegables.forEach(o => { if (o !== d) o.open = false; }); }));
+  const sub = SUB_ORIENT ? SUB_ORIENT + '.' : '';
+  return { titulo: TIT_ORIENT, nodes: [
+    sub ? h('p', { class: 'sub' }, O.bloque ? bloque(O.bloque, sub) : sub) : null,
+    cuerpo,
     nota(O.nota),
-    nota('Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.'),
-    pie(DATA.PRONOSTICO.pie)
+    GRUPOS && GRUPOS.aviso ? nota(GRUPOS.aviso) : null,
+    pie(P.pie)
   ] };
 }
 
 // ════════════════════════════════════════════════════════════════
 //  Render
 // ════════════════════════════════════════════════════════════════
-const PANTALLAS = { home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, rigidez: pRigidez };
+const PANTALLAS = { home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
 const $ = s => document.querySelector(s);
 $('#back').addEventListener('click', volver);
 
 function render(arriba) {
   const y = window.scrollY, cur = pila[pila.length - 1];
   const s = PANTALLAS[cur.p](cur.arg);
-  document.title = s.home ? 'Consulta hombro' : s.titulo + ' · hombro';
+  document.title = s.home ? 'Consulta ' + DATA.REGION : s.titulo + ' · ' + DATA.REGION;
   $('#titulo').textContent = s.titulo;
   $('#back').hidden = !!s.home;
   $('#cab').classList.toggle('home', !!s.home);

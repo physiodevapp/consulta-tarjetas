@@ -1,11 +1,13 @@
 {
+ "REGION": "hombro",
+ "NOMBRE": "Hombro",
  "TITULOS": {
   "caraA": "HOMBRO · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "HOMBRO · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",
   "pieA2": "Guía clínica de hombro, ap. 1 y 4 · Struyf · Powell y Lewis, cap. 3 — Ficha de primera visita, bloques 0, 3 y 4"
  },
  "BANDERAS": {
-  "titulo": "BANDERAS ROJAS — DERIVACIÓN MÉDICA INMEDIATA, SOBRE EL CRIBADO GENERAL DE LA FICHA",
+  "titulo": "Banderas rojas — derivación médica inmediata, sobre el cribado general de la ficha",
   "cabecera": [
    "Sospecha",
    "Pistas en entrevista y exploración",
@@ -117,8 +119,51 @@
   ],
   "nota": "No usar en hombro congelado: test específicos de MR, labrum o AC — casi siempre salen positivos al tensar una cápsula sensibilizada. Los test AC por separado son débiles: Paxinos + O’Brien combinados dan S y E >90 % (Ampliar)."
  },
+ "PRONOSTICO": {
+  "titulo": "para «a las X sesiones espero Y; si no lo veo → Z»",
+  "cabecera": [
+   "Síndrome",
+   "Horizonte e imagen",
+   "Criterio de derivación o cuidado"
+  ],
+  "filas": [
+   [
+    "SAPS",
+    "Una rotura completa del supraespinoso en ecografía aumenta la probabilidad, pero la imagen no mejora la capacidad de descartarlo.",
+    "Dolor en reposo: puede indicar bursitis o proceso inflamatorio que tolere mal el movimiento vigoroso → dosificar. La idea de «espacio subacromial estrecho» es controvertida."
+   ],
+   [
+    "Inestabilidad",
+    "Diagnóstico sobre todo clínico; la Rx simple puede identificar Bankart y Hill-Sachs. A las 3–4 semanas del episodio agudo hay poco dolor y recuperan movilidad y fuerza.",
+    "La MDI se confunde con inestabilidad unidireccional, SAPS, patología discal cervical, plexitis braquial y desfiladero torácico. Tener presente Ehlers-Danlos o Marfan."
+   ],
+   [
+    "Acromioclavicular",
+    "Rx y RM muestran patología AC, pero muchos cambios aparecen en personas sin síntomas.",
+    "La infiltración ecoguiada tiene efecto diagnóstico y terapéutico: decisión médica."
+   ],
+   [
+    "SLAP",
+    "La artro-RM es más precisa que la RM sin contraste.",
+    "El SLAP aislado es raro y es frecuente en asintomáticos: tratarlo solo tiene sentido si explica los síntomas. Suele acompañar a rotura del MR, inestabilidad, rotura del bíceps o bursitis."
+   ],
+   [
+    "Rotura del manguito",
+    "RM como referencia: rotura completa S 90 %, E 100 %; parcial S 100 %, E 87 %. No se observa curación espontánea y el tamaño puede aumentar en unos 2 años, también en asintomáticas.",
+    "Alrededor del 40 % de la población tiene roturas asintomáticas: la rotura no explica por sí sola el dolor. La degeneración crece desde los 50–55 años mientras el dolor no traumático baja a partir de los 60–65."
+   ],
+   [
+    "Hombro congelado",
+    "Se suele decir que se resuelve en 2–3 años, pero un 41 % sigue con síntomas a los 4 años y la mitad a los 7. No hay evidencia de que avance por estadios hasta curarse sin tratamiento. Rx normal salvo osteopenia o calcificación; RM no necesaria.",
+    "Ejercicio en grupo supervisado: mejores resultados que el individual y que el ejercicio en casa. Derivar a psicología si los factores psicosociales superan tu competencia. Baja autoeficacia predice peor evolución. Contralateral en el 6–34 %."
+   ]
+  ],
+  "nota": "③ lo elige el paciente; si no sabe: cartera del bolsillo trasero, sujetador o axila contraria (AC); peinarse, vestirse, alcanzar detrás de la espalda (congelado); lanzar (SLAP). Dosis y progresión no están en la guía: son tuyas.",
+  "pie": "Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo"
+ },
  "ORIENTATIVA": {
-  "titulo": "RIGIDEZ ACTIVA = PASIVA · QUÉ LO DISTINGUE DEL HOMBRO CONGELADO",
+  "titulo": "Rigidez activa = pasiva · qué lo distingue del hombro congelado",
+  "bloque": "4",
   "cabecera": [
    "Condición",
    "Qué la distingue del hombro congelado",
@@ -163,46 +208,86 @@
   ],
   "nota": "Los estadios del congelado se solapan: en la práctica es más útil clasificar como dolor > rigidez o rigidez > dolor y ajustar el tratamiento a eso."
  },
- "PRONOSTICO": {
-  "titulo": "PARA «A LAS X SESIONES ESPERO Y; SI NO LO VEO → Z»",
-  "cabecera": [
-   "Síndrome",
-   "Horizonte e imagen",
-   "Criterio de derivación o cuidado"
-  ],
-  "filas": [
-   [
-    "SAPS",
-    "Una rotura completa del supraespinoso en ecografía aumenta la probabilidad, pero la imagen no mejora la capacidad de descartarlo.",
-    "Dolor en reposo: puede indicar bursitis o proceso inflamatorio que tolere mal el movimiento vigoroso → dosificar. La idea de «espacio subacromial estrecho» es controvertida."
-   ],
-   [
-    "Inestabilidad",
-    "Diagnóstico sobre todo clínico; la Rx simple puede identificar Bankart y Hill-Sachs. A las 3–4 semanas del episodio agudo hay poco dolor y recuperan movilidad y fuerza.",
-    "La MDI se confunde con inestabilidad unidireccional, SAPS, patología discal cervical, plexitis braquial y desfiladero torácico. Tener presente Ehlers-Danlos o Marfan."
-   ],
-   [
-    "Acromioclavicular",
-    "Rx y RM muestran patología AC, pero muchos cambios aparecen en personas sin síntomas.",
-    "La infiltración ecoguiada tiene efecto diagnóstico y terapéutico: decisión médica."
-   ],
-   [
-    "SLAP",
-    "La artro-RM es más precisa que la RM sin contraste.",
-    "El SLAP aislado es raro y es frecuente en asintomáticos: tratarlo solo tiene sentido si explica los síntomas. Suele acompañar a rotura del MR, inestabilidad, rotura del bíceps o bursitis."
-   ],
-   [
-    "Rotura del manguito",
-    "RM como referencia: rotura completa S 90 %, E 100 %; parcial S 100 %, E 87 %. No se observa curación espontánea y el tamaño puede aumentar en unos 2 años, también en asintomáticas.",
-    "Alrededor del 40 % de la población tiene roturas asintomáticas: la rotura no explica por sí sola el dolor. La degeneración crece desde los 50–55 años mientras el dolor no traumático baja a partir de los 60–65."
-   ],
-   [
-    "Hombro congelado",
-    "Se suele decir que se resuelve en 2–3 años, pero un 41 % sigue con síntomas a los 4 años y la mitad a los 7. No hay evidencia de que avance por estadios hasta curarse sin tratamiento. Rx normal salvo osteopenia o calcificación; RM no necesaria.",
-    "Ejercicio en grupo supervisado: mejores resultados que el individual y que el ejercicio en casa. Derivar a psicología si los factores psicosociales superan tu competencia. Baja autoeficacia predice peor evolución. Contralateral en el 6–34 %."
+ "ENLACES": {
+  "1": {
+   "botones": [
+    {
+     "pantalla": "banderas"
+    }
    ]
+  },
+  "4": {
+   "patrones": {
+    "ACROMIOCLAVICULAR": "Acromioclavicular",
+    "INESTABILIDAD": "Inestabilidad GH",
+    "ROTURA DEL MANGUITO": "Rotura del manguito",
+    "SLAP": "Lesión SLAP",
+    "SAPS": "Dolor subacromial (SAPS)"
+   }
+  },
+  "2b": {
+   "botones": [
+    {
+     "pantalla": "orientativa"
+    },
+    {
+     "pantalla": "sindrome",
+     "fila": "Hombro congelado"
+    }
+   ]
+  }
+ },
+ "PRONOSTICO_DE": {
+  "Dolor subacromial (SAPS)": "SAPS",
+  "Inestabilidad GH": "Inestabilidad",
+  "Acromioclavicular": "Acromioclavicular",
+  "Lesión SLAP": "SLAP",
+  "Rotura del manguito": "Rotura del manguito",
+  "Hombro congelado": "Hombro congelado"
+ },
+ "FICHAS": {
+  "Hombro congelado": {
+   "pista": "Movilidad pasiva limitada igual que la activa (nodo 2b)",
+   "orientativa": true,
+   "nota": true
+  }
+ },
+ "ORIENTATIVA_GRUPOS": {
+  "aviso": "Agrupación propia: la tarjeta lista las 7 condiciones en una sola tabla.",
+  "grupos": [
+   {
+    "titulo": "Pasiva limitada, como el congelado",
+    "resto": true,
+    "filas": [
+     "Artrosis GH",
+     "Neoplasia",
+     "Luxación bloqueada",
+     "Fractura"
+    ]
+   },
+   {
+    "enlace": {
+     "pantalla": "sindrome",
+     "fila": "Hombro congelado",
+     "sub": "Ficha del síndrome"
+    }
+   },
+   {
+    "titulo": "Se parecen al congelado, pero con pasiva no limitada",
+    "plegado": true,
+    "filas": [
+     "Dolor del manguito",
+     "Acromioclavicular",
+     "Cervicogénico"
+    ]
+   }
   ],
-  "nota": "③ lo elige el paciente; si no sabe: cartera del bolsillo trasero, sujetador o axila contraria (AC); peinarse, vestirse, alcanzar detrás de la espalda (congelado); lanzar (SLAP). Dosis y progresión no están en la guía: son tuyas.",
-  "pie": "Guía clínica de hombro, ap. 5 y 6 · las filas ① y ② son propuestas de la guía, no proceden del capítulo"
- }
+  "dice": {
+   "Dolor del manguito": "movilidad pasiva no muy limitada",
+   "Acromioclavicular": "sin restricción pasiva",
+   "Cervicogénico": "sin restricción pasiva GH",
+   "Luxación bloqueada": "rigidez activa y pasiva similar al congelado"
+  }
+ },
+ "CORTE_NOTA": "Dosis y progresión"
 }
