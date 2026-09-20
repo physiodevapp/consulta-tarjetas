@@ -6,7 +6,7 @@
   "scripts": {
     "extraer": "node extraer.js tarjeta_hombro.js",
     "build": "python3 build.py",
-    "test": "node test-fuente.js && node test-contenido.js && node test-recorrido.js && node test-cabecera.js",
+    "test": "node test-build.js && node test-fuente.js && node test-contenido.js && node test-recorrido.js && node test-cabecera.js",
     "extraer-js": "node extraer-js.js",
     "tarjetas": "mkdir -p salida && for r in hombro cadera cervical lumbar rodilla; do OUT_DIR=salida node tarjeta_$r.js || exit 1; done"
   },
