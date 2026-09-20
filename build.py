@@ -4,6 +4,10 @@
 import json, os
 
 aqui = os.path.dirname(os.path.abspath(__file__))
+# Nombre de la app: una sola constante (app.json). De ahí salen el título de la
+# pestaña, la cabecera del inicio, package.json y (task 5) el manifest.
+nombre_app = json.load(open(os.path.join(aqui, 'app.json'), encoding='utf-8'))['nombre']
+
 # Las cinco regiones de la SPA (ver CLAUDE.md); el resto se añade con la tarea 4.
 REGIONES = ['hombro', 'lumbar', 'cervical', 'cadera', 'rodilla']
 
@@ -21,9 +25,11 @@ regiones = [{
     'disponible': r in datos_por_region
 } for r in REGIONES]
 
-bundle = {'REGIONES': regiones, 'DATOS': datos_por_region}
+bundle = {'APP': nombre_app, 'REGIONES': regiones, 'DATOS': datos_por_region}
 data = json.dumps(bundle, ensure_ascii=False).replace('</', '<\\/')
 html = open(os.path.join(aqui, 'plantilla.html'), encoding='utf-8').read()
+assert '__APP__' in html
+html = html.replace('__APP__', nombre_app)
 assert '__DATA__' in html
 html = html.replace('__DATA__', data)
 assert '__DATA__' not in html

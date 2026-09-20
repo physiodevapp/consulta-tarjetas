@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'hombro.data.json'), 'utf8'));
+const { nombre: APP } = JSON.parse(fs.readFileSync(path.join(__dirname, 'app.json'), 'utf8'));
 let fails = 0;
 const ok = (c, m) => { if (!c) { fails++; console.log('FALLO:', m); } else console.log('ok:', m); };
 const norm = s => s.replace(/\s+/g, ' ').trim();
@@ -25,7 +26,7 @@ const entrarHombro = d => click(btn(d, 'Hombro'));
 (async () => {
   // ── Selector + Home ──
   let { w, d, errs } = nueva();
-  ok(titulo(d) === 'Consulta' && d.querySelector('#back').hidden, 'selector: título y sin botón atrás');
+  ok(titulo(d) === APP && d.querySelector('#back').hidden, 'selector: título y sin botón atrás');
   ok(!!btn(d, 'Hombro') && d.querySelectorAll('#main .nav.pendiente').length === 4, 'selector: hombro disponible, 4 regiones pendientes');
   entrarHombro(d);
   ok(titulo(d) === 'Hombro' && !d.querySelector('#back').hidden, 'home: título y con botón atrás (vuelve al selector)');

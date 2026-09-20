@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Consulta</title>
+<title>__APP__</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -121,6 +121,7 @@ const DATA = __DATA__;
 
 // ════════════════════════════════════════════════════════════════
 //  Datos: una sola URL para todas las regiones (tarea 3).
+//    DATA.APP       nombre de la app (app.json); título de pestaña y cabecera del inicio
 //    DATA.REGIONES  [{region, nombre, disponible}]  para el selector del inicio
 //    DATA.DATOS     {<región>: datos de esa región}  solo las que ya están migradas
 //  Los datos de cada región son la tarjeta (tarjeta_<región>.js) más los campos
@@ -271,7 +272,7 @@ function pSelector() {
     ? nav(r.nombre, 'Tarjeta de consulta', () => irARegion(r.region))
     : h('div', { class: 'nav pendiente', 'aria-disabled': 'true' },
         h('div', { class: 'tx' }, h('b', {}, r.nombre), h('span', {}, 'Pendiente'))));
-  return { titulo: 'Consulta', home: true, nodes: [
+  return { titulo: DATA.APP, home: true, nodes: [
     h('p', { class: 'sub' }, 'Elige una región.'),
     filas
   ] };
@@ -439,7 +440,7 @@ $('#back').addEventListener('click', volver);
 function render(arriba) {
   const y = window.scrollY, cur = pila[pila.length - 1];
   const s = PANTALLAS[cur.p](cur.arg);
-  document.title = cur.p === 'selector' ? 'Consulta' : cur.p === 'home' ? 'Consulta ' + D.NOMBRE : s.titulo + ' · ' + D.NOMBRE;
+  document.title = cur.p === 'selector' ? DATA.APP : cur.p === 'home' ? DATA.APP + ' ' + D.NOMBRE : s.titulo + ' · ' + D.NOMBRE;
   $('#titulo').textContent = s.titulo;
   $('#back').hidden = !!s.home;
   $('#cab').classList.toggle('home', !!s.home);
