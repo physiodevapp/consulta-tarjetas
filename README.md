@@ -1,4 +1,4 @@
-# Consulta de tarjetas
+# Guía de consulta
 
 SPA móvil de solo lectura con tarjetas de consulta de fisioterapia (Banderas rojas, Bisagra y árbol, fichas de síndrome), para las cinco regiones de la Ficha de primera visita: hombro, cadera, lumbar, cervical y rodilla. El inicio es un selector de región. Funciona sin conexión (instalable como PWA), con un botón para mantener la pantalla encendida durante la consulta. No guarda datos.
 

@@ -1,8 +1,8 @@
 {
-  "name": "consulta-de-tarjetas",
+  "name": "guia-de-consulta",
   "version": "0.1.0",
   "private": true,
-  "description": "Consulta de tarjetas: SPA móvil de solo lectura, extractos de guías clínicas de fisioterapia.",
+  "description": "Guía de consulta: SPA móvil de solo lectura, extractos de guías clínicas de fisioterapia.",
   "scripts": {
     "extraer": "node tools/extraer.js data/tarjeta_hombro.js",
     "build": "python3 tools/build.py",
