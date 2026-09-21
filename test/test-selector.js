@@ -1,5 +1,5 @@
 // Tarea 3: selector de región en el inicio (una sola URL). Tarea 4: añadir regiones
-// una a una; las cinco ya tienen datos.
+// una a una; las seis ya tienen datos (tobillo y pie se añadió más tarde).
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
@@ -26,11 +26,11 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   ok(d.querySelector('#regionCab').hidden, 'selector: sin nombre de región en la cabecera (todavía no se ha elegido ninguna)');
 
   const filas = [...d.querySelectorAll('#main .nav, #main .nav.pendiente')];
-  ok(filas.length === 5, 'selector: las cinco regiones de CLAUDE.md: ' + filas.map(f => f.querySelector('b').textContent).join(', '));
+  ok(filas.length === 6, 'selector: las seis regiones de CLAUDE.md: ' + filas.map(f => f.querySelector('b').textContent).join(', '));
   const nombres = filas.map(f => f.querySelector('b').textContent);
-  ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla', 'selector: orden de las regiones: ' + nombres.join('|'));
+  ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla|Tobillo y pie', 'selector: orden de las regiones: ' + nombres.join('|'));
 
-  ok(filas.every(f => f.tagName === 'BUTTON'), 'selector: las cinco regiones son clicables');
+  ok(filas.every(f => f.tagName === 'BUTTON'), 'selector: las seis regiones son clicables');
   ok(!d.querySelector('#main .nav.pendiente'), 'selector: ninguna región pendiente');
 
   click(btn(d, 'Hombro'));
@@ -70,6 +70,12 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   click(btn(d, 'Rodilla'));
   click(btn(d, 'Bisagra y árbol'));
   ok([...d.querySelectorAll('.nodo .n')].map(e => e.textContent).join('|') === '1|2|3|4|5|6|7', 'rodilla: nodos propios');
+
+  d.querySelector('#back').click(); await wait(50); d.querySelector('#back').click(); await wait(50);
+  click(btn(d, 'Tobillo y pie'));
+  ok(d.querySelector('#titulo').textContent === 'Tobillo y pie' && d.title === APP + ' Tobillo y pie', 'selector → tobillo y pie: título de la región correcto');
+  click(btn(d, 'Bisagra y árbol'));
+  ok([...d.querySelectorAll('.nodo .n')].map(e => e.textContent).join('|') === '1|2|3|4|5|6|7|8', 'tobillo y pie: nodos propios');
 
   ok(w.sessionStorage.length === 0 && w.localStorage.length === 0, 'no guarda nada en el navegador');
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));

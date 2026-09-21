@@ -6,9 +6,9 @@
   "scripts": {
     "extraer": "node tools/extraer.js data/tarjeta_hombro.js",
     "build": "python3 tools/build.py",
-    "test": "node test/test-build.js && node test/test-fuente.js && node test/test-contenido.js && node test/test-contenido-cadera.js && node test/test-contenido-lumbar.js && node test/test-contenido-cervical.js && node test/test-contenido-rodilla.js && node test/test-recorrido.js && node test/test-cabecera.js && node test/test-urgencia.js && node test/test-selector.js && node test/test-app.js && node test/test-pwa.js && node test/test-wakelock.js",
+    "test": "node test/test-build.js && node test/test-fuente.js && node test/test-contenido.js && node test/test-contenido-cadera.js && node test/test-contenido-lumbar.js && node test/test-contenido-cervical.js && node test/test-contenido-rodilla.js && node test/test-contenido-tobillo_pie.js && node test/test-recorrido.js && node test/test-cabecera.js && node test/test-urgencia.js && node test/test-selector.js && node test/test-app.js && node test/test-pwa.js && node test/test-wakelock.js",
     "extraer-js": "node tools/extraer-js.js",
-    "tarjetas": "mkdir -p salida && for r in hombro cadera cervical lumbar rodilla; do OUT_DIR=salida node data/tarjeta_$r.js || exit 1; done"
+    "tarjetas": "mkdir -p salida && for r in hombro cadera cervical lumbar rodilla tobillo_pie; do OUT_DIR=salida node data/tarjeta_$r.js || exit 1; done"
   },
   "devDependencies": {
     "docx": "^9.7.1",

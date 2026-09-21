@@ -15,6 +15,9 @@ const { leer } = require('./extraer-js');
 const CABECERA_SINDROMES = ['Síndrome', 'Explorar · 10′', '① Gesto testigo', '② Medida objetiva'];
 
 const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+// Nombre de región para pantalla: la mayoría son una palabra (hombro -> Hombro); una
+// región de dos palabras usa REGION con «_» (tobillo_pie -> Tobillo y pie).
+const nombreRegion = REGION => cap1(REGION.replace(/_/g, ' y '));
 // Las celdas del árbol son arrays de líneas en el .js; la SPA las quiere unidas.
 // Las celdas con { span } (síndromes sin ① ni ②) pasan tal cual.
 const celda = v => Array.isArray(v) ? v.join('\n') : v;
@@ -25,7 +28,7 @@ function normalizar({ REGION, CONFIG, CONTENIDO }, propio = {}) {
   // Una sola paleta para todas las regiones (fija en el CSS): CONFIG.DARK no se usa en pantalla.
   const datos = {
     REGION,
-    NOMBRE: cap1(REGION),
+    NOMBRE: nombreRegion(REGION),
     TITULOS: {
       caraA: TITULOS.caraA.join('   '),
       caraB: TITULOS.caraB.join('   '),
