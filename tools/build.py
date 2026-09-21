@@ -16,8 +16,8 @@ dir_data = os.path.join(raiz, 'data')
 nombre_app = json.load(open(os.path.join(raiz, 'app.json'), encoding='utf-8'))['nombre']
 nombre_corto = nombre_app.split(' ')[0]
 
-# Las cinco regiones de la SPA (ver CLAUDE.md); todas con datos desde la tarea 4.
-REGIONES = ['hombro', 'lumbar', 'cervical', 'cadera', 'rodilla']
+# Las regiones de la SPA (ver CLAUDE.md); las cinco de la tarea 4 más tobillo y pie.
+REGIONES = ['hombro', 'lumbar', 'cervical', 'cadera', 'rodilla', 'tobillo_pie']
 
 datos_por_region = {}
 for r in REGIONES:

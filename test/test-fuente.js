@@ -9,7 +9,7 @@ const { leer } = require('../tools/extraer-js');
 const { datosDeRegion, aJSON } = require('../tools/datos');
 
 const DATA = path.join(__dirname, '..', 'data');
-const REGIONES = ['hombro', 'cadera', 'lumbar', 'cervical', 'rodilla'];   // al añadir una región, aquí
+const REGIONES = ['hombro', 'cadera', 'lumbar', 'cervical', 'rodilla', 'tobillo_pie'];   // al añadir una región, aquí
 
 const cel = v => Array.isArray(v) ? v.join('\n') : (v && typeof v === 'object' && v.span !== undefined ? v.span : String(v == null ? '' : v));
 const n = s => cel(s).replace(/\s+/g, ' ').trim();
