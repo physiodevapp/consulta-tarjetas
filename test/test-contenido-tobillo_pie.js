@@ -72,6 +72,7 @@ const PRONOSTICO_DE = {
   click(btn(d, 'Bisagra y árbol'));
   t = txt(d);
   ok(t.includes(norm(data.BISAGRA.pregunta)) && t.includes(norm(data.BISAGRA.apoyo)), 'árbol: bisagra completa');
+  ok(t.includes(norm(data.BISAGRA.nota)), 'árbol: bisagra, nota de que la guía no la nombra');
   ok(['1', '2', '3', '4', '5', '6', '7', '8'].every(n => [...d.querySelectorAll('.nodo .n')].some(e => e.textContent === n)), 'árbol: los 8 nodos de tobillo y pie');
   ok(t.includes(norm(data.ARBOL.filas.find(f => f[0] === '7')[1][0])) && t.includes(norm(data.ARBOL.filas.find(f => f[0] === '7')[1][1])), 'árbol: nodo 7, las dos líneas literales (posterior, y medial/lateral/anterior)');
   ok(t.includes(norm(data.ARBOL.filas.find(f => f[0] === '8')[1][0])) && t.includes(norm(data.ARBOL.filas.find(f => f[0] === '8')[1][1])), 'árbol: nodo 8, las dos líneas literales (localización, y dolor vago)');

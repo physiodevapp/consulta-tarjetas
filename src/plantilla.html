@@ -395,7 +395,8 @@ function pArbol() {
     h('section', { class: 'card key' },
       h('p', { class: 'nombre' }, B.pregunta),
       h('p', { class: 'pre' }, sp(B.ramas).replace(/\s*\|\s*/, '\n')),
-      h('p', { class: 'nota' }, sp(B.apoyo))),
+      h('p', { class: 'nota' }, sp(B.apoyo)),
+      B.nota ? h('p', { class: 'nota' }, sp(B.nota)) : null),
     nodos, R.CIERRE ? nota(R.CIERRE) : null, pie(D.TITULOS.pieA2)
   ] };
 }

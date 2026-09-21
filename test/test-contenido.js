@@ -46,6 +46,7 @@ const entrarHombro = d => click(btn(d, 'Hombro'));
   click(btn(d, 'Bisagra y árbol'));
   t = txt(d);
   ok(t.includes(norm(data.BISAGRA.pregunta)) && t.includes('capsulitis · artrosis GH · luxación bloqueada') && t.includes('NO → el resto de síndromes') && t.includes(norm(data.BISAGRA.apoyo)), 'árbol: bisagra completa');
+  ok(data.BISAGRA.nota === undefined, 'árbol: hombro sin nota de bisagra (la guía sí la nombra explícitamente)');
   ok(['1', '2', '2b', '3', '4'].every(n => [...d.querySelectorAll('.nodo .n')].some(e => e.textContent === n)), 'árbol: nodos 1, 2, 2b, 3, 4');
   ok(t.includes('Sí → 2b') && t.includes('LUXACIÓN BLOQUEADA o FRACTURA → Rx') && t.includes('CERVICOGÉNICO'), 'árbol: texto de nodos 2, 2b y 3');
   const accs = [...d.querySelectorAll('.acciones .big b')].map(b => b.textContent);
