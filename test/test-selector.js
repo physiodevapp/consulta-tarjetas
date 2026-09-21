@@ -28,7 +28,7 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   const filas = [...d.querySelectorAll('#main .nav, #main .nav.pendiente')];
   ok(filas.length === 6, 'selector: las seis regiones de CLAUDE.md: ' + filas.map(f => f.querySelector('b').textContent).join(', '));
   const nombres = filas.map(f => f.querySelector('b').textContent);
-  ok(nombres.join('|') === 'Hombro|Lumbar|Cervical|Cadera|Rodilla|Tobillo y pie', 'selector: orden de las regiones: ' + nombres.join('|'));
+  ok(nombres.join('|') === 'Cervical|Lumbar|Hombro|Cadera|Rodilla|Tobillo y pie', 'selector: orden de las regiones: ' + nombres.join('|'));
 
   ok(filas.every(f => f.tagName === 'BUTTON'), 'selector: las seis regiones son clicables');
   ok(!d.querySelector('#main .nav.pendiente'), 'selector: ninguna región pendiente');
