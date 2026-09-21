@@ -51,6 +51,7 @@ const entrarCadera = d => click(btn(d, 'Cadera'));
   click(btn(d, 'Bisagra y árbol'));
   t = txt(d);
   ok(t.includes(norm(data.BISAGRA.pregunta)) && t.includes(norm(data.BISAGRA.apoyo)), 'árbol: bisagra completa');
+  ok(t.includes(norm(data.BISAGRA.nota)), 'árbol: bisagra, nota de que la guía no la nombra');
   ok(['1', '2', '3', '4', '5', '5b', '6'].every(n => [...d.querySelectorAll('.nodo .n')].some(e => e.textContent === n)), 'árbol: los 7 nodos de cadera (no los de hombro)');
   const accs = btns(d).map(b => b.querySelector('b') && b.querySelector('b').textContent).filter(Boolean);
   const sindromes = data.SINDROMES.filas.map(f => f[0]);

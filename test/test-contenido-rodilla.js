@@ -50,6 +50,7 @@ const entrarRodilla = d => click(btn(d, 'Rodilla'));
   click(btn(d, 'Bisagra y árbol'));
   t = txt(d);
   ok(t.includes(norm(data.BISAGRA.pregunta)) && t.includes(norm(data.BISAGRA.apoyo)), 'árbol: bisagra completa');
+  ok(t.includes(norm(data.BISAGRA.nota)), 'árbol: bisagra, nota de que la guía no la nombra');
   ok(['1', '2', '3', '4', '5', '6', '7'].every(n => [...d.querySelectorAll('.nodo .n')].some(e => e.textContent === n)), 'árbol: los 7 nodos de rodilla');
   ok(t.includes(norm(data.ARBOL.filas.find(f => f[0] === '4')[1])), 'árbol: nodo 4, las dos líneas literales (sin recortar; sin patrones limpios)');
   ok(t.includes(norm(data.ARBOL.filas.find(f => f[0] === '7')[1])), 'árbol: nodo 7, las dos líneas literales (otra gramática: minúsculas, sin flechas)');
