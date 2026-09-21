@@ -17,7 +17,8 @@ nombre_app = json.load(open(os.path.join(raiz, 'app.json'), encoding='utf-8'))['
 nombre_corto = nombre_app.split(' ')[0]
 
 # Las regiones de la SPA (ver CLAUDE.md); las cinco de la tarea 4 más tobillo y pie.
-REGIONES = ['hombro', 'lumbar', 'cervical', 'cadera', 'rodilla', 'tobillo_pie']
+# El orden es el del selector del inicio (decisión propia, no viene de ninguna guía).
+REGIONES = ['cervical', 'lumbar', 'hombro', 'cadera', 'rodilla', 'tobillo_pie']
 
 datos_por_region = {}
 for r in REGIONES:
