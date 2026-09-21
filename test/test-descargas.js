@@ -23,11 +23,14 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
 (async () => {
   const { d, errs } = nueva();
 
-  // La entrada desde el selector no cuenta como una región más (clase distinta de .nav)
+  // La entrada desde el selector no cuenta como una región más: ni clase .nav (tarjeta de
+  // región) ni .doc (descarga), sino un enlace secundario aparte, para no parecer una
+  // séptima región en la lista
   const filasSelector = [...d.querySelectorAll('#main .nav, #main .nav.pendiente')];
   ok(filasSelector.length === 6, 'selector: sigue habiendo exactamente seis filas de región (la entrada a documentos no es .nav)');
-  const entrada = [...d.querySelectorAll('#main .doc')].find(e => e.textContent.includes('Formularios, ficha y guía rápida'));
-  ok(entrada && entrada.tagName === 'BUTTON', 'selector: hay un botón a los documentos, con clase propia');
+  const entrada = [...d.querySelectorAll('#main .enlace')].find(e => e.textContent.includes('Formularios, ficha y guía rápida'));
+  ok(entrada && entrada.tagName === 'BUTTON' && !entrada.classList.contains('nav') && !entrada.classList.contains('doc'),
+    'selector: hay un botón a los documentos, con su propia clase (no parece una región ni una descarga)');
 
   click(entrada);
   ok(d.querySelector('#titulo').textContent === 'Documentos' && d.title === APP + ' · Documentos', 'documentos: título de la pantalla y de la pestaña');
