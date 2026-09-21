@@ -72,14 +72,15 @@ main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .card.urgencia{border:3px solid var(--ink)}
 .card.urgencia .nombre{font-size:17px}
 
-.nav,.big{appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-  padding:12px 14px;margin:0 0 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;min-height:64px}
-.nav .tx,.big .tx{flex:1;min-width:0}
-.nav b,.big b{display:block;font-size:18px;line-height:1.25}
-.nav span,.big span{display:block;font-size:15px;color:var(--muted);margin-top:2px}
-.nav i,.big i{flex:none;font-style:normal;font-size:24px;color:var(--muted)}
+.nav,.big,.doc{appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:12px 14px;margin:0 0 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;min-height:64px;box-sizing:border-box}
+.nav .tx,.big .tx,.doc .tx{flex:1;min-width:0}
+.nav b,.big b,.doc b{display:block;font-size:18px;line-height:1.25}
+.nav span,.big span,.doc span{display:block;font-size:15px;color:var(--muted);margin-top:2px}
+.nav i,.big i,.doc i{flex:none;font-style:normal;font-size:24px;color:var(--muted)}
 .nav.pendiente{cursor:default;opacity:.55;border-style:dashed}
 .nav.pendiente span{font-style:italic}
+.doc{color:inherit;text-decoration:none}
 .nodo{display:flex;gap:10px}
 .nodo .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700;
   display:grid;place-items:center;font-size:15px}
@@ -259,6 +260,14 @@ const nav = (titulo, sub, fn) => h('button', { type: 'button', class: 'nav', onc
   h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
 const big = (titulo, sub, fn) => h('button', { type: 'button', class: 'big', onclick: fn },
   h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
+// Documentos descargables (formularios previos, ficha de primera visita, guía rápida):
+// propios de la SPA, no del CONTENIDO clínico. docNav entra en la pantalla «documentos»
+// (mismo aspecto que nav/big, clase distinta para no contarse entre las regiones del
+// selector); docLink es la descarga en sí, un <a> a un .docx en descargas/.
+const docNav = (titulo, sub, fn) => h('button', { type: 'button', class: 'doc', onclick: fn },
+  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
+const docLink = (titulo, sub, href) => h('a', { class: 'doc', href, download: true },
+  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '↓'));
 const nota = t => h('p', { class: 'nota pre' }, sp(t));
 const pie = t => h('p', { class: 'nota' }, sp(t));
 const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, titulo), h('p', { class: 'pre' }, sp(texto)));
@@ -295,9 +304,26 @@ function pSelector() {
   return { titulo: DATA.APP, home: true, nodes: [
     h('p', { class: 'sub' }, 'Elige una región.'),
     filas,
+    docNav('Formularios, ficha y guía rápida', 'Para imprimir antes o durante la consulta', () => ir('documentos')),
     h('p', { class: 'sub', style: 'margin-top:18px' },
       'Proyecto personal para practicar y entrenar el razonamiento clínico en fisioterapia. No sustituye el juicio profesional.'),
     pie('Basado en Lluch, López-Cubas, Jones, Jull, Hall y Lewis — Pattern Recognition of Clinical Syndromes Related to Neuromusculoskeletal Pain Disorders (ZERAPI, 2020).')
+  ] };
+}
+
+// Documentos descargables: ficha de primera visita, guía rápida y los formularios previos
+// de cada región, en .docx. Viven en descargas/ (raíz, publicado por GitHub Pages; rutas
+// relativas, decisión 9). Son papel de consulta propio de la SPA, no CONTENIDO clínico:
+// las anotaciones que los mencionan (p. ej. «criterio fijo en la guía rápida») no traían
+// enlace hasta ahora.
+function pDocumentos() {
+  const formularios = DATA.REGIONES.filter(r => r.disponible).map(r =>
+    docLink('Formulario previo · ' + r.nombre, 'Para el paciente, antes de la visita', 'descargas/formulario_previo_' + r.region + '.docx'));
+  return { titulo: 'Documentos', nodes: [
+    h('p', { class: 'sub' }, 'Se descargan en .docx, para imprimir o editar antes de usarlos.'),
+    docLink('Ficha de primera visita', 'Cribado · orientación de tratamiento · basal de seguimiento', 'descargas/ficha_primera_visita.docx'),
+    docLink('Guía rápida', 'Criterio de severidad e irritabilidad', 'descargas/guia_rapida.docx'),
+    formularios
   ] };
 }
 
@@ -471,7 +497,7 @@ function pOrientativa() {
 // ════════════════════════════════════════════════════════════════
 //  Render
 // ════════════════════════════════════════════════════════════════
-const PANTALLAS = { selector: pSelector, home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
+const PANTALLAS = { selector: pSelector, documentos: pDocumentos, home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
 const $ = s => document.querySelector(s);
 $('#back').addEventListener('click', volver);
 
@@ -535,13 +561,17 @@ if ('wakeLock' in navigator) {
 function render(arriba) {
   const y = window.scrollY, cur = pila[pila.length - 1];
   const s = PANTALLAS[cur.p](cur.arg);
-  document.title = cur.p === 'selector' ? DATA.APP : cur.p === 'home' ? DATA.APP + ' ' + D.NOMBRE : s.titulo + ' · ' + D.NOMBRE;
+  document.title = cur.p === 'selector' ? DATA.APP
+    : cur.p === 'documentos' ? DATA.APP + ' · ' + s.titulo
+    : cur.p === 'home' ? DATA.APP + ' ' + D.NOMBRE
+    : s.titulo + ' · ' + D.NOMBRE;
   $('#titulo').textContent = s.titulo;
   $('#back').hidden = !!s.home;
   $('#cab').classList.toggle('home', !!s.home);
   // El nombre de la región se ve siempre en la cabecera (una sola paleta: ya no lo dice el color),
-  // menos en el selector y en el inicio de la región, donde ya es el título de la pantalla
-  $('#regionCab').hidden = cur.p === 'selector' || cur.p === 'home';
+  // menos en el selector, en documentos (no es de ninguna región) y en el inicio de la región,
+  // donde ya es el título de la pantalla
+  $('#regionCab').hidden = cur.p === 'selector' || cur.p === 'documentos' || cur.p === 'home';
   $('#regionCab').textContent = D ? D.NOMBRE : '';
   $('#main').replaceChildren(...[s.nodes].flat(Infinity).filter(Boolean));
   if (cur.p === 'arbol') $('#cabRec').replaceChildren(...chipsRecorrido());
