@@ -81,6 +81,8 @@ main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .nav.pendiente{cursor:default;opacity:.55;border-style:dashed}
 .nav.pendiente span{font-style:italic}
 .doc{color:inherit;text-decoration:none}
+.enlace{appearance:none;display:block;width:100%;text-align:center;background:none;border:none;
+  border-top:1px solid var(--line);margin:22px 0 0;padding:16px 0 0;color:var(--accent);font-size:15px;cursor:pointer}
 .nodo{display:flex;gap:10px}
 .nodo .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700;
   display:grid;place-items:center;font-size:15px}
@@ -261,13 +263,16 @@ const nav = (titulo, sub, fn) => h('button', { type: 'button', class: 'nav', onc
 const big = (titulo, sub, fn) => h('button', { type: 'button', class: 'big', onclick: fn },
   h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
 // Documentos descargables (formularios previos, ficha de primera visita, guía rápida):
-// propios de la SPA, no del CONTENIDO clínico. docNav entra en la pantalla «documentos»
-// (mismo aspecto que nav/big, clase distinta para no contarse entre las regiones del
-// selector); docLink es la descarga en sí, un <a> a un .docx en descargas/.
-const docNav = (titulo, sub, fn) => h('button', { type: 'button', class: 'doc', onclick: fn },
-  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '›'));
+// propios de la SPA, no del CONTENIDO clínico. docLink es la descarga en sí, en la pantalla
+// «documentos»: un <a> a un .docx en descargas/, con el mismo aspecto que nav/big (ahí sí
+// son el contenido principal de la pantalla). La entrada desde el selector es otra cosa
+// (enlaceSecundario, más abajo): no debe parecer una séptima región.
 const docLink = (titulo, sub, href) => h('a', { class: 'doc', href, download: true },
   h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '↓'));
+// Enlace secundario de una sola línea, sin tarjeta ni chevron de navegación: para acciones
+// que cuelgan de una pantalla pero no son su contenido principal (aquí, la entrada a
+// «documentos» desde el selector, separada de la lista de regiones).
+const enlaceSecundario = (texto, fn) => h('button', { type: 'button', class: 'enlace', onclick: fn }, texto);
 const nota = t => h('p', { class: 'nota pre' }, sp(t));
 const pie = t => h('p', { class: 'nota' }, sp(t));
 const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, titulo), h('p', { class: 'pre' }, sp(texto)));
@@ -304,10 +309,10 @@ function pSelector() {
   return { titulo: DATA.APP, home: true, nodes: [
     h('p', { class: 'sub' }, 'Elige una región.'),
     filas,
-    docNav('Formularios, ficha y guía rápida', 'Para imprimir antes o durante la consulta', () => ir('documentos')),
     h('p', { class: 'sub', style: 'margin-top:18px' },
       'Proyecto personal para practicar y entrenar el razonamiento clínico en fisioterapia. No sustituye el juicio profesional.'),
-    pie('Basado en Lluch, López-Cubas, Jones, Jull, Hall y Lewis — Pattern Recognition of Clinical Syndromes Related to Neuromusculoskeletal Pain Disorders (ZERAPI, 2020).')
+    pie('Basado en Lluch, López-Cubas, Jones, Jull, Hall y Lewis — Pattern Recognition of Clinical Syndromes Related to Neuromusculoskeletal Pain Disorders (ZERAPI, 2020).'),
+    enlaceSecundario('Formularios, ficha y guía rápida para descargar ›', () => ir('documentos'))
   ] };
 }
 
