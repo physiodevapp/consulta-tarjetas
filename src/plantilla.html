@@ -70,12 +70,13 @@ header.home{padding-left:14px}
 }
 /* Cápsulas del recorrido en la cabecera (actualizarCab(), al hacer scroll): en móvil competían
    por sitio en la misma fila con el nombre de la región y los tres botones redondos y quedaban
-   muy apretadas. La clase .modo-recorrido (la pone el JS a la vez que oculta #titulo) las baja
-   a su propia fila, a todo el ancho; el título ya no cuenta (está oculto) así que la fila de
-   arriba (back + nombre de región + iconos) no se ve afectada */
+   muy apretadas. La clase .modo-recorrido (la pone el JS a la vez que oculta #titulo) oculta el
+   grupo de iconos mientras se ven las cápsulas -- vuelven en cuanto se sube el scroll y
+   reaparece el título -- para darles todo ese ancho sin tocar la altura de la cabecera (un
+   primer intento las bajaba a una segunda fila, pero el cambio de altura de la cabecera sticky
+   desplazaba el contenido justo al cruzar el umbral, un salto visible que así se evita) */
 @media (max-width:639px){
-  header.modo-recorrido{flex-wrap:wrap}
-  header.modo-recorrido .cabrec{order:1;flex-basis:100%}
+  header.modo-recorrido .iconos{display:none}
 }
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
