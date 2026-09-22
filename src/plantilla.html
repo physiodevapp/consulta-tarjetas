@@ -529,6 +529,9 @@ function actualizarBotonPantalla() {
   if (!boton) return;
   const activo = !!wakeLock;
   boton.setAttribute('aria-pressed', String(activo));
+  // El relleno del icono ya distingue el estado a la vista; aria-label lo dice también para
+  // quien use lector de pantalla (no depende de hover, a diferencia de title: en móvil no hay)
+  boton.setAttribute('aria-label', 'Mantener la pantalla encendida: ' + (activo ? 'activado' : 'desactivado'));
   boton.innerHTML = activo ? OJO_ENCENDIDO : OJO_APAGADO;
 }
 
