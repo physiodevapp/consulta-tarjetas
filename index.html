@@ -339,7 +339,7 @@ function pSelector() {
 function pDocumentos() {
   const regiones = DATA.REGIONES.filter(r => r.disponible);
   const tarjetas = regiones.map(r =>
-    docLink('Tarjeta · ' + r.nombre, 'Cara A y cara B, para imprimir', 'descargas/tarjeta_' + r.region + '.docx'));
+    docLink('Tarjeta · ' + r.nombre, 'Para imprimir', 'descargas/tarjeta_' + r.region + '.docx'));
   const formularios = regiones.map(r =>
     docLink('Formulario previo · ' + r.nombre, 'Para el paciente, antes de la visita', 'descargas/formulario_previo_' + r.region + '.docx'));
   return { titulo: 'Documentos', nodes: [
