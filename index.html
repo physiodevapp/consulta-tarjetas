@@ -58,6 +58,12 @@ header.home{padding-left:14px}
 #tema{margin-left:auto}
 #pantalla[hidden]{display:none}
 #tema[aria-pressed="true"],#pantalla[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+/* Hover solo con ratón de verdad (no en táctil, donde un tap dejaría el estado "pegado"):
+   pista visual en desktop de que el icono es interactivo, más el title con el modo actual */
+@media (hover:hover) and (pointer:fine){
+  #tema:hover{border-color:var(--muted)}
+  #tema[aria-pressed="true"]:hover{border-color:var(--on-accent)}
+}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -548,6 +554,9 @@ function aplicarTema() {
   boton.innerHTML = TEMA_ICONO[tema];
   boton.setAttribute('aria-pressed', String(tema !== 'auto'));
   boton.setAttribute('aria-label', 'Tema: ' + TEMA_LABEL[tema]);
+  // title: mismo texto que aria-label, como tooltip en hover de escritorio (no sustituye
+  // al aria-label — en móvil no hay hover, decisión 5 — solo lo refuerza a la vista)
+  boton.setAttribute('title', 'Tema: ' + TEMA_LABEL[tema]);
 }
 $('#tema').addEventListener('click', () => { tema = SIG_TEMA[tema]; aplicarTema(); });
 // Si se sigue en "automático", que el botón (y el color de la barra) reaccionen si el
