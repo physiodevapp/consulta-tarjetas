@@ -52,11 +52,14 @@ header.home{padding-left:14px}
 #regionCab[hidden]{display:none}
 /* Documentos (acceso permanente a formularios/ficha/guía rápida, tarea 10), Tema claro/oscuro
    (toggle manual sobre el automático del sistema) y Wake Lock (tarea 6, oculto por defecto,
-   visible solo si la API existe, ver JS): mismo botón redondo */
+   visible solo si la API existe, ver JS): mismo botón redondo. El margin-left:auto que los
+   alinea a la derecha vive en el contenedor .iconos, no en un botón: #documentos se oculta
+   a sí mismo en su propia pantalla (como #pantalla sin Wake Lock), y si el margen viviera
+   ahí, al ocultarse se perdía y el resto de iconos se quedaban pegados al título */
+.iconos{margin-left:auto;flex:none;display:flex;gap:4px}
 #documentos,#tema,#pantalla{appearance:none;flex:none;width:44px;height:44px;border:1px solid var(--line);
   border-radius:50%;background:var(--panel);color:var(--muted);cursor:pointer;
   display:grid;place-items:center}
-#documentos{margin-left:auto}
 #documentos[hidden],#pantalla[hidden]{display:none}
 #tema[aria-pressed="true"],#pantalla[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 /* Hover solo con ratón de verdad (no en táctil, donde un tap dejaría el estado "pegado"):
@@ -144,7 +147,7 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 </style>
 </head>
 <body>
-<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div><button id="documentos" type="button" aria-label="Documentos: formularios, ficha y guía rápida" title="Documentos: formularios, ficha y guía rápida"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" d="M6,3 H14 L18,7 V21 H6 Z"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M14,3 V7 H18"/></svg></button><button id="tema" type="button" aria-pressed="false"></button><button id="pantalla" type="button" aria-label="Mantener la pantalla encendida" aria-pressed="false" hidden></button></header>
+<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div><div class="iconos"><button id="documentos" type="button" aria-label="Documentos: formularios, ficha y guía rápida" title="Documentos: formularios, ficha y guía rápida"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" d="M6,3 H14 L18,7 V21 H6 Z"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M14,3 V7 H18"/></svg></button><button id="tema" type="button" aria-pressed="false"></button><button id="pantalla" type="button" aria-label="Mantener la pantalla encendida" aria-pressed="false" hidden></button></div></header>
 <main id="main"></main>
 
 <script>
