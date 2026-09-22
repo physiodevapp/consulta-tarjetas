@@ -73,16 +73,6 @@ header.home{padding-left:14px}
   #documentos:hover,#tema:hover,#pantalla:hover{border-color:var(--muted)}
   #tema[aria-pressed="true"]:hover,#pantalla[aria-pressed="true"]:hover{border-color:var(--on-accent)}
 }
-/* Cápsulas del recorrido en la cabecera (actualizarCab(), al hacer scroll): en móvil competían
-   por sitio en la misma fila con el nombre de la región y los tres botones redondos y quedaban
-   muy apretadas. La clase .modo-recorrido (la pone el JS a la vez que oculta #titulo) oculta el
-   grupo de iconos mientras se ven las cápsulas -- vuelven en cuanto se sube el scroll y
-   reaparece el título -- para darles todo ese ancho sin tocar la altura de la cabecera (un
-   primer intento las bajaba a una segunda fila, pero el cambio de altura de la cabecera sticky
-   desplazaba el contenido justo al cruzar el umbral, un salto visible que así se evita) */
-@media (max-width:639px){
-  header.modo-recorrido .iconos{display:none}
-}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -153,6 +143,19 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 .cabrec{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;padding:4px 0}
 .cabrec[hidden]{display:none}
 .cabrec .paso{flex:none;min-width:48px;min-height:40px;padding:2px 10px}
+/* Título (o, en el árbol, las cápsulas del recorrido que lo sustituyen al hacer scroll, tarea 4)
+   en su propia fila, a todo el ancho, debajo de atrás + región + iconos: en móvil, compartir fila
+   con esos tres elementos les dejaba muy poco sitio (un título de ficha con paréntesis, o
+   simplemente largo, se apretaba contra los iconos). Con esta fila siempre presente (no solo
+   cuando hay cápsulas) la cabecera ya no cambia de número de filas al cruzar el umbral de scroll
+   del árbol -- un intento anterior sí lo hacía, y el salto de altura de la cabecera sticky
+   desplazaba el contenido de golpe; ahora #titulo y #cabRec solo intercambian contenido dentro
+   de la misma fila 2, sin tocar la fila 1. Va después de la regla base de .cabrec (misma
+   especificidad; si fuera antes, el flex-basis:0% de su flex:1 ganaría por ir después) */
+@media (max-width:639px){
+  header{flex-wrap:wrap}
+  #titulo,.cabrec{order:1;flex-basis:100%}
+}
 .rec .lin{font-size:15px;margin:0 0 4px}
 .rec .ghost{appearance:none;margin-top:8px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);cursor:pointer}
 .cond + .cond{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
@@ -414,12 +417,11 @@ function chipsRecorrido() {
     n + ' ' + (marcas[n] ? SIMBOLO[marcas[n]] : '·')));
 }
 // Títulos de ficha con un detalle final entre paréntesis (p. ej. «Dolor subacromial (SAPS)»,
-// «Fracturas del pie (5.º MT, calcáneo)»): en la cabecera, con el nombre de la región y los tres
-// iconos siempre presentes, casi cualquier título de más de una palabra ya envuelve a varias
-// líneas por sí solo (comprobado con Playwright). Partir el paréntesis final en una segunda línea,
-// más pequeña y atenuada, no reescribe el texto (decisión 2: sigue siendo el mismo, literal) y
-// reduce las líneas que hacen falta para leerlo. Solo el último paréntesis, y solo si de verdad
-// cierra el título (nada de texto después): un paréntesis a mitad de frase se deja como está.
+// «Fracturas del pie (5.º MT, calcáneo)»): aunque el título ya tiene su propia fila a todo el
+// ancho (ver el CSS de #titulo/.cabrec), separar el paréntesis en una segunda línea más pequeña
+// y atenuada sigue leyéndose mejor que dejarlo en el mismo tamaño que el nombre principal. No
+// reescribe el texto (decisión 2: sigue siendo el mismo, literal). Solo el último paréntesis, y
+// solo si de verdad cierra el título (nada de texto después): uno a mitad de frase se deja como está.
 function partirTitulo(t) {
   const m = /^(.*)\s(\([^()]*\))$/.exec(t);
   return m ? { principal: m[1], detalle: m[2] } : null;
@@ -430,7 +432,6 @@ function actualizarCab() {
   let modo = false;
   if (cur.p === 'arbol' && pasos) modo = pasos.getBoundingClientRect().bottom <= $('#cab').getBoundingClientRect().bottom;
   $('#titulo').hidden = modo; $('#cabRec').hidden = !modo;
-  $('#cab').classList.toggle('modo-recorrido', modo);
 }
 window.addEventListener('scroll', actualizarCab, { passive: true });
 
