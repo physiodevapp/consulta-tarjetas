@@ -51,6 +51,18 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   ok(hrefs.join('|') === esperados.join('|'), 'documentos: rutas relativas, agrupadas y en el orden de REGIONES: ' + hrefs.join(', '));
   ok(hrefs.every(h => !h.startsWith('/') && !h.startsWith('http')), 'documentos: todas las rutas son relativas (sin "/" inicial), como el manifest y el service worker');
 
+  // El subtítulo de cada tarjeta nombra sus caras (CARAS, derivado de SPLIT_A/SPLIT_B en
+  // tools/datos.js): hombro/cervical/lumbar solo A y B; cadera suma C; rodilla y tobillo
+  // y pie suman A2 y C. No es el mismo texto para las seis (ver tarea 8, addendum).
+  const subsTarjetas = enlaces.slice(0, 6).map(a => a.querySelector('.tx span').textContent);
+  const carasEsperadas = {
+    cervical: 'Cara A y B, para imprimir', lumbar: 'Cara A y B, para imprimir', hombro: 'Cara A y B, para imprimir',
+    cadera: 'Cara A, B y C, para imprimir',
+    rodilla: 'Cara A, A2, B y C, para imprimir', tobillo_pie: 'Cara A, A2, B y C, para imprimir'
+  };
+  ok(subsTarjetas.join('|') === REGIONES.map(r => carasEsperadas[r]).join('|'),
+    'documentos: el subtítulo de cada tarjeta nombra sus caras: ' + subsTarjetas.join(' / '));
+
   for (const href of hrefs) {
     ok(fs.existsSync(path.join(RAIZ, href)), 'documentos: existe el archivo publicado ' + href);
   }

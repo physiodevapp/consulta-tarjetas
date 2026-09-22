@@ -1,6 +1,12 @@
 {
  "REGION": "rodilla",
  "NOMBRE": "Rodilla",
+ "CARAS": [
+  "A",
+  "A2",
+  "B",
+  "C"
+ ],
  "TITULOS": {
   "caraA": "RODILLA · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "RODILLA · cara B   rodilla aguda traumática y dolor anterior persistente",

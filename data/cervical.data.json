@@ -1,6 +1,10 @@
 {
  "REGION": "cervical",
  "NOMBRE": "Cervical",
+ "CARAS": [
+  "A",
+  "B"
+ ],
  "TITULOS": {
   "caraA": "CERVICAL · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "CERVICAL · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",

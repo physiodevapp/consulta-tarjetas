@@ -1,6 +1,11 @@
 {
  "REGION": "cadera",
  "NOMBRE": "Cadera",
+ "CARAS": [
+  "A",
+  "B",
+  "C"
+ ],
  "TITULOS": {
   "caraA": "CADERA E INGLE · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "CADERA E INGLE · cara B   bloques 4, 5 y 6, ya dentro de una rama del árbol",
