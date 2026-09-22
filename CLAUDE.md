@@ -131,5 +131,6 @@ Motor: `columnas()` (usada por `pOrientativa()`) ahora trata las filas con `{ sp
 - **`.gitignore` con `node_modules/` y `salida/`** (ya está). El repo se sube a mano (sin carpetas ni archivos ocultos) y una sesión en la nube podría commitear `node_modules`.
 - Cambios de contenido clínico: primero en la tarjeta o la guía, después reflejarlos aquí.
 - Antes de dar algo por hecho: `npm test` (ya regenera `index.html` y falla si no coincidía con el del repo).
+- Si cambia `data/formulario_<región>.js`, `data/ficha_primera_visita.js`, `data/body_chart.jpg` o `tools/plantilla_formularios.js`: `npm run formularios` y comitear los `.docx` de `descargas/` regenerados. A diferencia de `index.html`, `npm test` no lo comprueba solo (los `.docx` no son reproducibles byte a byte, ver tarea 8): toca acordarse a mano.
 - Publicar en GitHub Pages **desde una rama, sin GitHub Actions** (los tokens de las sesiones en la nube pueden no poder empujar archivos de workflow).
 - Sin datos de pacientes en el repo, en pruebas ni en ejemplos.
