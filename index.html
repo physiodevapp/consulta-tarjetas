@@ -8,9 +8,11 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<!-- theme-color: mismo acento que --accent en el CSS de abajo (decisión 8); si cambia, cambiar en los dos sitios -->
-<meta name="theme-color" content="#1F5F4E" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#5CC0A3" media="(prefers-color-scheme: dark)">
+<!-- theme-color: mismo acento que --accent en el CSS de abajo (decisión 8); si cambia, cambiar
+     en los dos sitios. Un único meta (no dos con media): con el toggle claro/oscuro el
+     color de la barra del navegador puede no coincidir con el del sistema, así que lo
+     mantiene al día aplicarTema() en el JS de abajo -->
+<meta name="theme-color" content="#1F5F4E" id="temaColor">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -48,12 +50,14 @@ header.home{padding-left:14px}
 #regionCab{flex:none;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
   color:var(--muted);padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
 #regionCab[hidden]{display:none}
-/* Wake Lock (tarea 6): botón oculto por defecto, visible solo si la API existe (ver JS) */
-#pantalla{appearance:none;flex:none;width:44px;height:44px;margin-left:auto;border:1px solid var(--line);
+/* Tema claro/oscuro (toggle manual sobre el automático del sistema) y Wake Lock (tarea 6,
+   oculto por defecto, visible solo si la API existe, ver JS): mismo botón redondo */
+#tema,#pantalla{appearance:none;flex:none;width:44px;height:44px;border:1px solid var(--line);
   border-radius:50%;background:var(--panel);color:var(--muted);cursor:pointer;
   display:grid;place-items:center}
+#tema{margin-left:auto}
 #pantalla[hidden]{display:none}
-#pantalla[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+#tema[aria-pressed="true"],#pantalla[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -129,7 +133,7 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
 </style>
 </head>
 <body>
-<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div><button id="pantalla" type="button" aria-label="Mantener la pantalla encendida" aria-pressed="false" hidden></button></header>
+<header id="cab"><button id="back" type="button" aria-label="Volver" hidden>‹</button><div id="regionCab" hidden></div><div id="titulo"></div><div class="cabrec" id="cabRec" hidden aria-label="Recorrido del árbol"></div><button id="tema" type="button" aria-pressed="false"></button><button id="pantalla" type="button" aria-label="Mantener la pantalla encendida" aria-pressed="false" hidden></button></header>
 <main id="main"></main>
 
 <script>
@@ -505,6 +509,51 @@ function pOrientativa() {
 const PANTALLAS = { selector: pSelector, documentos: pDocumentos, home: pHome, banderas: pBanderas, arbol: pArbol, sindrome: pSindrome, orientativa: pOrientativa };
 const $ = s => document.querySelector(s);
 $('#back').addEventListener('click', volver);
+
+// Tema claro/oscuro: por defecto sigue al sistema (decisión 5, media query en el CSS
+// de arriba); este botón deja forzar claro u oscuro para cuando el sistema no coincide
+// con lo que se necesita en el momento (p. ej. pantalla muy brillante con luz de consulta).
+// Como el recorrido del árbol y el wake lock, es un interruptor manual que vive solo en
+// memoria (decisión 1): al recargar vuelve a "automático". El CSS ya distingue
+// :root[data-theme="light"|"dark"] de :root:not([data-theme="light"]) bajo la media
+// query — aquí solo se pone o se quita ese atributo.
+let tema = 'auto';   // 'auto' (según el sistema) | 'light' | 'dark'
+const SIG_TEMA = { auto: 'light', light: 'dark', dark: 'auto' };
+const TEMA_COLOR = { light: '#1F5F4E', dark: '#5CC0A3' };
+const TEMA_LABEL = { auto: 'automático (según el sistema)', light: 'claro', dark: 'oscuro' };
+// Iconos en línea (decisión 6), mismo estilo que el del wake lock: contorno para «auto»
+// (medio círculo relleno, como el icono habitual de tema del sistema), sol y luna para
+// los dos forzados.
+const TEMA_ICONO = {
+  auto: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+    '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/>' +
+    '<path fill="currentColor" d="M12,3.5 A8.5,8.5 0 0 1 12,20.5 Z"/></svg>',
+  light: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+    '<circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/>' +
+    '<g stroke="currentColor" stroke-width="1.7" stroke-linecap="round">' +
+    '<line x1="12" y1="2" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22"/>' +
+    '<line x1="2" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22" y2="12"/>' +
+    '<line x1="4.9" y1="4.9" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.1" y2="19.1"/>' +
+    '<line x1="4.9" y1="19.1" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.1" y2="4.9"/></g></svg>',
+  dark: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+    '<path fill="currentColor" d="M20,14.5 A9,9 0 1 1 9.5,4 A7.2,7.2 0 0 0 20,14.5 Z"/></svg>'
+};
+const prefiereOscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+
+function aplicarTema() {
+  if (tema === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = tema;
+  const oscuro = tema === 'auto' ? !!(prefiereOscuro && prefiereOscuro.matches) : tema === 'dark';
+  $('#temaColor').setAttribute('content', oscuro ? TEMA_COLOR.dark : TEMA_COLOR.light);
+  const boton = $('#tema');
+  boton.innerHTML = TEMA_ICONO[tema];
+  boton.setAttribute('aria-pressed', String(tema !== 'auto'));
+  boton.setAttribute('aria-label', 'Tema: ' + TEMA_LABEL[tema]);
+}
+$('#tema').addEventListener('click', () => { tema = SIG_TEMA[tema]; aplicarTema(); });
+// Si se sigue en "automático", que el botón (y el color de la barra) reaccionen si el
+// sistema cambia de tema mientras la SPA está abierta
+if (prefiereOscuro) prefiereOscuro.addEventListener('change', () => { if (tema === 'auto') aplicarTema(); });
+aplicarTema();
 
 // Wake Lock (tarea 6): mantener la pantalla encendida durante la consulta. Es un
 // interruptor manual (no se activa solo al entrar en una región) y, como el
