@@ -44,6 +44,11 @@ header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px
 #back{appearance:none;flex:none;width:48px;height:48px;border:0;background:none;font-size:30px;line-height:1;cursor:pointer;color:var(--ink)}
 #back[hidden]{display:none}
 #titulo{font-weight:700;font-size:19px;line-height:1.2;min-width:0;overflow-wrap:anywhere}
+/* Título de ficha con detalle final entre paréntesis (partirTitulo() en el JS): el paréntesis
+   baja a una segunda línea más pequeña y atenuada, mismo lenguaje visual que el "span" de
+   .nav/.big/.doc en el resto de la app. Sin el paréntesis, #titulo sigue siendo solo texto */
+#titulo b{display:block;font-weight:700}
+#titulo span{display:block;font-weight:400;font-size:14px;line-height:1.25;color:var(--muted);margin-top:1px}
 header.home{padding-left:14px}
 /* Con una sola paleta ya no hay color por región: el nombre se ve siempre en la cabecera
    (menos en el propio selector y en el inicio de la región, donde ya es el título) */
@@ -408,6 +413,17 @@ function chipsRecorrido() {
     'aria-label': 'Nodo ' + n + (marcas[n] ? ': ' + marcas[n] : ': sin marcar'), onclick: () => irANodo(n) },
     n + ' ' + (marcas[n] ? SIMBOLO[marcas[n]] : '·')));
 }
+// Títulos de ficha con un detalle final entre paréntesis (p. ej. «Dolor subacromial (SAPS)»,
+// «Fracturas del pie (5.º MT, calcáneo)»): en la cabecera, con el nombre de la región y los tres
+// iconos siempre presentes, casi cualquier título de más de una palabra ya envuelve a varias
+// líneas por sí solo (comprobado con Playwright). Partir el paréntesis final en una segunda línea,
+// más pequeña y atenuada, no reescribe el texto (decisión 2: sigue siendo el mismo, literal) y
+// reduce las líneas que hacen falta para leerlo. Solo el último paréntesis, y solo si de verdad
+// cierra el título (nada de texto después): un paréntesis a mitad de frase se deja como está.
+function partirTitulo(t) {
+  const m = /^(.*)\s(\([^()]*\))$/.exec(t);
+  return m ? { principal: m[1], detalle: m[2] } : null;
+}
 // Cuando las cápsulas del panel salen de la pantalla por arriba, la cabecera muestra el recorrido en lugar del título
 function actualizarCab() {
   const cur = pila[pila.length - 1], pasos = document.getElementById('recPasos');
@@ -665,7 +681,9 @@ function render(arriba) {
     : cur.p === 'documentos' ? DATA.APP + ' · ' + s.titulo
     : cur.p === 'home' ? DATA.APP + ' ' + D.NOMBRE
     : s.titulo + ' · ' + D.NOMBRE;
-  $('#titulo').textContent = s.titulo;
+  const pt = partirTitulo(s.titulo);
+  if (pt) $('#titulo').replaceChildren(h('b', {}, pt.principal), ' ', h('span', {}, pt.detalle));
+  else $('#titulo').replaceChildren(s.titulo);
   $('#back').hidden = !!s.home;
   $('#cab').classList.toggle('home', !!s.home);
   // El nombre de la región se ve siempre en la cabecera (una sola paleta: ya no lo dice el color),
