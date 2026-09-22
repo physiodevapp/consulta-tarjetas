@@ -43,6 +43,7 @@ function nueva(oscuroSistema) {
   ok(d.documentElement.dataset.theme === undefined, 'al cargar: sin data-theme (automático, según el sistema)');
   ok(boton.getAttribute('aria-pressed') === 'false', 'botón: aria-pressed false en automático');
   ok(boton.getAttribute('aria-label') === 'Tema: automático (según el sistema)', 'botón: aria-label dice "automático"');
+  ok(boton.getAttribute('title') === 'Tema: automático (según el sistema)', 'botón: title (tooltip en hover de escritorio) dice lo mismo que aria-label');
   ok(d.querySelector('#temaColor').getAttribute('content') === '#1F5F4E', 'meta theme-color: acento claro cuando el sistema no pide oscuro');
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
 }
@@ -55,9 +56,11 @@ function nueva(oscuroSistema) {
   ok(d.documentElement.dataset.theme === 'light', 'primer clic: data-theme="light"');
   ok(boton.getAttribute('aria-pressed') === 'true', 'forzado: aria-pressed true');
   ok(boton.getAttribute('aria-label') === 'Tema: claro', 'aria-label dice "claro"');
+  ok(boton.getAttribute('title') === 'Tema: claro', 'title dice "claro"');
   boton.click();
   ok(d.documentElement.dataset.theme === 'dark', 'segundo clic: data-theme="dark"');
   ok(boton.getAttribute('aria-label') === 'Tema: oscuro', 'aria-label dice "oscuro"');
+  ok(boton.getAttribute('title') === 'Tema: oscuro', 'title dice "oscuro"');
   ok(d.querySelector('#temaColor').getAttribute('content') === '#5CC0A3', 'meta theme-color: acento oscuro con el tema forzado a oscuro');
   boton.click();
   ok(d.documentElement.dataset.theme === undefined, 'tercer clic: vuelve a automático, sin data-theme');
