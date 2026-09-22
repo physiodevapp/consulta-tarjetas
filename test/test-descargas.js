@@ -23,19 +23,18 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
 (async () => {
   const { d, errs } = nueva();
 
-  // La entrada desde el selector no cuenta como una región más: ni clase .nav (tarjeta de
-  // región) ni .doc (descarga), sino un enlace secundario aparte, para no parecer una
-  // séptima región en la lista
+  // La entrada a documentos no cuenta como una región más en el selector (ni clase .nav):
+  // vive en el botón #documentos de la cabecera (tarea 10), permanente en toda la SPA
   const filasSelector = [...d.querySelectorAll('#main .nav, #main .nav.pendiente')];
   ok(filasSelector.length === 6, 'selector: sigue habiendo exactamente seis filas de región (la entrada a documentos no es .nav)');
-  const entrada = [...d.querySelectorAll('#main .enlace')].find(e => e.textContent.includes('Formularios, ficha y guía rápida'));
-  ok(entrada && entrada.tagName === 'BUTTON' && !entrada.classList.contains('nav') && !entrada.classList.contains('doc'),
-    'selector: hay un botón a los documentos, con su propia clase (no parece una región ni una descarga)');
+  const boton = d.querySelector('#documentos');
+  ok(!!boton && !boton.hidden, 'selector: el botón de documentos está visible en la cabecera');
 
-  click(entrada);
+  click(boton);
   ok(d.querySelector('#titulo').textContent === 'Documentos' && d.title === APP + ' · Documentos', 'documentos: título de la pantalla y de la pestaña');
   ok(!d.querySelector('#back').hidden, 'documentos: botón atrás visible (no es una pantalla "home")');
   ok(d.querySelector('#regionCab').hidden, 'documentos: sin nombre de región en la cabecera (no es de ninguna región, y no hay ninguna elegida)');
+  ok(d.querySelector('#documentos').hidden, 'documentos: el propio botón de la cabecera se oculta en su pantalla (como #back en home)');
 
   const enlaces = [...d.querySelectorAll('#main a.doc')];
   ok(enlaces.length === 8, 'documentos: ocho enlaces (ficha + guía rápida + 6 formularios previos): ' + enlaces.length);
@@ -54,6 +53,13 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   d.querySelector('#back').click();
   await wait(50);
   ok(d.querySelector('#titulo').textContent === APP && d.title === APP, 'atrás desde documentos: vuelve al selector');
+  ok(!d.querySelector('#documentos').hidden, 'atrás desde documentos: el botón de la cabecera vuelve a verse en el selector');
+
+  // También accesible desde dentro de una región, no solo desde el selector
+  click(btn(d, 'Hombro'));
+  ok(!d.querySelector('#documentos').hidden, 'dentro de una región: el botón de documentos sigue visible en la cabecera');
+  click(d.querySelector('#documentos'));
+  ok(d.querySelector('#titulo').textContent === 'Documentos', 'desde una región: el botón de la cabecera también lleva a documentos');
 
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
   console.log(fails ? '\n' + fails + ' FALLOS' : '\nTODO OK');
