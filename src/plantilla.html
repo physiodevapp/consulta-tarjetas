@@ -65,8 +65,8 @@ header.home{padding-left:14px}
 /* Hover solo con ratón de verdad (no en táctil, donde un tap dejaría el estado "pegado"):
    pista visual en desktop de que el icono es interactivo, más el title con lo que hace/representa */
 @media (hover:hover) and (pointer:fine){
-  #documentos:hover,#tema:hover{border-color:var(--muted)}
-  #tema[aria-pressed="true"]:hover{border-color:var(--on-accent)}
+  #documentos:hover,#tema:hover,#pantalla:hover{border-color:var(--muted)}
+  #tema[aria-pressed="true"]:hover,#pantalla[aria-pressed="true"]:hover{border-color:var(--on-accent)}
 }
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
@@ -596,8 +596,12 @@ function actualizarBotonPantalla() {
   const activo = !!wakeLock;
   boton.setAttribute('aria-pressed', String(activo));
   // El relleno del icono ya distingue el estado a la vista; aria-label lo dice también para
-  // quien use lector de pantalla (no depende de hover, a diferencia de title: en móvil no hay)
-  boton.setAttribute('aria-label', 'Mantener la pantalla encendida: ' + (activo ? 'activado' : 'desactivado'));
+  // quien use lector de pantalla, sin depender de hover (no existe en móvil, decisión 5)
+  const texto = 'Mantener la pantalla encendida: ' + (activo ? 'activado' : 'desactivado');
+  boton.setAttribute('aria-label', texto);
+  // title: mismo texto, como tooltip en hover de escritorio (pedido por el usuario, igual
+  // que en #tema); no sustituye al aria-label, en móvil no hace nada
+  boton.setAttribute('title', texto);
   boton.innerHTML = activo ? OJO_ENCENDIDO : OJO_APAGADO;
 }
 

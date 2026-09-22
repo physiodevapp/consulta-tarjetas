@@ -8,7 +8,7 @@
 //
 // Todas las rutas son relativas (sin `/` inicial): GitHub Pages puede servir el sitio
 // desde una subruta (usuario.github.io/repo/), y una ruta absoluta se rompería ahí.
-const CACHE = 'guia-de-consulta-c391b82547';
+const CACHE = 'guia-de-consulta-c223e0cf5d';
 const CASCARON = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
