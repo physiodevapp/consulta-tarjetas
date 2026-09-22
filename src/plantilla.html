@@ -68,6 +68,15 @@ header.home{padding-left:14px}
   #documentos:hover,#tema:hover,#pantalla:hover{border-color:var(--muted)}
   #tema[aria-pressed="true"]:hover,#pantalla[aria-pressed="true"]:hover{border-color:var(--on-accent)}
 }
+/* Cápsulas del recorrido en la cabecera (actualizarCab(), al hacer scroll): en móvil competían
+   por sitio en la misma fila con el nombre de la región y los tres botones redondos y quedaban
+   muy apretadas. La clase .modo-recorrido (la pone el JS a la vez que oculta #titulo) las baja
+   a su propia fila, a todo el ancho; el título ya no cuenta (está oculto) así que la fila de
+   arriba (back + nombre de región + iconos) no se ve afectada */
+@media (max-width:639px){
+  header.modo-recorrido{flex-wrap:wrap}
+  header.modo-recorrido .cabrec{order:1;flex-basis:100%}
+}
 
 main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
 .sub{color:var(--muted);font-size:15px;margin:0 0 14px}
@@ -404,6 +413,7 @@ function actualizarCab() {
   let modo = false;
   if (cur.p === 'arbol' && pasos) modo = pasos.getBoundingClientRect().bottom <= $('#cab').getBoundingClientRect().bottom;
   $('#titulo').hidden = modo; $('#cabRec').hidden = !modo;
+  $('#cab').classList.toggle('modo-recorrido', modo);
 }
 window.addEventListener('scroll', actualizarCab, { passive: true });
 
