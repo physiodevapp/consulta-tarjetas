@@ -1,6 +1,12 @@
 {
  "REGION": "tobillo_pie",
  "NOMBRE": "Tobillo y pie",
+ "CARAS": [
+  "A",
+  "A2",
+  "B",
+  "C"
+ ],
  "TITULOS": {
   "caraA": "TOBILLO Y PIE · cara A   bloque 0 (con el paciente fuera) y bloques 3–4",
   "caraB": "TOBILLO Y PIE · cara B   tobillo agudo y dolor posterior, medial, lateral y anterior",

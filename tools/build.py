@@ -27,11 +27,14 @@ for r in REGIONES:
         datos_por_region[r] = json.load(open(archivo, encoding='utf-8'))
 
 # Metadatos para el selector del inicio: las que no tienen datos todavía se ven
-# pero no se pueden abrir (disponible: false).
+# pero no se pueden abrir (disponible: false). 'caras' (qué caras trae el docx de esa
+# región, ver tools/datos.js) solo la usa la pantalla «Documentos», para el subtítulo
+# de cada tarjeta descargable.
 regiones = [{
     'region': r,
     'nombre': datos_por_region[r]['NOMBRE'] if r in datos_por_region else r.capitalize(),
-    'disponible': r in datos_por_region
+    'disponible': r in datos_por_region,
+    'caras': datos_por_region[r]['CARAS'] if r in datos_por_region else []
 } for r in REGIONES]
 
 bundle = {'APP': nombre_app, 'REGIONES': regiones, 'DATOS': datos_por_region}

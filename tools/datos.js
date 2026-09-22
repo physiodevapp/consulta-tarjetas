@@ -26,9 +26,18 @@ const filas = f => f.map(fila => fila.map(celda));
 function normalizar({ REGION, CONFIG, CONTENIDO }, propio = {}) {
   const { URGENCIA, BANDERAS, BISAGRA, ARBOL, SINDROMES, ORIENTATIVA, PRONOSTICO, TITULOS } = CONTENIDO;
   // Una sola paleta para todas las regiones (fija en el CSS): CONFIG.DARK no se usa en pantalla.
+  // CARAS: qué caras trae el docx de esta región, en el orden fijo de plantilla_tarjetas.js
+  // (A, A2, B, C — A2 solo con SPLIT_A, C solo con SPLIT_B). Es el único uso de SPLIT_A/
+  // SPLIT_B en la SPA (aparte de elegir el pie, más abajo): solo alimenta el subtítulo de
+  // descargas ("Cara A y B" / "Cara A, B y C" / "Cara A, A2, B y C" en pDocumentos()), no
+  // cambia nada del papel. Si algún día una región necesita una quinta cara (D), no basta
+  // con listarla aquí: primero hay que ampliar plantilla_tarjetas.js (un SPLIT_C, un
+  // TITULOS.caraD, maquetar la página) y solo entonces esta lista sabría de ella.
+  const CARAS = ['A', ...(CONFIG.SPLIT_A ? ['A2'] : []), 'B', ...(CONFIG.SPLIT_B ? ['C'] : [])];
   const datos = {
     REGION,
     NOMBRE: nombreRegion(REGION),
+    CARAS,
     TITULOS: {
       caraA: TITULOS.caraA.join('   '),
       caraB: TITULOS.caraB.join('   '),
