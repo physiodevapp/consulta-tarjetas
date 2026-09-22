@@ -330,19 +330,27 @@ function pSelector() {
   ] };
 }
 
-// Documentos descargables: ficha de primera visita, guía rápida y los formularios previos
-// de cada región, en .docx. Viven en descargas/ (raíz, publicado por GitHub Pages; rutas
-// relativas, decisión 9). Son papel de consulta propio de la SPA, no CONTENIDO clínico:
-// las anotaciones que los mencionan (p. ej. «criterio fijo en la guía rápida») no traían
-// enlace hasta ahora.
+// Documentos descargables: tarjetas de consulta, formularios previos de cada región, ficha
+// de primera visita y guía rápida, en .docx. Viven en descargas/ (raíz, publicado por
+// GitHub Pages; rutas relativas, decisión 9). Son papel de consulta propio de la SPA, no
+// CONTENIDO clínico: las anotaciones que los mencionan (p. ej. «criterio fijo en la guía
+// rápida») no traían enlace hasta ahora. Tres grupos con su propio título (h3.grupo, el
+// mismo que ORIENTATIVA_GRUPOS): con 14 enlaces, una lista plana era difícil de escanear.
 function pDocumentos() {
-  const formularios = DATA.REGIONES.filter(r => r.disponible).map(r =>
+  const regiones = DATA.REGIONES.filter(r => r.disponible);
+  const tarjetas = regiones.map(r =>
+    docLink('Tarjeta · ' + r.nombre, 'Cara A y cara B, para imprimir', 'descargas/tarjeta_' + r.region + '.docx'));
+  const formularios = regiones.map(r =>
     docLink('Formulario previo · ' + r.nombre, 'Para el paciente, antes de la visita', 'descargas/formulario_previo_' + r.region + '.docx'));
   return { titulo: 'Documentos', nodes: [
     h('p', { class: 'sub' }, 'Se descargan en .docx, para imprimir o editar antes de usarlos.'),
+    h('h3', { class: 'grupo' }, 'Tarjetas de consulta'),
+    tarjetas,
+    h('h3', { class: 'grupo' }, 'Formularios previos a la primera visita'),
+    formularios,
+    h('h3', { class: 'grupo' }, 'Generales'),
     docLink('Ficha de primera visita', 'Cribado · orientación de tratamiento · basal de seguimiento', 'descargas/ficha_primera_visita.docx'),
-    docLink('Guía rápida', 'Criterio de severidad e irritabilidad', 'descargas/guia_rapida.docx'),
-    formularios
+    docLink('Guía rápida', 'Criterio de severidad e irritabilidad', 'descargas/guia_rapida.docx')
   ] };
 }
 

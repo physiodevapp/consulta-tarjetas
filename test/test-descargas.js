@@ -1,6 +1,6 @@
-// Documentos descargables (ficha de primera visita, guía rápida, formularios previos):
-// propios de la SPA, no del CONTENIDO clínico (decisión 2). Viven en descargas/, publicado
-// por GitHub Pages junto a index.html, con rutas relativas (decisión 9).
+// Documentos descargables (tarjetas de consulta, formularios previos, ficha de primera
+// visita, guía rápida): propios de la SPA, no del CONTENIDO clínico (decisión 2). Viven en
+// descargas/, publicado por GitHub Pages junto a index.html, con rutas relativas (decisión 9).
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
@@ -37,13 +37,18 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   ok(d.querySelector('#documentos').hidden, 'documentos: el propio botón de la cabecera se oculta en su pantalla (como #back en home)');
 
   const enlaces = [...d.querySelectorAll('#main a.doc')];
-  ok(enlaces.length === 8, 'documentos: ocho enlaces (ficha + guía rápida + 6 formularios previos): ' + enlaces.length);
-  ok(enlaces.every(a => a.hasAttribute('download')), 'documentos: los ocho enlaces llevan download (se descargan, no navegan)');
+  ok(enlaces.length === 14, 'documentos: catorce enlaces (6 tarjetas + 6 formularios previos + ficha + guía rápida): ' + enlaces.length);
+  ok(enlaces.every(a => a.hasAttribute('download')), 'documentos: los catorce enlaces llevan download (se descargan, no navegan)');
+
+  const grupos = [...d.querySelectorAll('#main h3.grupo')].map(g => g.textContent);
+  ok(grupos.join('|') === 'Tarjetas de consulta|Formularios previos a la primera visita|Generales', 'documentos: tres grupos con su título, en ese orden: ' + grupos.join(', '));
 
   const hrefs = enlaces.map(a => a.getAttribute('href'));
-  const esperados = ['descargas/ficha_primera_visita.docx', 'descargas/guia_rapida.docx',
-    ...['cervical', 'lumbar', 'hombro', 'cadera', 'rodilla', 'tobillo_pie'].map(r => `descargas/formulario_previo_${r}.docx`)];
-  ok(hrefs.join('|') === esperados.join('|'), 'documentos: rutas relativas, en el orden de REGIONES: ' + hrefs.join(', '));
+  const REGIONES = ['cervical', 'lumbar', 'hombro', 'cadera', 'rodilla', 'tobillo_pie'];
+  const esperados = [...REGIONES.map(r => `descargas/tarjeta_${r}.docx`),
+    ...REGIONES.map(r => `descargas/formulario_previo_${r}.docx`),
+    'descargas/ficha_primera_visita.docx', 'descargas/guia_rapida.docx'];
+  ok(hrefs.join('|') === esperados.join('|'), 'documentos: rutas relativas, agrupadas y en el orden de REGIONES: ' + hrefs.join(', '));
   ok(hrefs.every(h => !h.startsWith('/') && !h.startsWith('http')), 'documentos: todas las rutas son relativas (sin "/" inicial), como el manifest y el service worker');
 
   for (const href of hrefs) {
