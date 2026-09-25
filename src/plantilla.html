@@ -157,8 +157,17 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
    especificidad; si fuera antes, el flex-basis:0% de su flex:1 ganaría por ir después) */
 @media (max-width:639px){
   header{flex-wrap:wrap}
-  #titulo,.cabrec{order:1;flex-basis:100%}
+  header:not(.home) #titulo,.cabrec{order:1;flex-basis:100%}
 }
+/* header.home (solo el selector: la única pantalla con `home: true`, `#back` y `#regionCab`
+   ocultos a la vez) queda fuera de la regla de arriba a propósito: su título es siempre el
+   nombre de la app (DATA.APP), corto y fijo -- nunca el título largo de una ficha de síndrome
+   que motivó forzar la fila 2 (ver comentario de esa regla). Forzarlo también aquí dejaba los
+   tres iconos solos en la fila 1 (nada a su izquierda: #back y #regionCab ocultos) y el título
+   solo en la fila 2, un aspecto descosido -- visto en captura real, pedido por el usuario.
+   Sin la regla, #titulo se queda en la fila 1 con el flujo flex normal: a la izquierda, a la
+   misma altura que .iconos (margin-left:auto la empuja a la derecha), como cualquier otra
+   cabecera con título a la izquierda e iconos a la derecha. */
 .rec .lin{font-size:15px;margin:0 0 4px}
 .rec .ghost{appearance:none;margin-top:8px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);cursor:pointer}
 .cond + .cond{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
