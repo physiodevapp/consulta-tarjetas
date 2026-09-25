@@ -8,11 +8,14 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<!-- theme-color: mismo acento que --accent en el CSS de abajo (decisión 8); si cambia, cambiar
-     en los dos sitios. Un único meta (no dos con media): con el toggle claro/oscuro el
-     color de la barra del navegador puede no coincidir con el del sistema, así que lo
-     mantiene al día aplicarTema() en el JS de abajo -->
-<meta name="theme-color" content="#1F5F4E" id="temaColor">
+<!-- theme-color: mismo color que --panel en el CSS de abajo (claro aquí; el JS lo cambia a
+     oscuro si toca — ver TEMA_COLOR), no el acento. Con el acento, la barra de estado del
+     sistema (que pinta este color) quedaba de un verde vivo justo encima de una cabecera
+     mucho más oscura en tema oscuro: una costura visible, no una cabecera continua.
+     Un único meta (no dos con media): con el toggle claro/oscuro el color de la barra del
+     navegador puede no coincidir con el del sistema, así que lo mantiene al día
+     aplicarTema() en el JS de abajo -->
+<meta name="theme-color" content="#FFFFFF" id="temaColor">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -583,7 +586,7 @@ $('#documentos').addEventListener('click', () => ir('documentos'));
 // query — aquí solo se pone o se quita ese atributo.
 let tema = 'auto';   // 'auto' (según el sistema) | 'light' | 'dark'
 const SIG_TEMA = { auto: 'light', light: 'dark', dark: 'auto' };
-const TEMA_COLOR = { light: '#1F5F4E', dark: '#5CC0A3' };
+const TEMA_COLOR = { light: '#FFFFFF', dark: '#162124' }; // = --panel claro/oscuro, no el acento (ver comentario del <meta> arriba)
 const TEMA_LABEL = { auto: 'automático (según el sistema)', light: 'claro', dark: 'oscuro' };
 // Iconos en línea (decisión 6), mismo estilo que el del wake lock: contorno para «auto»
 // (medio círculo relleno, como el icono habitual de tema del sistema), sol y luna para

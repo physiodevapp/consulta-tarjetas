@@ -44,7 +44,7 @@ function nueva(oscuroSistema) {
   ok(boton.getAttribute('aria-pressed') === 'false', 'botón: aria-pressed false en automático');
   ok(boton.getAttribute('aria-label') === 'Tema: automático (según el sistema)', 'botón: aria-label dice "automático"');
   ok(boton.getAttribute('title') === 'Tema: automático (según el sistema)', 'botón: title (tooltip en hover de escritorio) dice lo mismo que aria-label');
-  ok(d.querySelector('#temaColor').getAttribute('content') === '#1F5F4E', 'meta theme-color: acento claro cuando el sistema no pide oscuro');
+  ok(d.querySelector('#temaColor').getAttribute('content') === '#FFFFFF', 'meta theme-color: --panel claro cuando el sistema no pide oscuro');
   ok(errs.length === 0, 'sin errores de JS: ' + errs.join(' / '));
 }
 
@@ -61,7 +61,7 @@ function nueva(oscuroSistema) {
   ok(d.documentElement.dataset.theme === 'dark', 'segundo clic: data-theme="dark"');
   ok(boton.getAttribute('aria-label') === 'Tema: oscuro', 'aria-label dice "oscuro"');
   ok(boton.getAttribute('title') === 'Tema: oscuro', 'title dice "oscuro"');
-  ok(d.querySelector('#temaColor').getAttribute('content') === '#5CC0A3', 'meta theme-color: acento oscuro con el tema forzado a oscuro');
+  ok(d.querySelector('#temaColor').getAttribute('content') === '#162124', 'meta theme-color: --panel oscuro con el tema forzado a oscuro');
   boton.click();
   ok(d.documentElement.dataset.theme === undefined, 'tercer clic: vuelve a automático, sin data-theme');
   ok(boton.getAttribute('aria-pressed') === 'false', 'de vuelta a automático: aria-pressed false');
@@ -71,10 +71,10 @@ function nueva(oscuroSistema) {
 // ── En automático, sigue al sistema si este cambia mientras la SPA está abierta ──
 {
   const { d, errs, sistema } = nueva(false);
-  ok(d.querySelector('#temaColor').getAttribute('content') === '#1F5F4E', 'antes del cambio: acento claro');
+  ok(d.querySelector('#temaColor').getAttribute('content') === '#FFFFFF', 'antes del cambio: --panel claro');
   sistema().cambiar(true);
   ok(d.documentElement.dataset.theme === undefined, 'sigue automático: no se fuerza data-theme al cambiar el sistema');
-  ok(d.querySelector('#temaColor').getAttribute('content') === '#5CC0A3', 'meta theme-color reacciona al cambio de preferencia del sistema');
+  ok(d.querySelector('#temaColor').getAttribute('content') === '#162124', 'meta theme-color reacciona al cambio de preferencia del sistema');
   errs.length && ok(false, 'cambio de sistema: sin errores de JS: ' + errs.join(' / '));
 }
 
