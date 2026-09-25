@@ -306,6 +306,11 @@ const big = (titulo, sub, fn) => h('button', { type: 'button', class: 'big', onc
 // no desde una fila más del selector.
 const docLink = (titulo, sub, href) => h('a', { class: 'doc', href, download: true },
   h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '↓'));
+// Enlace externo (no descarga, no es un .docx del repo): misma tarjeta visual que docLink,
+// pero abre en pestaña nueva (target/rel) y el icono es "↗" en vez de "↓", para distinguir
+// a la vista un enlace que sale de la SPA de uno que descarga un archivo propio
+const enlaceExterno = (titulo, sub, href) => h('a', { class: 'doc', href, target: '_blank', rel: 'noopener' },
+  h('div', { class: 'tx' }, h('b', {}, titulo), sub ? h('span', {}, sub) : null), h('i', { 'aria-hidden': 'true' }, '↗'));
 const nota = t => h('p', { class: 'nota pre' }, sp(t));
 const pie = t => h('p', { class: 'nota' }, sp(t));
 const seccion = (titulo, texto) => h('section', { class: 'card' }, h('h3', {}, titulo), h('p', { class: 'pre' }, sp(texto)));
@@ -352,8 +357,12 @@ function pSelector() {
 // de primera visita y guía rápida, en .docx. Viven en descargas/ (raíz, publicado por
 // GitHub Pages; rutas relativas, decisión 9). Son papel de consulta propio de la SPA, no
 // CONTENIDO clínico: las anotaciones que los mencionan (p. ej. «criterio fijo en la guía
-// rápida») no traían enlace hasta ahora. Tres grupos con su propio título (h3.grupo, el
+// rápida») no traían enlace hasta ahora. Cuatro grupos con su propio título (h3.grupo, el
 // mismo que ORIENTATIVA_GRUPOS): con 14 enlaces, una lista plana era difícil de escanear.
+// El cuarto grupo, «Enlaces», es distinto de los otros tres: un enlace externo (no un .docx
+// del repo) a una herramienta propia del usuario para una valoración más guiada, con
+// enlaceExterno() en vez de docLink() (abre en pestaña nueva, no descarga, y el sub deja
+// claro que hace falta conexión — a diferencia de la SPA, que funciona sin red, tarea 5).
 // Une una lista de textos con comas y una «y» antes del último: ['A','B'] -> 'A y B',
 // ['A','B','C'] -> 'A, B y C'. Genérico: no asume cuántos elementos trae la lista.
 const listaY = xs => xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' y ' + xs[xs.length - 1];
@@ -364,14 +373,16 @@ function pDocumentos() {
   const formularios = regiones.map(r =>
     docLink('Formulario previo · ' + r.nombre, 'Para el paciente, antes de la visita', 'descargas/formulario_previo_' + r.region + '.docx'));
   return { titulo: 'Documentos', nodes: [
-    h('p', { class: 'sub' }, 'Se descargan en .docx, para imprimir o editar antes de usarlos.'),
+    h('p', { class: 'sub' }, 'Se descargan en .docx, para imprimir o editar antes de usarlos (salvo el último enlace, que abre una herramienta externa).'),
     h('h3', { class: 'grupo' }, 'Tarjetas de consulta'),
     tarjetas,
     h('h3', { class: 'grupo' }, 'Formularios previos a la primera visita'),
     formularios,
     h('h3', { class: 'grupo' }, 'Generales'),
     docLink('Ficha de primera visita', 'Cribado · orientación de tratamiento · basal de seguimiento', 'descargas/ficha_primera_visita.docx'),
-    docLink('Guía rápida', 'Criterio de severidad e irritabilidad', 'descargas/guia_rapida.docx')
+    docLink('Guía rápida', 'Criterio de severidad e irritabilidad', 'descargas/guia_rapida.docx'),
+    h('h3', { class: 'grupo' }, 'Enlaces'),
+    enlaceExterno('Valoración guiada', 'Herramienta externa, para quien quiera una valoración más guiada · requiere conexión', 'https://edugamboa.com/physiq/assessment/')
   ] };
 }
 
