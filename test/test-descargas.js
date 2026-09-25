@@ -36,12 +36,18 @@ const click = b => { if (!b) throw new Error('botón no encontrado'); b.click();
   ok(d.querySelector('#regionCab').hidden, 'documentos: sin nombre de región en la cabecera (no es de ninguna región, y no hay ninguna elegida)');
   ok(d.querySelector('#documentos').hidden, 'documentos: el propio botón de la cabecera se oculta en su pantalla (como #back en home)');
 
-  const enlaces = [...d.querySelectorAll('#main a.doc')];
-  ok(enlaces.length === 14, 'documentos: catorce enlaces (6 tarjetas + 6 formularios previos + ficha + guía rápida): ' + enlaces.length);
-  ok(enlaces.every(a => a.hasAttribute('download')), 'documentos: los catorce enlaces llevan download (se descargan, no navegan)');
+  const todos = [...d.querySelectorAll('#main a.doc')];
+  ok(todos.length === 15, 'documentos: quince enlaces (6 tarjetas + 6 formularios previos + ficha + guía rápida + valoración guiada externa): ' + todos.length);
+  const enlaces = todos.slice(0, 14);
+  const externo = todos[14];
+  ok(enlaces.every(a => a.hasAttribute('download')), 'documentos: los catorce enlaces de documentos propios llevan download (se descargan, no navegan)');
+  ok(!externo.hasAttribute('download') && externo.getAttribute('target') === '_blank' && externo.getAttribute('rel') === 'noopener',
+    'documentos: el enlace externo no lleva download, abre en pestaña nueva y con rel=noopener');
+  ok(externo.getAttribute('href') === 'https://edugamboa.com/physiq/assessment/', 'documentos: el enlace externo apunta a la herramienta de valoración guiada');
+  ok(/requiere conexi[oó]n/i.test(externo.querySelector('.tx span').textContent), 'documentos: el enlace externo avisa de que requiere conexión');
 
   const grupos = [...d.querySelectorAll('#main h3.grupo')].map(g => g.textContent);
-  ok(grupos.join('|') === 'Tarjetas de consulta|Formularios previos a la primera visita|Generales', 'documentos: tres grupos con su título, en ese orden: ' + grupos.join(', '));
+  ok(grupos.join('|') === 'Tarjetas de consulta|Formularios previos a la primera visita|Generales|Enlaces', 'documentos: cuatro grupos con su título, en ese orden: ' + grupos.join(', '));
 
   const hrefs = enlaces.map(a => a.getAttribute('href'));
   const REGIONES = ['cervical', 'lumbar', 'hombro', 'cadera', 'rodilla', 'tobillo_pie'];
