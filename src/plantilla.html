@@ -154,10 +154,16 @@ summary .st span{display:block;font-size:15px;font-weight:400;color:var(--muted)
    del árbol -- un intento anterior sí lo hacía, y el salto de altura de la cabecera sticky
    desplazaba el contenido de golpe; ahora #titulo y #cabRec solo intercambian contenido dentro
    de la misma fila 2, sin tocar la fila 1. Va después de la regla base de .cabrec (misma
-   especificidad; si fuera antes, el flex-basis:0% de su flex:1 ganaría por ir después) */
+   especificidad; si fuera antes, el flex-basis:0% de su flex:1 ganaría por ir después).
+   header.una-fila (selector, documentos e inicio de región -- ver JS de render(), mismas tres
+   pantallas que ya ocultan #regionCab) queda fuera a propósito: ahí el título es siempre corto
+   y fijo y no hay insignia de región compitiendo por sitio, así que forzarlo a su propia fila
+   solo dejaba los iconos solos arriba y el título suelto debajo -- visto en captura real, dos
+   veces, pedido por el usuario. Sin la regla, #titulo vuelve al flujo normal (order:0 por
+   defecto): a la izquierda, a la misma altura que .iconos. */
 @media (max-width:639px){
   header{flex-wrap:wrap}
-  header:not(.home) #titulo,.cabrec{order:1;flex-basis:100%}
+  header:not(.una-fila) #titulo,.cabrec{order:1;flex-basis:100%}
 }
 /* header.home (solo el selector: la única pantalla con `home: true`, `#back` y `#regionCab`
    ocultos a la vez) queda fuera de la regla de arriba a propósito: su título es siempre el
@@ -713,8 +719,18 @@ function render(arriba) {
   // El nombre de la región se ve siempre en la cabecera (una sola paleta: ya no lo dice el color),
   // menos en el selector, en documentos (no es de ninguna región) y en el inicio de la región,
   // donde ya es el título de la pantalla
-  $('#regionCab').hidden = cur.p === 'selector' || cur.p === 'documentos' || cur.p === 'home';
+  const sinInsigniaRegion = cur.p === 'selector' || cur.p === 'documentos' || cur.p === 'home';
+  $('#regionCab').hidden = sinInsigniaRegion;
   $('#regionCab').textContent = D ? D.NOMBRE : '';
+  // Estas tres pantallas comparten algo más que ocultar la insignia: su título es siempre
+  // corto y fijo (el nombre de la app, "Documentos" o el nombre de una región, nunca el de
+  // una ficha de síndrome) y su fila 1 no compite con #regionCab por sitio -- cabe de sobra
+  // junto a #back/.iconos en una sola línea (ver CSS de header.una-fila). Banderas/árbol
+  // quedan fuera a propósito aunque su título también sea fijo: ahí SÍ hay insignia de
+  // región compitiendo, y el título de banderas ("Banderas rojas de la región...") no cabe
+  // con las dos cosas a la vez -- comprobado, necesitaría casi el doble del ancho disponible
+  // en un móvil estrecho.
+  $('#cab').classList.toggle('una-fila', sinInsigniaRegion);
   $('#documentos').hidden = cur.p === 'documentos';
   $('#main').replaceChildren(...[s.nodes].flat(Infinity).filter(Boolean));
   if (cur.p === 'arbol') $('#cabRec').replaceChildren(...chipsRecorrido());
